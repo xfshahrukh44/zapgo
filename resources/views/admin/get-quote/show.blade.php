@@ -1,6 +1,81 @@
 @extends('layouts.app')
 
 @section('content')
+    @php
+        $product = App\Product::where('id', intval($getquote->product))->first();
+        $day = $getquote->number_of_days;
+
+        // Fetch the per week price
+        $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();
+        $weekProductAttribute = App\ProductAttribute::where('product_id', $product->id)
+            ->where('attribute_id', $weekAttributeValue->attribute_id)
+            ->first();
+        $per_week_price = $weekProductAttribute->price; // Calculate per week price
+        // Fetch the per month price
+        $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
+        $monthProductAttribute = App\ProductAttribute::where('product_id', $product->id)
+            ->where('attribute_id', $monthAttributeValue->attribute_id)
+            ->first();
+        $per_month_price = $monthProductAttribute->price; // Calculate per month price
+
+        if ($day >= 28) {
+            $monthCount = floor($day / 28); // Calculate number of months (each month is 28 days)
+            $remainingDays = $day % 28; // Calculate remaining days after whole months
+
+            // Fetch the price for a month
+            $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
+            $monthProductAttribute = App\ProductAttribute::where('product_id', $product->id)
+                ->where('attribute_id', $monthAttributeValue->attribute_id)
+                ->first();
+
+            // Calculate subtotal for whole months
+            $subtotal = $monthProductAttribute->price * $monthCount;
+
+            // If there are remaining days, calculate additional daily rate
+            if ($remainingDays > 0) {
+                // If there's a day price, add it
+                $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
+                if ($dailyAttributeValue) {
+                    $dailyProductAttribute = App\ProductAttribute::where('product_id', $product->id)
+                        ->where('attribute_id', $dailyAttributeValue->attribute_id)
+                        ->first();
+
+                    // Add additional daily rate for remaining days
+                    $subtotal += $dailyProductAttribute->price * $remainingDays;
+                }
+            }
+        } elseif ($day >= 7) {
+            $weekCount = floor($day / 7); // Calculate number of weeks
+            $remainingDays = $day % 7; // Calculate remaining days after whole weeks
+
+            // Calculate subtotal for whole weeks
+            $subtotal = $weekProductAttribute->price * $weekCount;
+
+            // If there are remaining days, calculate additional daily rate
+            if ($remainingDays > 0) {
+                // If there's a day price, add it
+                $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
+                if ($dailyAttributeValue) {
+                    $dailyProductAttribute = App\ProductAttribute::where('product_id', $product->id)
+                        ->where('attribute_id', $dailyAttributeValue->attribute_id)
+                        ->first();
+
+                    // Add additional daily rate for remaining days
+                    $subtotal += $dailyProductAttribute->price * $remainingDays;
+                }
+            }
+        } else {
+            // For rentals less than 7 days, use the standard daily rate
+            $subtotal = $product->price * $getquote->quantity * $day;
+            // dump($subtotal);
+        }
+
+        if ($day < 7 && $subtotal >= $per_week_price) {
+            $subtotal = $per_week_price;
+        } elseif ($day < 28 && $subtotal >= $per_month_price) {
+            $subtotal = $per_month_price;
+        }
+    @endphp
     <div class="container-fluid bg-white mt-5">
         <!-- .row -->
         <div class="row">
@@ -65,6 +140,14 @@
                                         <th> Additional Information </th>
                                         <td> {{ $getquote->message }} </td>
                                     </tr>
+                                    <tr>
+                                        <th>Date range</th>
+                                        <td> {{ $getquote->start_date . ' to ' . $getquote->start_date }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Number of days</th>
+                                        <td> {{ $getquote->number_of_days }} </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -87,7 +170,8 @@
                                             </div>
                                             <div class="pname item">
                                                 <h4>Item Price: </h4>
-                                                <h4>$<span id="price">{{ number_format($getquote->productss->price) }}</span></h4>
+{{--                                                <h4>$<span id="price">{{ number_format($getquote->productss->price) }}</span></h4>--}}
+                                                <h4>$<span id="price">{{ number_format($subtotal) }}</span></h4>
                                             </div>
                                             <div class="quantity item">
                                                 <h5>Quantity: </h4>
@@ -103,7 +187,8 @@
                                             </div>
                                             <div class="price item">
                                                 <h5>Total: </h5>
-                                                    <h4>$<span id="total">{{ $getquote->productss->price * $getquote->quantity }}</span></h4>
+{{--                                                    <h4>$<span id="total">{{ $getquote->productss->price * $getquote->quantity }}</span></h4>--}}
+                                                    <h4>$<span id="total">{{ $subtotal * $getquote->quantity }}</span></h4>
 
 
                                             </div>
