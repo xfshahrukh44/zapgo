@@ -1,0 +1,105 @@
+@media (max-width: 1440px) {
+  .equipment h1 {
+    font-size: 75px;
+  }
+  .equipment h1 span {
+    font-size: 95px;
+  }
+  .equipment p {
+    width: 42%;
+  }
+
+  .week-and-day ul li {
+    width: 100px;
+  }
+
+  .main-center {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .mid-slides p {
+    font-size: 14px;
+  }
+  .main-center {
+    padding: 20px;
+  }
+
+  .why-we-best p {
+    font-size: 15px;
+  }
+  .camera-back .machine-img {
+    margin-top: -210px;
+  }
+  .bulb-div {
+    margin: 45px 0;
+  }
+
+  .home-ab:before {
+    height: 85%;
+  }
+  .bulb-div figure {
+    width: 120px;
+    height: 80px;
+  }
+  .commited p {
+    width: 86%;
+  }
+  .on-para p {
+    width: 62%;
+  }
+
+  .slides-main .owl-nav .owl-prev {
+    left: 100px;
+  }
+
+  .slides-main .owl-nav .owl-next {
+    right: 100px;
+  }
+  .form-h p {
+    font-size: 14px;
+  }
+  .side-bar h4 {
+    font-size: 18px;
+  }
+
+  .side-bar h3 {
+    font-size: 25px;
+  }
+  .main-pro-details {
+    margin: 0;
+  }
+
+  .minus-1 {
+    width: 25px;
+    height: 25px;
+  }
+
+  .quantity__input {
+    width: 25px;
+    height: 25px;
+  }
+
+  .plus-1 {
+    width: 25px;
+    height: 25px;
+  }
+  .dehum p {
+    font-size: 9px;
+  }
+
+  .dollar-btn a {
+    width: 80px;
+  }
+  .cleaner-img {
+    margin: 0;
+  }
+  .check-sec {
+    padding-left: 60px;
+  }
+
+  .side-summary {
+    padding-left: 30px;
+    padding-right: 100px;
+  }
+}
