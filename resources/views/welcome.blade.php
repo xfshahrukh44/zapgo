@@ -280,10 +280,10 @@
                         @csrf
                         <div class="date-row">
                             <div class="form-group col-6">
-                                <input type="text" class="date-rent-start form-control" name="start_date" id="daterange_start" placeholder="Start date" required>
+                                <input style="max-width: 210px;" type="text" class="date-rent-start form-control" name="start_date" id="daterange_start" placeholder="Start date" required>
                             </div>
                             <div class="form-group col-6">
-                                <input type="text" class="date-rent-end form-control" name="end_date" id="daterange_end" placeholder="End date" required>
+                                <input style="max-width: 210px;" type="text" class="date-rent-end form-control" name="end_date" id="daterange_end" placeholder="End date" required>
                             </div>
                         </div>
                         <div class="row">

@@ -192,6 +192,7 @@
                                                     let days = datediff(parseDate($('#date-rent-start').val()), parseDate($(
                                                         '#date-rent-end').val()));
                                                     let totalBill = '{{ $product_detail->price }}' * $('#qty').val() * days;
+                                                    {{--let totalBill = '{{ $product_detail->price }}' * {{ $value['qty'] }} * days;--}}
                                                     $('#days').text(days)
                                                     var price = $('#cart-price-{{ $key }}').text()
                                                     var prices = 0;
@@ -269,6 +270,8 @@
                                                     }else if(days < 28 && prices >= {{ $per_month_price }}) {
                                                         prices = {{ $per_month_price }};
                                                     }
+
+                                                    prices = prices * {{$value['qty']}};
 
                                                     var product_price = parseFloat(prices)
                                                     var rsub = parseFloat(prices)
@@ -380,6 +383,8 @@
                                         }elseif ($day < 28 && $pro_total >= $per_month_price) {
                                             $pro_total = $per_month_price;
                                         }
+
+                                        $pro_total = $pro_total * $value['qty'];
 
                                         ?>
                                             {{-- @dump($day) --}}
