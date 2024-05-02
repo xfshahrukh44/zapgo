@@ -255,6 +255,74 @@
     </style>
 @endsection
 @section('content')
+    @php
+        $new_cart = [
+            "items" => [],
+        ];
+        foreach ((session()->get('cart') ?? []) as $product_id => $item) {
+            $product = \App\Product::find($product_id);
+            $qty = $item['qty'];
+            $price = floatval($item['price']);
+            $price_per_day = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 14])->first()->price) ?? 0.00;
+            $price_per_week = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 15])->first()->price) ?? 0.00;
+            $price_per_month = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 16])->first()->price) ?? 0.00;
+            $new_cart ['items'] []= [
+                'id' => $product_id,
+                'name' => $product->product_title,
+                'qty' => $item['qty'],
+                'delivery_charges' => $item['delivery_charges'],
+                'price_per_day' => $price_per_day,
+                'price_per_week' => $price_per_week,
+                'price_per_month' => $price_per_month,
+            ];
+        }
+        $new_cart['delivery_charges'] = $new_cart['items'][0]['delivery_charges'];
+
+        //first calculation
+        $rental_subtotal = 0.00;
+        $round_trip_delivery = 0.00;
+        $rental_protection_plan = 0.00;
+        $environmental_service_fee = 0.00;
+        $other_fees = 0.00;
+        $taxes = 0.00;
+        $estimated_subtotal = 0.00;
+
+        if(Session::get('daterange') != null){
+            $date_array = explode(', ', str_replace(['[', ']'], '', Session::get('daterange')));
+            $date_start = Carbon\Carbon::createFromFormat('m-d-Y', $date_array[0]);
+            $date_from = Carbon\Carbon::createFromFormat('m-d-Y', $date_array[1]);
+
+            $days = $date_start->diffInDays($date_from);
+        } else {
+            $days = 1;
+        }
+
+        $price_key = '';
+        $day_values = [
+            'price_per_month' => 28,
+            'price_per_week' => 7,
+            'price_per_day' => 1,
+        ];
+
+        if ($days > 28) {
+            $price_key = 'price_per_month';
+        } else if ($days > 7) {
+            $price_key = 'price_per_week';
+        } else {
+            $price_key = 'price_per_day';
+        }
+
+        foreach ($new_cart['items'] as $cart_item) {
+            $day_value = $day_values[$price_key];
+            $multiplier_value = $days / $day_value;
+            $product_total = (floatval($cart_item[$price_key]) * floatval($multiplier_value)) * ($cart_item['qty']);
+            $rental_subtotal += $product_total;
+
+            $cart_item['total'] = $product_total;
+        }
+
+        $new_cart['sub_total'] = $rental_subtotal;
+    @endphp
 
     @php
 
@@ -602,7 +670,6 @@
                                 $cart = Session::get('cart');
                                 // dd($cart);
                                 $subtotal = 0;
-                                $subtotal1 = 0;
                                 $addon_total = 0;
                                 $variation = 0; ?>
                                 @foreach ($cart as $key => $value)
@@ -680,8 +747,6 @@
                                     } elseif ($day < 28 && $subtotal >= $per_month_price) {
                                         $subtotal = $per_month_price;
                                     }
-
-                                    $subtotal1 += $subtotal;
                                     ?>
                                     <h5>{{ $value['name'] }} <span>${{ $value['price'] * $value['qty'] }} x
                                             {{ $day }} Day = ${{ $subtotal }}</span>
@@ -714,10 +779,10 @@
                         $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
                         $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
 
-                        $tax_final = ($tax / 100) * $subtotal1;
-                        $otherFees_final = ($otherFees / 100) * $subtotal1;
-                        $envFee_final = ($envFee / 100) * $subtotal1;
-                        $rentalProtection_final = ($rentalProtection / 100) * $subtotal1;
+                        $tax_final = ($tax / 100) * $rental_subtotal;
+                        $otherFees_final = ($otherFees / 100) * $rental_subtotal;
+                        $envFee_final = ($envFee / 100) * $rental_subtotal;
+                        $rentalProtection_final = ($rentalProtection / 100) * $rental_subtotal;
 
                         ?>
                         <ul class="total-row">
@@ -726,7 +791,7 @@
                             </li>
                             <li>
                                 <p>Rental subtotal:</p>
-                                <p>${{ number_format($subtotal1, 2) }}</p>
+                                <p>${{ number_format($rental_subtotal, 2) }}</p>
                             </li>
                             <li>
                                 <p>Purchases subtotal: </p>
@@ -760,18 +825,9 @@
                                 <p>Taxes:</p>
                                 <p>${{ number_format($tax_final, 2) }}</p>
                             </li>
-                            @php
-                                $subtotal1 =
-                                    $subtotal1 +
-                                    $rentalProtection_final +
-                                    $envFee_final +
-                                    $otherFees_final +
-                                    $tax_final +
-                                    $deliveryFee;
-                            @endphp
                             <li>
                                 <p>Estimated subtotal:</p>
-                                <p>${{ number_format($subtotal1, 2) }}</p>
+                                <p>${{ number_format($rental_subtotal, 2) }}</p>
                             </li>
                         </ul>
 
@@ -820,7 +876,7 @@
                                                 <div class="form-group">
                                                     <button class="btn btn-red btn-block blue-custom" type="button"
                                                         id="stripe-submit">Pay Now
-                                                        ${{ number_format($subtotal1) }}</button>
+                                                        ${{ number_format($rental_subtotal) }}</button>
                                                 </div>
                                             </div>
                                         </div>

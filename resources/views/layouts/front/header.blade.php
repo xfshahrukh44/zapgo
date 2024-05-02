@@ -1,3 +1,71 @@
+@php
+    $new_cart = [
+        "items" => [],
+    ];
+    foreach ((session()->get('cart') ?? []) as $product_id => $item) {
+        $product = \App\Product::find($product_id);
+        $qty = $item['qty'];
+        $price = floatval($item['price']);
+        $price_per_day = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 14])->first()->price) ?? 0.00;
+        $price_per_week = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 15])->first()->price) ?? 0.00;
+        $price_per_month = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 16])->first()->price) ?? 0.00;
+        $new_cart ['items'] []= [
+            'id' => $product_id,
+            'name' => $product->product_title,
+            'qty' => $item['qty'],
+            'delivery_charges' => $item['delivery_charges'],
+            'price_per_day' => $price_per_day,
+            'price_per_week' => $price_per_week,
+            'price_per_month' => $price_per_month,
+        ];
+    }
+    $new_cart['delivery_charges'] = $new_cart['items'][0]['delivery_charges'];
+
+    //first calculation
+    $rental_subtotal = 0.00;
+    $round_trip_delivery = 0.00;
+    $rental_protection_plan = 0.00;
+    $environmental_service_fee = 0.00;
+    $other_fees = 0.00;
+    $taxes = 0.00;
+    $estimated_subtotal = 0.00;
+
+    if(Session::get('daterange') != null){
+        $date_array = explode(', ', str_replace(['[', ']'], '', Session::get('daterange')));
+        $date_start = Carbon\Carbon::createFromFormat('m-d-Y', $date_array[0]);
+        $date_from = Carbon\Carbon::createFromFormat('m-d-Y', $date_array[1]);
+
+        $days = $date_start->diffInDays($date_from);
+    } else {
+        $days = 1;
+    }
+
+    $price_key = '';
+    $day_values = [
+        'price_per_month' => 28,
+        'price_per_week' => 7,
+        'price_per_day' => 1,
+    ];
+
+    if ($days > 28) {
+        $price_key = 'price_per_month';
+    } else if ($days > 7) {
+        $price_key = 'price_per_week';
+    } else {
+        $price_key = 'price_per_day';
+    }
+
+    foreach ($new_cart['items'] as $cart_item) {
+        $day_value = $day_values[$price_key];
+        $multiplier_value = $days / $day_value;
+        $product_total = (floatval($cart_item[$price_key]) * floatval($multiplier_value)) * ($cart_item['qty']);
+        $rental_subtotal += $product_total;
+
+        $cart_item['total'] = $product_total;
+    }
+
+    $new_cart['sub_total'] = $rental_subtotal;
+@endphp
 <html lang="en">
 
 <head>
@@ -147,7 +215,7 @@
                             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
                                 integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
                                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                            <?php $subtotal1 = 0;
+                            <?php //$subtotal1 = 0;
                                   $pro_total = 0;?>
                             @if ($cart != null)
                                 @foreach ($cart as $key => $value)
@@ -162,139 +230,147 @@
 
 
 
-                                    <script>
-                                        function datediff(first, second) {
-                                            return Math.round((second - first) / (1000 * 60 * 60 * 24));
-                                        }
+{{--                                    <script>--}}
+{{--                                        function datediff(first, second) {--}}
+{{--                                            return Math.round((second - first) / (1000 * 60 * 60 * 24));--}}
+{{--                                        }--}}
 
-                                        function parseDate(str) {
-                                            var mdy = str.split('-');
-                                            return new Date(mdy[2], mdy[0] - 1, mdy[1]);
-                                        }
+{{--                                        function parseDate(str) {--}}
+{{--                                            var mdy = str.split('-');--}}
+{{--                                            return new Date(mdy[2], mdy[0] - 1, mdy[1]);--}}
+{{--                                        }--}}
 
-                                        $(document).ready(function() {
-                                            $('#date-rent-start').Zebra_DatePicker({
-                                                direction: true,
-                                                format: 'm-d-Y',
-                                                pair: $('#date-rent-end'),
-                                                onClose: function(view, elements) {
-                                                    var datepicker = $('#date-rent-end').data('Zebra_DatePicker');
-                                                    datepicker.clear_date();
-                                                    $('.total').slideUp()
+{{--                                        $(document).ready(function() {--}}
+{{--                                            $('.input_qty').on('change', function () {--}}
+{{--                                                date_rent_end_close();--}}
+{{--                                            });--}}
 
-                                                }
-                                            });
+{{--                                            $('#date-rent-start').Zebra_DatePicker({--}}
+{{--                                                direction: true,--}}
+{{--                                                format: 'm-d-Y',--}}
+{{--                                                pair: $('#date-rent-end'),--}}
+{{--                                                onClose: function(view, elements) {--}}
+{{--                                                    var datepicker = $('#date-rent-end').data('Zebra_DatePicker');--}}
+{{--                                                    datepicker.clear_date();--}}
+{{--                                                    $('.total').slideUp()--}}
 
-                                            $('#date-rent-end').Zebra_DatePicker({
-                                                direction: 1,
-                                                format: 'm-d-Y',
-                                                onClose: function(view, elements) {
-                                                    let days = datediff(parseDate($('#date-rent-start').val()), parseDate($(
-                                                        '#date-rent-end').val()));
-                                                    let totalBill = '{{ $product_detail->price }}' * $('#qty').val() * days;
-                                                    {{--let totalBill = '{{ $product_detail->price }}' * {{ $value['qty'] }} * days;--}}
-                                                    $('#days').text(days)
-                                                    var price = $('#cart-price-{{ $key }}').text()
-                                                    var prices = 0;
-                                                    @php
-                                                        // Fetch the per week price
-                                                        $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();
-                                                        $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                                                                    ->where('attribute_id', $weekAttributeValue->attribute_id)
-                                                                                                    ->first();
-                                                        $per_week_price = $weekProductAttribute->price; // Calculate per week price
-                                                        // Fetch the per month price
-                                                        $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
-                                                        $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                                                                        ->where('attribute_id', $monthAttributeValue->attribute_id)
-                                                                                                        ->first();
-                                                        $per_month_price = $monthProductAttribute->price; // Calculate per month price
-                                                    @endphp
-                                                    if (days >= 28) {
-                                                    // Fetch the price for a month
-                                                    @php
-                                                    $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
-                                                    $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $monthAttributeValue->attribute_id)->first();
-                                                    @endphp
-                                                    var months = Math.floor(days / 28);
-                                                    var remainingDays = days % 28;
-                                                    prices = months * {{ $monthProductAttribute->price }}; // Price per month
-                                                        if (remainingDays > 0) {
-                                                            @php
-                                                            // If there's a day price, add it
-                                                            $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
-                                                            if ($dailyAttributeValue) {
-                                                            $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();
-                                                            @endphp
-                                                            prices += remainingDays * {{ $dailyProductAttribute->price }}; // Additional daily rate
+{{--                                                }--}}
+{{--                                            });--}}
 
-                                                            @php
-                                                        }
-                                                            @endphp
-                                                        }
-                                                    }else if (days >= 7) {
-                                                    @php
-                                                    $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();
-                                                    $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $weekAttributeValue->attribute_id)->first();
-                                                    @endphp
-                                                    var weeks = Math.floor(days / 7);
-                                                    var remainingDays = days % 7;
-                                                    prices = weeks * {{ $weekProductAttribute->price }}; // Price per week
-                                                    if (remainingDays > 0) {
-                                                        @php
-                                                        // If there's a day price, add it
-                                                        $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
-                                                        if ($dailyAttributeValue) {
-                                                        $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();
-                                                        @endphp
-                                                        prices += remainingDays * {{ $dailyProductAttribute->price }}; // Additional daily rate
-                                                        @php
-                                                        }
-                                                        @endphp
-                                                        }
-                                                    }else {
-                                                        @php
-                                                        // If there's a day price, add it
-                                                        $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
-                                                        if ($dailyAttributeValue) {
-                                                        $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();
-                                                        @endphp
-                                                        prices = days * {{ $dailyProductAttribute->price }}; // Price per day
-                                                        @php
-                                                        }
-                                                        @endphp
-                                                    }
+{{--                                            $('#date-rent-end').Zebra_DatePicker({--}}
+{{--                                                direction: 1,--}}
+{{--                                                format: 'm-d-Y',--}}
+{{--                                                onClose: function(view, elements) {--}}
+{{--                                                    date_rent_end_close();--}}
+{{--                                                }--}}
+{{--                                            })--}}
 
-                                                    if (days < 7 && prices >= {{ $per_week_price }}) {
-                                                        prices = {{ $per_week_price }};
-                                                    }else if(days < 28 && prices >= {{ $per_month_price }}) {
-                                                        prices = {{ $per_month_price }};
-                                                    }
+{{--                                            const date_rent_end_close = () => {--}}
+{{--                                                let days = datediff(parseDate($('#date-rent-start').val()), parseDate($('#date-rent-end').val()));--}}
+{{--                                                let totalBill = '{{ $product_detail->price }}' * $('#qty').val() * days;--}}
+{{--                                                --}}{{--let totalBill = '{{ $product_detail->price }}' * {{ $value['qty'] }} * days;--}}
+{{--                                                $('#days').text(days)--}}
+{{--                                                var price = $('#cart-price-{{ $key }}').text()--}}
+{{--                                                alert(price);--}}
+{{--                                                var prices = 0;--}}
+{{--                                                @php--}}
+{{--                                                    // Fetch the per week price--}}
+{{--                                                    $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();--}}
+{{--                                                    $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])--}}
+{{--                                                                                                ->where('attribute_id', $weekAttributeValue->attribute_id)--}}
+{{--                                                                                                ->first();--}}
+{{--                                                    $per_week_price = $weekProductAttribute->price; // Calculate per week price--}}
+{{--                                                    // Fetch the per month price--}}
+{{--                                                    $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();--}}
+{{--                                                    $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])--}}
+{{--                                                                                                    ->where('attribute_id', $monthAttributeValue->attribute_id)--}}
+{{--                                                                                                    ->first();--}}
+{{--                                                    $per_month_price = $monthProductAttribute->price; // Calculate per month price--}}
+{{--                                                @endphp--}}
+{{--                                                if (days >= 28) {--}}
+{{--                                                    // Fetch the price for a month--}}
+{{--                                                    @php--}}
+{{--                                                        $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();--}}
+{{--                                                        $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $monthAttributeValue->attribute_id)->first();--}}
+{{--                                                    @endphp--}}
+{{--                                                    var months = Math.floor(days / 28);--}}
+{{--                                                    var remainingDays = days % 28;--}}
+{{--                                                    prices = months * {{ $monthProductAttribute->price }}; // Price per month--}}
+{{--                                                    if (remainingDays > 0) {--}}
+{{--                                                        @php--}}
+{{--                                                            // If there's a day price, add it--}}
+{{--                                                            $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();--}}
+{{--                                                            if ($dailyAttributeValue) {--}}
+{{--                                                            $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();--}}
+{{--                                                        @endphp--}}
+{{--                                                            prices += remainingDays * {{ $dailyProductAttribute->price }}; // Additional daily rate--}}
 
-                                                    prices = prices * {{$value['qty']}};
+{{--                                                        @php--}}
+{{--                                                            }--}}
+{{--                                                        @endphp--}}
+{{--                                                    }--}}
+{{--                                                }else if (days >= 7) {--}}
+{{--                                                    @php--}}
+{{--                                                        $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();--}}
+{{--                                                        $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $weekAttributeValue->attribute_id)->first();--}}
+{{--                                                    @endphp--}}
+{{--                                                    var weeks = Math.floor(days / 7);--}}
+{{--                                                    var remainingDays = days % 7;--}}
+{{--                                                    prices = weeks * {{ $weekProductAttribute->price }}; // Price per week--}}
+{{--                                                    if (remainingDays > 0) {--}}
+{{--                                                        @php--}}
+{{--                                                            // If there's a day price, add it--}}
+{{--                                                            $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();--}}
+{{--                                                            if ($dailyAttributeValue) {--}}
+{{--                                                            $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();--}}
+{{--                                                        @endphp--}}
+{{--                                                            prices += remainingDays * {{ $dailyProductAttribute->price }}; // Additional daily rate--}}
+{{--                                                        @php--}}
+{{--                                                            }--}}
+{{--                                                        @endphp--}}
+{{--                                                    }--}}
+{{--                                                }else {--}}
+{{--                                                    @php--}}
+{{--                                                        // If there's a day price, add it--}}
+{{--                                                        $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();--}}
+{{--                                                        if ($dailyAttributeValue) {--}}
+{{--                                                        $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();--}}
+{{--                                                    @endphp--}}
+{{--                                                        prices = days * {{ $dailyProductAttribute->price }}; // Price per day--}}
+{{--                                                    @php--}}
+{{--                                                        }--}}
+{{--                                                    @endphp--}}
+{{--                                                }--}}
 
-                                                    var product_price = parseFloat(prices)
-                                                    var rsub = parseFloat(prices)
-                                                    var esub = parseFloat(prices)
-                                                    var roundsub = parseFloat($('#roundsub').text())
-                                                    var rensub = parseFloat($('#rensub').text())
-                                                    var envsub = parseFloat($('#envsub').text())
-                                                    var othsub = parseFloat($('#othsub').text())
-                                                    var taxsub = parseFloat($('#taxsub').text())
+{{--                                                if (days < 7 && prices >= {{ $per_week_price }}) {--}}
+{{--                                                    prices = {{ $per_week_price }};--}}
+{{--                                                }else if(days < 28 && prices >= {{ $per_month_price }}) {--}}
+{{--                                                    prices = {{ $per_month_price }};--}}
+{{--                                                }--}}
+
+{{--                                                prices = prices * {{$value['qty']}};--}}
+
+{{--                                                var product_price = parseFloat(prices)--}}
+{{--                                                var rsub = parseFloat(prices)--}}
+{{--                                                var esub = parseFloat(prices)--}}
+{{--                                                var roundsub = parseFloat($('#roundsub').text())--}}
+{{--                                                var rensub = parseFloat($('#rensub').text())--}}
+{{--                                                var envsub = parseFloat($('#envsub').text())--}}
+{{--                                                var othsub = parseFloat($('#othsub').text())--}}
+{{--                                                var taxsub = parseFloat($('#taxsub').text())--}}
 
 
-                                                    $('#rsub').text(rsub)
-                                                    $('#esub').text((esub + roundsub + rensub + envsub + othsub + taxsub).toFixed(2));
-                                                    $('#cart-price-{{ $key }}').text(product_price)
-                                                    $('#total_amount').text('$ ' + totalBill)
-                                                    $('.total').slideDown()
-                                                    $('#daterange').val(`[${$('#date-rent-start').val()},${$('#date-rent-end').val()}]`)
-                                                    // alert($('#daterange').val())
-                                                    //    $('#totalamount').val(totalBill)
-                                                }
-                                            })
-                                        });
-                                    </script>
+{{--                                                $('#rsub').text(rsub)--}}
+{{--                                                $('#esub').text((esub + roundsub + rensub + envsub + othsub + taxsub).toFixed(2));--}}
+{{--                                                $('#cart-price-{{ $key }}').text(product_price)--}}
+{{--                                                $('#total_amount').text('$ ' + totalBill)--}}
+{{--                                                $('.total').slideDown()--}}
+{{--                                                $('#daterange').val(`[${$('#date-rent-start').val()},${$('#date-rent-end').val()}]`)--}}
+{{--                                                // alert($('#daterange').val())--}}
+{{--                                                //    $('#totalamount').val(totalBill)--}}
+{{--                                            };--}}
+{{--                                        });--}}
+{{--                                    </script>--}}
 
 
 
@@ -401,7 +477,7 @@
                                                 Quantity: <input type="number" min="1" value="{{$value['qty']}}" name="qty" class="input_qty form-control">
                                             </p>
                                             <?php
-                                            $subtotal1 += $pro_total;
+                                            //$subtotal1 += $pro_total;
                                             ?>
                                         </div>
                                     </div>
@@ -418,8 +494,10 @@
                                         <p>Taxes and fees will be calculated before rental confirmation.</p>
                                     </li>
                                     <li>
-                                        <input type="hidden" name="subs" id="subs" value="{{ number_format($subtotal1, 2) }}">
-                                        <p>Rental subtotal:</p><p>$<span id="rsub">{{ number_format($subtotal1, 2) }}</span></p>
+{{--                                        <input type="hidden" name="subs" id="subs" value="{{ number_format($subtotal1, 2) }}">--}}
+{{--                                        <p>Rental subtotal:</p><p>$<span id="rsub">{{ number_format($subtotal1, 2) }}</span></p>--}}
+                                        <input type="hidden" name="subs" id="subs" value="{{ number_format($rental_subtotal, 2) }}">
+                                        <p>Rental subtotal:</p><p>$<span id="rsub">{{ number_format($rental_subtotal, 2) }}</span></p>
                                     </li>
                                     @php
                                         $tax = App\Http\Traits\HelperTrait::returnFlag(1973);
@@ -428,10 +506,10 @@
                                         $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
                                         $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
 
-                                        $tax_final = ($tax / 100) * $subtotal1;
-                                        $otherFees_final = ($otherFees / 100) * $subtotal1;
-                                        $envFee_final = ($envFee / 100) * $subtotal1;
-                                        $rentalProtection_final = ($rentalProtection / 100) * $subtotal1;
+                                        $tax_final = ($tax / 100) * $rental_subtotal;
+                                        $otherFees_final = ($otherFees / 100) * $rental_subtotal;
+                                        $envFee_final = ($envFee / 100) * $rental_subtotal;
+                                        $rentalProtection_final = ($rentalProtection / 100) * $rental_subtotal;
                                     @endphp
                                     <li>
                                         <p>Purchases subtotal: </p><p>-</p>
@@ -459,10 +537,10 @@
                                         <p>Taxes:</p><p>$<span id="taxsub">{{ number_format($tax_final, 2) }}</p>
                                     </li>
                                     @php
-                                        $estimatedSubtotal = ($subtotal1+$rentalProtection_final+$envFee_final+$otherFees_final+$tax_final+$deliveryFee);
+                                        $estimatedSubtotal = ($rental_subtotal+$rentalProtection_final+$envFee_final+$otherFees_final+$tax_final+$deliveryFee);
                                     @endphp
                                     <li>
-                                        <input type="hidden" name="esubs" id="esubs" value="{{ number_format($subtotal1, 2) }}">
+                                        <input type="hidden" name="esubs" id="esubs" value="{{ number_format($rental_subtotal, 2) }}">
                                         <p>Estimated subtotal:</p><p>$<span id="esub">{{ number_format($estimatedSubtotal, 2) }}</span></p>
                                     </li>
 
@@ -527,5 +605,183 @@
         }else{
             $('#updateCartCheck').text('Select Date First');
         }
+    });
+
+</script>
+<script>
+    function datediff(first, second) {
+        return Math.round((second - first) / (1000 * 60 * 60 * 24));
+    }
+
+    function parseDate(str) {
+        var mdy = str.split('-');
+        return new Date(mdy[2], mdy[0] - 1, mdy[1]);
+    }
+
+    $(document).ready(function() {
+        $('.input_qty').on('change', function () {
+            date_rent_end_close($(this));
+        });
+
+        $('#date-rent-start').Zebra_DatePicker({
+            direction: true,
+            format: 'm-d-Y',
+            pair: $('#date-rent-end'),
+            onClose: function(view, elements) {
+                var datepicker = $('#date-rent-end').data('Zebra_DatePicker');
+                datepicker.clear_date();
+                $('.total').slideUp()
+
+            }
+        });
+
+        $('#date-rent-end').Zebra_DatePicker({
+            direction: 1,
+            format: 'm-d-Y',
+            onClose: function(view, elements) {
+                date_rent_end_close();
+            }
+        })
+
+        const date_rent_end_close = (qty_element) => {
+            let cart = JSON.parse('{!! json_encode($new_cart) !!}');
+            console.log(cart);
+
+
+            let days = datediff(parseDate($('#date-rent-start').val()), parseDate($('#date-rent-end').val()));
+            $('#days').text(days)
+
+            let price_key = '';
+            let day_values = {
+                price_per_month: 28,
+                price_per_week: 7,
+                price_per_day: 1,
+            };
+
+            if (days > 28) {
+                price_key = 'price_per_month'
+            } else if (days > 7) {
+                price_key = 'price_per_week'
+            } else {
+                price_key = 'price_per_day'
+            }
+
+            let sub_total = 0.00;
+            for (const item of cart.items) {
+                let day_value = day_values[price_key];
+                let multiplier_value = days / day_value;
+                let product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                sub_total += product_total;
+
+                item['total'] = product_total;
+            }
+            cart['total'] = sub_total;
+
+            $('#rsub').text(sub_total.toString());
+            $('#roundsub').text(cart['delivery_charges'].toString());
+            let grand_total = sub_total + parseFloat($('#roundsub').text().replaceAll('$', '')) + parseFloat($('#rensub').text().replaceAll('$', '')) + parseFloat($('#envsub').text().replaceAll('$', '')) + parseFloat($('#othsub').text().replaceAll('$', '')) + parseFloat($('#taxsub').text().replaceAll('$', ''));
+            $('#esub').text(grand_total.toFixed(2).toString());
+            {{--// console.log(cart);--}}
+
+            {{--let totalBill = '{{ $product_detail->price }}' * $('#qty').val() * days;--}}
+            {{--let totalBill = '{{ $product_detail->price }}' * {{ $value['qty'] }} * days;--}}
+            {{--var price = $('#cart-price-{{ $key }}').text()--}}
+            {{--var prices = 0;--}}
+            {{--@php--}}
+            {{--    // Fetch the per week price--}}
+            {{--    $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();--}}
+            {{--    $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])--}}
+            {{--                                                ->where('attribute_id', $weekAttributeValue->attribute_id)--}}
+            {{--                                                ->first();--}}
+            {{--    $per_week_price = $weekProductAttribute->price; // Calculate per week price--}}
+            {{--    // Fetch the per month price--}}
+            {{--    $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();--}}
+            {{--    $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])--}}
+            {{--                                                    ->where('attribute_id', $monthAttributeValue->attribute_id)--}}
+            {{--                                                    ->first();--}}
+            {{--    $per_month_price = $monthProductAttribute->price; // Calculate per month price--}}
+            {{--@endphp--}}
+            {{--if (days >= 28) {--}}
+            {{--    // Fetch the price for a month--}}
+            {{--    @php--}}
+            {{--        $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();--}}
+            {{--        $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $monthAttributeValue->attribute_id)->first();--}}
+            {{--    @endphp--}}
+            {{--    var months = Math.floor(days / 28);--}}
+            {{--    var remainingDays = days % 28;--}}
+            {{--    prices = months * {{ $monthProductAttribute->price }}; // Price per month--}}
+            {{--    if (remainingDays > 0) {--}}
+            {{--        @php--}}
+            {{--            // If there's a day price, add it--}}
+            {{--            $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();--}}
+            {{--            if ($dailyAttributeValue) {--}}
+            {{--            $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();--}}
+            {{--        @endphp--}}
+            {{--            prices += remainingDays * {{ $dailyProductAttribute->price }}; // Additional daily rate--}}
+
+            {{--        @php--}}
+            {{--            }--}}
+            {{--        @endphp--}}
+            {{--    }--}}
+            {{--}else if (days >= 7) {--}}
+            {{--    @php--}}
+            {{--        $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();--}}
+            {{--        $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $weekAttributeValue->attribute_id)->first();--}}
+            {{--    @endphp--}}
+            {{--    var weeks = Math.floor(days / 7);--}}
+            {{--    var remainingDays = days % 7;--}}
+            {{--    prices = weeks * {{ $weekProductAttribute->price }}; // Price per week--}}
+            {{--    if (remainingDays > 0) {--}}
+            {{--        @php--}}
+            {{--            // If there's a day price, add it--}}
+            {{--            $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();--}}
+            {{--            if ($dailyAttributeValue) {--}}
+            {{--            $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();--}}
+            {{--        @endphp--}}
+            {{--            prices += remainingDays * {{ $dailyProductAttribute->price }}; // Additional daily rate--}}
+            {{--        @php--}}
+            {{--            }--}}
+            {{--        @endphp--}}
+            {{--    }--}}
+            {{--}else {--}}
+            {{--    @php--}}
+            {{--        // If there's a day price, add it--}}
+            {{--        $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();--}}
+            {{--        if ($dailyAttributeValue) {--}}
+            {{--        $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])->where('attribute_id', $dailyAttributeValue->attribute_id)->first();--}}
+            {{--    @endphp--}}
+            {{--        prices = days * {{ $dailyProductAttribute->price }}; // Price per day--}}
+            {{--    @php--}}
+            {{--        }--}}
+            {{--    @endphp--}}
+            {{--}--}}
+
+            {{--if (days < 7 && prices >= {{ $per_week_price }}) {--}}
+            {{--    prices = {{ $per_week_price }};--}}
+            {{--}else if(days < 28 && prices >= {{ $per_month_price }}) {--}}
+            {{--    prices = {{ $per_month_price }};--}}
+            {{--}--}}
+
+            {{--prices = prices * {{$value['qty']}};--}}
+
+            {{--var product_price = parseFloat(prices)--}}
+            {{--var rsub = parseFloat(prices)--}}
+            {{--var esub = parseFloat(prices)--}}
+            {{--var roundsub = parseFloat($('#roundsub').text())--}}
+            {{--var rensub = parseFloat($('#rensub').text())--}}
+            {{--var envsub = parseFloat($('#envsub').text())--}}
+            {{--var othsub = parseFloat($('#othsub').text())--}}
+            {{--var taxsub = parseFloat($('#taxsub').text())--}}
+
+
+            {{--$('#rsub').text(rsub)--}}
+            // $('#esub').text((esub + roundsub + rensub + envsub + othsub + taxsub).toFixed(2));
+            $('#cart-price-{{ $key }}').text(product_price)
+            $('#total_amount').text('$ ' + totalBill)
+            $('.total').slideDown()
+            $('#daterange').val(`[${$('#date-rent-start').val()},${$('#date-rent-end').val()}]`)
+            // alert($('#daterange').val())
+            //    $('#totalamount').val(totalBill)
+        };
     });
 </script>

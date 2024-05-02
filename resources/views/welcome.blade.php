@@ -546,11 +546,6 @@ h2.animate-charcter {
 
 // });
 $(document).ready(function() {
-    $('.input_qty').on('change', function () {
-        $('#update-cart').submit();
-    });
-
-
     $('.date-rent-start').Zebra_DatePicker({
         direction: true,
         format: 'm-d-Y',

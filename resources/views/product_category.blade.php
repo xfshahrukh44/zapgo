@@ -271,22 +271,6 @@
 @section('js')
 <script type="text/javascript">
 $(document).ready(function() {
-    $('.input_qty').on('change', function () {
-        $('#update-cart').submit();
-    });
-    // $('ul.input-attr li:first-child').addClass('active');
-
-    // $('ul.input-attr li').click(function() {
-    //     $(this).find('input').prop("checked", true);
-    //     $('ul.input-attr li').removeClass('active');
-    //     $(this).addClass('active');
-    // });
-
-
-    // $('ul.input-attr input').change(function() {
-    //     $('ul.input-attr li').removeClass('active');
-    //     $(this).parent().addClass('active');
-    // });
 
 });
 

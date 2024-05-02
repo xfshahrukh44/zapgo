@@ -469,9 +469,7 @@
     <script src="{{ asset('js/zebra_datepicker.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('.input_qty').on('change', function () {
-                $('#update-cart').submit();
-            });
+
         });
         // $('ul.input-attr li').click(function(){
         //         $(this).find('input').prop("checked", true);

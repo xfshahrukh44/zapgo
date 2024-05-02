@@ -39,9 +39,7 @@
 @section('js')
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.input_qty').on('change', function () {
-            $('#update-cart').submit();
-        });
+
     });
 </script>
 @endsection
