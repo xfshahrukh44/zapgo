@@ -6,6 +6,8 @@
 
         <a href="{{ URL('orders') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'orders')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> Orders History</a>
 
+        <a href="{{ URL('quotes') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'quotes')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> Get A Quote</a>
+
         <a href="{{ URL('account-detail') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'account-detail')  ? 'active' : '' ?>"><i class="fa fa-user"></i> Account Details</a>
 
         <a href="{{ URL('signout') }}"><i class="fas fa-arrow-circle-left"></i> Logout</a>

@@ -154,6 +154,9 @@ Route::get('signin','GuestController@signin')->name('signin');
 Route::get('signup','GuestController@signup')->name('signup');
 Route::get('account','LoggedInController@account')->name('account');
 Route::get('orders','LoggedInController@orders')->name('orders');
+Route::get('quotes','LoggedInController@quotes')->name('quotes');
+Route::get('quotes/{id}','LoggedInController@view_quotes')->name('view.quotes');
+Route::get('payment/{id}','LoggedInController@view_payment')->name('view.payment');
 Route::get('account-detail','LoggedInController@accountDetail')->name('accountDetail');
 
 Route::post('update/account','LoggedInController@updateAccount')->name('update.account');
@@ -194,6 +197,7 @@ Route::get('about','HomeController@about')->name('about');
 Route::get('contact','HomeController@contact')->name('contact');
 Route::get('category','HomeController@category')->name('category');
 Route::get('product-category/{id}','HomeController@product_category')->name('product_category');
+Route::get('get-a-qoute','HomeController@get_a_qoute')->name('get_a_qoute');
 
 
 Route::get('/remove-cart', function () {
@@ -284,5 +288,7 @@ Route::resource('upcomingclasses', 'UpcomingclassesController');
 Route::resource('admin/location', 'Admin\LocationController');
 
 Route::resource('admin/get-quote', 'Admin\GetQuoteController');
+Route::post('admin/bulk-status', 'Admin\GetQuoteController@bulk_status')->name('bulk-status');
+Route::post('admin/discount', 'Admin\GetQuoteController@discount')->name('discount');
 
 Route::resource('bulkorders/bulkorders', 'bulkorders\BulkordersController');

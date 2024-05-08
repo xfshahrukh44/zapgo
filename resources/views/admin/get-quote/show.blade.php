@@ -76,6 +76,7 @@
             $subtotal = $per_month_price;
         }
     @endphp
+    <input type="hidden" id="quote_id" value="{{ $getquote->id }}">
     <div class="container-fluid bg-white mt-5">
         <!-- .row -->
         <div class="row">
@@ -129,12 +130,11 @@
                                         <td> {{ $getquote->state }} </td>
                                     </tr>
                                     <tr>
-                                        <th> Selected Product </th>
-                                        <td> {{ $getquote->productss->product_title }} </td>
-                                    </tr>
-                                    <tr>
-                                        <th> Quantity </th>
-                                        <td> {{ $getquote->quantity }} </td>
+                                        <th> Bulk Amount </th>
+                                        <td> {{ $getquote->bulk_amount }} 
+                                            {{-- <button id="approved" class="btn btn-success response" data-amount = "{{ $getquote->bulk_amount }}" style=" padding: 3px; margin-left: 17px; font-size: 12px; display: inline-block">Approve</button> 
+                                            <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}" style=" padding: 3px; margin-left: 17px; font-size: 12px; display: inline-block">Decline</button>  --}}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th> Additional Information </th>
@@ -154,7 +154,40 @@
                     </div>
                 </div>
                 <div class="row">
+                    @foreach ($getquote->quote_products as $val)
                     <div class="col-md-6">
+                        <div class="white-box card">
+                            <div class="card-body">
+                                <div class="order-detail">
+                                    <h3>Product Detail</h3>
+                                    <div class="order-box">
+                                        <div class="pname item">
+                                            <h4>Item Name: </h4>
+                                            <h4>{{ $val->product_title }}</h4>
+                                        </div>
+                                        <div class="pname item">
+                                            <h4>Item Price: </h4>
+                                            <h4>$<span id="price">{{ $val->item_price }}</span></h4>
+                                        </div>
+                                        <div class="pname item">
+                                            <h4>Quantity: </h4>
+                                            <h4>{{ $val->quantity }}</h4>
+                                        </div>
+                                        <div class="price item">
+                                            <h5>Total: </h5>
+                                                <h4>$<span id="total">{{ $val->price }}</span></h4>            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>
+                    </div>
+                    @php
+                        $subtotal+= $val->item_price * $val->quantity;
+                    @endphp
+                    @endforeach
+                    {{-- <div class="col-md-6">
                         @if ($getquote->status == 0)
                             <div class="white-box card">
                                 <div class="card-body">
@@ -170,7 +203,6 @@
                                             </div>
                                             <div class="pname item">
                                                 <h4>Item Price: </h4>
-{{--                                                <h4>$<span id="price">{{ number_format($getquote->productss->price) }}</span></h4>--}}
                                                 <h4>$<span id="price">{{ number_format($subtotal) }}</span></h4>
                                             </div>
                                             <div class="quantity item">
@@ -187,7 +219,6 @@
                                             </div>
                                             <div class="price item">
                                                 <h5>Total: </h5>
-{{--                                                    <h4>$<span id="total">{{ $getquote->productss->price * $getquote->quantity }}</span></h4>--}}
                                                     <h4>$<span id="total">{{ $subtotal * $getquote->quantity }}</span></h4>
 
 
@@ -237,6 +268,40 @@
                                 </div>
                             </div>
                         @endif
+                    </div> --}}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="white-box card">
+                            <div class="card-body">
+                                <div class="order-detail">
+                                    <h3>Total Product Amount</h3>
+                                    <div class="order-box">
+                                        {{ $subtotal }}
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="white-box card">
+                            <div class="card-body">
+                                <div class="order-detail">
+                                    <h3>Discount</h3>
+                                    <div class="order-box">
+                                        <form>
+                                            <input type="hidden" id="quote_id" value="{{ $getquote->id }}">
+                                            <input type="hidden" id="subtotal" value="{{ $subtotal }}">
+                                            <input type="number" step="any" name="total_amount" id="total_amount">
+                                            <input type="button" class="btn btn-primary" id="submitButton" value="Add">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>
                     </div>
                 </div>
 
@@ -347,83 +412,147 @@
         <script src="{{ asset('plugins/vendors/jquery/jquery.min.js') }}"></script>
         <script src="https://js.stripe.com/v3/"></script>
         <script>
-            var stripe = Stripe('{{ config('services.stripe.stripekey') }}');
 
-            // Create an instance of Elements.
-            var elements = stripe.elements();
-            var style = {
-                base: {
-                    color: '#32325d',
-                    lineHeight: '18px',
-                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                    fontSmoothing: 'antialiased',
-                    fontSize: '16px',
-                    '::placeholder': {
-                        color: '#aab7c4'
-                    }
-                },
-                invalid: {
-                    color: '#fa755a',
-                    iconColor: '#fa755a'
-                }
-            };
-            var card = elements.create('card', {
-                style: style
-            });
-            card.mount('#card-element');
+            $('.response').click(function(){
+                var response = $(this).attr('id'); 
+                var amount = $(this).attr('data-amount'); 
+                var quote_id = $('#quote_id').val();
 
-            card.addEventListener('change', function(event) {
-                var displayError = document.getElementById('card-errors');
-                if (event.error) {
-                    $(displayError).show();
-                    displayError.textContent = event.error.message;
-                } else {
-                    $(displayError).hide();
-                    displayError.textContent = '';
-                }
-            });
+                $.ajax({
+                    url: "{{ url('admin/bulk-status') }}", 
+                    method: 'POST', 
+                    data: { response: response, quote_id: quote_id, "_token": "{{ csrf_token() }}", amount: amount }, 
+                    dataType: 'json', 
+                    // headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    success: function(response) {
+                        
+                        console.log('Data updated successfully');
 
-            var form = document.getElementById('order-place');
-
-            $('#stripe-submit').click(function() {
-                $('#order_total').val({{ $subtotal }});
-                stripe.createToken(card).then(function(result) {
-                    var errorCount = checkEmptyFileds();
-                    if ((result.error) || (errorCount == 1)) {
-                        // Inform the user if there was an error.
-                        if (result.error) {
-                            var errorElement = document.getElementById('card-errors');
-                            $(errorElement).show();
-                            errorElement.textContent = result.error.message;
-                        } else {
-                            $.toast({
-                                heading: 'Alert!',
-                                position: 'bottom-right',
-                                text: 'Please fill the required fields before proceeding to pay',
-                                loaderBg: '#ff6849',
-                                icon: 'error',
-                                hideAfter: 5000,
-                                stack: 6
-                            });
+                        if(response.success && response.status == "approved"){
+                            $('#approved').show();
+                            $('#approved').text('Approved');
+                            $('#declined').hide();
+                        }else{
+                            $('#declined').show();
+                            $('#declined').text('Declined');
+                            $('#approved').hide();
                         }
-                    } else {
-                        // Send the token to your server.
-                        stripeTokenHandler(result.token);
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        
+                        console.error('Error updating data:', error);
+                        
                     }
                 });
             });
 
-            function stripeTokenHandler(token) {
-                // Insert the token ID into the form so it gets submitted to the server
-                var form = document.getElementById('order-place');
-                var hiddenInput = document.createElement('input');
-                hiddenInput.setAttribute('type', 'hidden');
-                hiddenInput.setAttribute('name', 'stripeToken');
-                hiddenInput.setAttribute('value', token.id);
-                $('#payment_method').val('stripe');
-                form.appendChild(hiddenInput);
-                form.submit();
-            }
+            $(document).ready(function(){
+                $('#submitButton').click(function(){
+                    var totalAmount = parseFloat($('#total_amount').val());
+                    var quote_id = $('#quote_id').val();
+                    var subtotal = parseFloat($('#subtotal').val());
+
+                    // Check if totalAmount is less than or equal to subtotal
+                    if(totalAmount <= subtotal) {
+                        $.ajax({
+                            url: "{{ url('admin/discount') }}", 
+                            method: 'POST', 
+                            data: { quote_id: quote_id, amount: totalAmount, subtotal: subtotal, "_token": "{{ csrf_token() }}" }, 
+                            dataType: 'json',
+                            success: function(response){
+                                alert(response.message)
+                                console.log(response);
+                            },
+                            error: function(xhr, status, error){
+                                alert(xhr.responseText);
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    } else {
+                        alert("Total amount cannot exceed total product amount.");
+                    }
+                });
+            });
+
+
+            // var stripe = Stripe('{{ config('services.stripe.stripekey') }}');
+
+            // // Create an instance of Elements.
+            // var elements = stripe.elements();
+            // var style = {
+            //     base: {
+            //         color: '#32325d',
+            //         lineHeight: '18px',
+            //         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            //         fontSmoothing: 'antialiased',
+            //         fontSize: '16px',
+            //         '::placeholder': {
+            //             color: '#aab7c4'
+            //         }
+            //     },
+            //     invalid: {
+            //         color: '#fa755a',
+            //         iconColor: '#fa755a'
+            //     }
+            // };
+            // var card = elements.create('card', {
+            //     style: style
+            // });
+            // card.mount('#card-element');
+
+            // card.addEventListener('change', function(event) {
+            //     var displayError = document.getElementById('card-errors');
+            //     if (event.error) {
+            //         $(displayError).show();
+            //         displayError.textContent = event.error.message;
+            //     } else {
+            //         $(displayError).hide();
+            //         displayError.textContent = '';
+            //     }
+            // });
+
+            // var form = document.getElementById('order-place');
+
+            // $('#stripe-submit').click(function() {
+            //     $('#order_total').val({{ $subtotal }});
+            //     stripe.createToken(card).then(function(result) {
+            //         var errorCount = checkEmptyFileds();
+            //         if ((result.error) || (errorCount == 1)) {
+            //             // Inform the user if there was an error.
+            //             if (result.error) {
+            //                 var errorElement = document.getElementById('card-errors');
+            //                 $(errorElement).show();
+            //                 errorElement.textContent = result.error.message;
+            //             } else {
+            //                 $.toast({
+            //                     heading: 'Alert!',
+            //                     position: 'bottom-right',
+            //                     text: 'Please fill the required fields before proceeding to pay',
+            //                     loaderBg: '#ff6849',
+            //                     icon: 'error',
+            //                     hideAfter: 5000,
+            //                     stack: 6
+            //                 });
+            //             }
+            //         } else {
+            //             // Send the token to your server.
+            //             stripeTokenHandler(result.token);
+            //         }
+            //     });
+            // });
+
+            // function stripeTokenHandler(token) {
+            //     // Insert the token ID into the form so it gets submitted to the server
+            //     var form = document.getElementById('order-place');
+            //     var hiddenInput = document.createElement('input');
+            //     hiddenInput.setAttribute('type', 'hidden');
+            //     hiddenInput.setAttribute('name', 'stripeToken');
+            //     hiddenInput.setAttribute('value', token.id);
+            //     $('#payment_method').val('stripe');
+            //     form.appendChild(hiddenInput);
+            //     form.submit();
+            // }
 
 
             function checkEmptyFileds() {
@@ -439,6 +568,9 @@
                 });
                 return errorCount;
             }
+
+            
+
         </script>
         {{-- @include('layouts.admin.footer') --}}
     </div>

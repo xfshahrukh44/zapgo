@@ -13,6 +13,8 @@ use View;
 use File;
 use App\orders_products;
 use App\orders;
+use App\Models\GetQuote;
+use App\Models\Bulkorder;
 use Auth;
 use Session;
 use App\Http\Traits\HelperTrait;
@@ -58,6 +60,31 @@ class LoggedInController extends Controller
 				->get();
 		return view('account.orders',['ORDERS'=>$orders]); 
 		
+	}
+
+	public function quotes()
+    {
+		
+		$quote = GetQuote::where('user_id', Auth::user()->id)
+				->orderBy('id', 'desc')
+				->get();
+		return view('account.quote',['quote'=>$quote]); 
+		
+	}
+
+	public function view_quotes($id)
+    {
+		$quote = GetQuote::with('quote_products')->find($id);
+		$bulkOrders = Bulkorder::where('qoute_id', $id)->first();
+		return view('account.view_quote',['quote'=>$quote, 'bulkOrders' => $bulkOrders]); 
+		
+	}
+
+
+	public function view_payment($id)
+    {
+		$quote = GetQuote::with('quote_products')->find($id);
+		return view('account.view_payments',['quote'=>$quote]); 
 	}
 	
 

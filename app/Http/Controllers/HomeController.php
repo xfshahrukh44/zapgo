@@ -25,6 +25,7 @@ use App\Testimonial;
 use App\ProductAttribute;
 use App\Models\Location;
 use App\Models\GetQuote;
+use App\Models\QuoteProdInfo;
 use Stripe;
 use App\Models\Bulkorder;
 
@@ -94,7 +95,7 @@ else
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
-            'phone' => 'required'
+            'phone' => 'required',
 		]);
 
         $req = $request->all();
@@ -104,8 +105,27 @@ else
         $req['number_of_days'] = $end_date->diffInDays($start_date);
         $req['start_date'] = $request->start_date;
         $req['end_date'] = $request->end_date;
+        $req['user_id'] = Auth::user()->id;
+        $req['bulk_amount'] = $request->bulk_amount;
 
-        GetQuote::create($req);
+        $quote = GetQuote::create($req);
+
+        $products = $request->input('product');
+        $prices = $request->input('price');
+        $quantities = $request->input('quantity');
+        $item_price = $request->input('item_price');
+
+        if(is_array($products)){
+            foreach($products as $key => $productId){
+                $data = new QuoteProdInfo();
+                $data->qoute_id = $quote->id;
+                $data->product = $productId;
+                $data->quantity = $quantities[$key];
+                $data->price = $prices[$key];
+                $data->item_price = $item_price[$key];
+                $data->save();
+            }
+        }
 
 
 
@@ -172,6 +192,7 @@ else
                 $bulkOrders->quantity = $request->quantity;
                 $bulkOrders->amount = $total;
                 $bulkOrders->transaction_id = $transactionID;
+                $bulkOrders->quote_prod_ids = $request->quote_prod_ids;
                 $bulkOrders->status = $payment_status;
                 $bulkOrders->save();
 
@@ -222,6 +243,15 @@ else
     public function rental_agreement(){
         $page = DB::table('pages')->where('id', 10)->first();
         return view('rental-agreement', compact('page'));
+    }
+
+    public function get_a_qoute()
+    {
+        // $page = Page::find(4);
+        if (!Auth::check()) {
+            return redirect()->route('home');
+        }
+        return view('get_a_qoute');
     }
 
 
@@ -280,5 +310,23 @@ else
             }
         }
     }
+
+    // public function store(Request $request)
+    // {
+    //     $products = $request->input('product');
+    //     $quantities = $request->input('quantity');
+    //     $prices = $request->input('price');
+
+    //     foreach ($products as $index => $productId) {
+    //         // Insert product into the database
+    //         Product::create([
+    //             'product_id' => $productId,
+    //             'quantity' => $quantities[$index],
+    //             'price' => $prices[$index]
+    //         ]);
+    //     }
+
+    //     return redirect()->back()->with('success', 'Products inserted successfully');
+    // }
 
 }

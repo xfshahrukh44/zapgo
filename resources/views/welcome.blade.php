@@ -9,7 +9,8 @@
                    <div class="equipment">
                        {!! $page->content !!}
                         <div class="top-btn">
-                            <a class="btn blue-custom" href="#" type="submit" data-bs-toggle="modal" data-bs-target="#news-modal">Get A Quote</a>
+                            {{-- <a class="btn blue-custom" href="#" type="submit" data-bs-toggle="modal" data-bs-target="#news-modal">Get A Quote</a> --}}
+                            <a class="btn blue-custom" href="{{ route('get_a_qoute') }}">Get A Quote</a>
                              <a class="btn blue-custom black-btn" href="{{ route('category') }}">All Products</a>
                         </div>
                    </div>
@@ -319,8 +320,6 @@
                                      <option value="{{ $value->name }}">{{ $value->name }}</option>
                                     @endforeach
 
-
-                                    <!-- Add more options as needed -->
                                 </select>
 
                             </div>

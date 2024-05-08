@@ -204,7 +204,7 @@
   font-weight: bold;
 }
 
-.plus-1 {
+.plus-1, .q-plus-1 {
   width: 30px;
   height: 30px;
   margin: 0;
@@ -224,7 +224,7 @@
   background: var(--blue-color);
 }
 
-.minus-1 {
+.minus-1, .q-minus-1 {
   width: 30px;
   height: 30px;
   margin: 0;
@@ -462,6 +462,18 @@
   width: 40px;
   height: 40px;
 }
+
+.side-details .week-and-day .quantity .q-minus-1 {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  .side-details .week-and-day .quantity .q-plus-1 {
+    width: 40px;
+    height: 40px;
+  }
 
 .side-details .week-and-day .quantity {
 }

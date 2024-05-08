@@ -107,7 +107,8 @@ class GetQuoteController extends Controller
     {
         $model = str_slug('getquote','-');
         if(auth()->user()->permissions()->where('name','=','view-'.$model)->first()!= null) {
-            $getquote = GetQuote::findOrFail($id);
+            $getquote = GetQuote::with('quote_products')->findOrFail($id);
+            // return $getquote;
             return view('admin.get-quote.show', compact('getquote'));
         }
         return response(view('403'), 403);
@@ -197,5 +198,39 @@ class GetQuoteController extends Controller
         }
         return response(view('403'), 403);
 
+    }
+
+    public function bulk_status(Request $request) 
+    {
+        $data = GetQuote::find($request->quote_id);
+
+        if(!$data){
+            return response()->json(['error' => true, 'message' => 'Status updated failed']);
+        }
+
+        if($request->response == 'approved'){
+            $data->bulk_status = 1;
+        }else{
+            $data->bulk_status = 0;
+        }
+        $data->total_amount = $request->amount;
+        $data->save();
+
+        return response()->json(['success' => true, 'message' => 'Status updated success', 'status' => $request->response]);
+    }
+
+    public function discount(Request $request)
+    {
+        $data = GetQuote::find($request->quote_id);
+
+        if(!$data){
+            return response()->json(['error' => true, 'message' => 'Discount updated failed']);
+        }
+
+        $data->discount =  $request->amount;
+        $data->total_amount =  $request->subtotal - $request->amount;
+        $data->save();
+
+        return response()->json(['success' => true, 'message' => 'Discount updated success']);
     }
 }

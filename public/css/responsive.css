@@ -70,7 +70,7 @@
     margin: 0;
   }
 
-  .minus-1 {
+  .minus-1, .q-minus-1 {
     width: 25px;
     height: 25px;
   }
@@ -80,7 +80,7 @@
     height: 25px;
   }
 
-  .plus-1 {
+  .plus-1, .q-plus-1 {
     width: 25px;
     height: 25px;
   }
