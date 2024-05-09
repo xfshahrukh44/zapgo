@@ -249,7 +249,7 @@ else
     {
         // $page = Page::find(4);
         if (!Auth::check()) {
-            return redirect()->route('home');
+            return redirect()->route('signin');
         }
         return view('get_a_qoute');
     }
