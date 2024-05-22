@@ -117,7 +117,7 @@
         <div class="form-container sign-in-container col-md-6">
             <div class="sec-text-form-free-acc">
                 <h4>
-                    Sign In to your ZapGO Rentals
+                    Sign In to your ZapGO Rentals Account
                 </h4>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
@@ -140,7 +140,7 @@
                     {{-- <label class="remember"><input type="checkbox"> Remember me </label> --}}
                     <a href="{{ url('password/reset') }}" class="pull-right forg_text">Forgot password?</a>
                 </div>
-                <button class="btn btn-yellow" type="submit">Sign in</button>
+                <button class="btn btn-yellow" type="submit">Sign up</button>
                 <!-- <span>or</span>
                 <div class="social-group">
                     <button class="loginBtn loginBtn--facebook">Login with Facebook</button>

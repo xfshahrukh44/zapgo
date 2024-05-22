@@ -142,7 +142,7 @@
                                     </tr>
                                     <tr>
                                         <th>Date range</th>
-                                        <td> {{ $getquote->start_date . ' to ' . $getquote->start_date }} </td>
+                                        <td> {{ $getquote->start_date . ' to ' . $getquote->end_date }} </td>
                                     </tr>
                                     <tr>
                                         <th>Number of days</th>
