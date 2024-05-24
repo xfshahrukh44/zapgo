@@ -74,7 +74,7 @@ ul.footer-menu li a {
                                  </div>
                                 <div class="form-group">
                                       <label>Phone Number (*)</label>
-                                      <input type="email" name="phone" class="form-control" id="" required="">
+                                      <input type="number" name="phone" class="form-control" id="" required="">
                                  </div>
 
                                  <div class="form-group">
