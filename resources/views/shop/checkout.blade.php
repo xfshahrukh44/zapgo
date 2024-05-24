@@ -825,9 +825,12 @@
                                 <p>Taxes:</p>
                                 <p>${{ number_format($tax_final, 2) }}</p>
                             </li>
+                            @php
+                                $estimatedSubtotal = ($rental_subtotal+$rentalProtection_final+$envFee_final+$otherFees_final+$tax_final+$deliveryFee);
+                            @endphp
                             <li>
                                 <p>Estimated subtotal:</p>
-                                <p>${{ number_format($rental_subtotal, 2) }}</p>
+                                <p>${{ number_format($estimatedSubtotal, 2) }}</p>
                             </li>
                         </ul>
 
@@ -876,7 +879,7 @@
                                                 <div class="form-group">
                                                     <button class="btn btn-red btn-block blue-custom" type="button"
                                                         id="stripe-submit">Pay Now
-                                                        ${{ number_format($rental_subtotal) }}</button>
+                                                        ${{ number_format($estimatedSubtotal) }}</button>
                                                 </div>
                                             </div>
                                         </div>
