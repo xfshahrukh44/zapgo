@@ -455,12 +455,12 @@
                                     <div class="form-group col-md-6">
                                         <label for="inputEmail4">Start Date</label>
                                         <input type="date" class="form-control" name="start_date"
-                                            value="{{ $date_start->format('Y-m-d') }}" required>
+                                            value="{{ $date_start->format('Y-m-d') }}" required readonly>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="inputPassword4">End Date</label>
                                         <input type="date" class="form-control" name="end_date"
-                                            value="{{ $date_from->format('Y-m-d') }}" required>
+                                            value="{{ $date_from->format('Y-m-d') }}" required readonly>
                                     </div>
                                 </div>
                                 <div class="form-group col-12">
@@ -514,6 +514,32 @@
                                         {{-- <span class="invalid-feedback">
                                                 <strong>{{ $errors->first('delivery_zip_code') }}</strong>
                                               </span> --}}
+                                    </div>
+                                </div>
+
+                                <br>
+                                <div class="form-group col-12" style=" padding: 16px; ">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="terms_and_conditions" id="termsAndConditions" required>
+                                        <label class="form-check-label" for="termsAndConditions">
+                                            I agree to the <a href="#">Terms and Conditions</a>
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            You must agree to the terms and conditions.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <br>
+                                <div class="form-group col-12" style=" padding-left: 16px; ">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="rental_agreement" id="rentalAgreement" required>
+                                        <label class="form-check-label" for="rentalAgreement">
+                                            I have read and accept the <a href="#">Rental Agreement</a>
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            You must accept the rental agreement.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1476,6 +1502,10 @@
                     .val() == '' || $('input[name="delivery_state"]').val() == '' || $(
                         'input[name="delivery_zip_code"]').val() == '') {
                     alert('Please fill in all fields.');
+                } else if (!$('input[name="terms_and_conditions"]').is(':checked')) {
+                    alert('Please agree to the Terms and Conditions.');
+                } else if (!$('input[name="rental_agreement"]').is(':checked')) {
+                    alert('Please accept the Rental Agreement.');
                 } else {
                     $('#get_order_box').slideUp();
                     $('#recovery_time_box').slideDown();

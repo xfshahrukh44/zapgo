@@ -222,7 +222,7 @@
                    <div class="commited">
                        {!! $section[6]->value !!}
                         <div class="mt-5">
-                             <a href="{{ route('contact') }}" class="btn blue-custom">Book an appointment</a>
+                             <a href="{{ route('contact') }}" class="btn blue-custom">Contact Us</a>
                         </div>
                    </div>
               </div>

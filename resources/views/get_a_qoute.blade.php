@@ -56,7 +56,7 @@
                                             required="">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="address" class="form-control" placeholder="Address*"
+                                        <input type="text" name="address" class="form-control" placeholder="Delivery/Recovery Address*"
                                             required="">
                                     </div>
                                     <div class="form-group col-6">
@@ -134,7 +134,7 @@
                                         <input type="text" name="" id="total_amount" class="form-control" placeholder="Total Amount*" readonly>
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="bulk_amount" class="form-control" placeholder="Bulk Amount*">
+                                        <input type="number" step="any" name="bulk_amount" class="form-control" placeholder="Your Amount*">
                                     </div>
 
                                     <div class="form-group col-12">
@@ -334,16 +334,24 @@
                     price = parseFloat(price_value);
                 } else if (days > 30) {
                     price_value = parseFloat(selectedOption.data("price-per-month"));
-                    price = parseFloat(price_value + per_day_price * amount_date);
+                    price = parseFloat(per_day_price * days);
                 } else if (days == 7) {
                     price_value = parseFloat(selectedOption.data("price-per-week"));
                     price = parseFloat(price_value);
                 } else if (days > 7) {
-                    price_value = parseFloat(selectedOption.data("price-per-week"));
-                    price = parseFloat(price_value + per_day_price * amount_date);
+                    // price_value = parseFloat(selectedOption.data("price-per-week"));
+                    price_value = parseFloat(selectedOption.data("price-per-month"));
+                    price = parseFloat(per_day_price * days);
+                    if (price > price_value) {
+                        price = price_value;
+                    }
                 } else{
-                    price_value = parseFloat(selectedOption.data("price"));
-                    price = parseFloat(price_value * amount_date);
+                    // price_value = parseFloat(selectedOption.data("price"));
+                    price_value = parseFloat(selectedOption.data("price-per-week"));
+                    price = parseFloat(per_day_price * amount_date);
+                    if (price > price_value) {
+                        price = price_value;
+                    }
                 }
 
                 $('#item-price-'+ rowCounter).val(price.toFixed(2));

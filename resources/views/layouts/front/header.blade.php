@@ -693,7 +693,7 @@
                 price_key = 'price_per_day'
             }
 
-            console.log(days,price_key);
+            // console.log(days,price_key);
             let sub_total = 0.00;
 
             for (const item of cart.items) {
@@ -705,16 +705,30 @@
                 if(price_key == 'price_per_month' && days == 30) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_month' && days > 30) {
-                    console.log(item[price_key],item['price_per_day'],multiplier_value_temp);
-                    product_total = (parseFloat(item[price_key]) + parseFloat(item['price_per_day']) * parseFloat(multiplier_value_temp)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item['price_per_day']) * parseFloat(days)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_week' && days == 7) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_week' && days > 7) {
-                    console.log(item[price_key],item['price_per_day'],multiplier_value_temp);
-                    product_total = (parseFloat(item[price_key]) + parseFloat(item['price_per_day']) * parseFloat(multiplier_value_temp)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item['price_per_day']) * parseFloat(days)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    if (product_total > item['price_per_month']) {
+                        product_total = parseFloat(item['price_per_month']);
+                    }
                 } else {
                     product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    if (product_total > item['price_per_week']) {
+                        product_total = parseFloat(item['price_per_week']);
+                    }
                 }
+                // console.log(product_total+' preious');
+
+                // const priceArray = [58, 225, 710];
+                // priceArray.shift();
+                // for (const price of priceArray) {
+                //     if (price < product_total) {
+                //         product_total = price;
+                //     }
+                // }
+                // console.log(product_total+' after');
             
                 sub_total += product_total;
             
@@ -767,7 +781,7 @@
             let envFee_final = (envFee / 100) * sub_total;
             let rentalProtection_final = (rentalProtection / 100) * sub_total;
             
-            console.log(rentalProtection_final,envFee_final,otherFees_final,tax_final);
+            // console.log(rentalProtection_final,envFee_final,otherFees_final,tax_final);
             
             function formatValue(value) {
                 return parseFloat(value).toFixed(2);

@@ -119,6 +119,31 @@
                                 $count++;
                             @endphp
                             @endforeach
+                            @php
+                                $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
+                                $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
+                                if($quote->discount != null)
+                                {
+                                    $rental_price = $quote->discount;
+                                }else{
+                                    $rental_price = $subtotal;
+                                }
+                                $rentalProtection_final = ($rentalProtection / 100) * $rental_price;
+                            @endphp
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count }}</div>
+                                <div class="col-9 col-sm-5">Delivery Fee</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($deliveryFee, 2) !!}</div>
+                            </div>
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 1 }}</div>
+                                <div class="col-9 col-sm-5">Rental protection plan</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($rentalProtection_final, 2) !!}</div>
+                            </div>
                         </div>
                         
 
@@ -134,16 +159,16 @@
                                         SubTotal
                                     </div>
                                     <div class="col-5">
-                                        <span class="text-120 text-secondary-d1">${{ $subtotal }}</span>
+                                        <span class="text-120 text-secondary-d1">${!! number_format($subtotal, 2) !!}</span>
                                     </div>
                                 </div>
                                 @if($quote->discount != null)
                                 <div class="row my-2">
                                     <div class="col-7 text-right">
-                                        Discount
+                                        Admin Price
                                     </div>
                                     <div class="col-5">
-                                        <span class="text-110 text-secondary-d1">${{$quote->discount}}</span>
+                                        <span class="text-110 text-secondary-d1">${!! number_format($quote->discount, 2) !!}</span>
                                     </div>
                                 </div>
                                 @endif
@@ -176,9 +201,10 @@
                                         }else{
                                             $total = $subtotal;
                                         }
+                                        $total = $total + $deliveryFee + $rentalProtection_final;
                                     @endphp
                                     <div class="col-5">
-                                        <span class="text-150 text-success-d3 opacity-2">${{$total }}</span>
+                                        <span class="text-150 text-success-d3 opacity-2">${!! number_format($total, 2) !!}</span>
                                     </div>
                                 </div>
                             </div>

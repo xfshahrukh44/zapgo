@@ -30,7 +30,7 @@
     font-weight: 500;
     color: var(--white-color) !important;
     font-family: Proxima-Nova-Font;
-    margin-left: 300px;
+    /* margin-left: 300px; */
     margin-top: 15px;
 }
 
@@ -140,7 +140,10 @@
                     {{-- <label class="remember"><input type="checkbox"> Remember me </label> --}}
                     <a href="{{ url('password/reset') }}" class="pull-right forg_text">Forgot password?</a>
                 </div>
-                <button class="btn btn-yellow" type="submit">Sign up</button>
+                <div style=" display: flex; justify-content: center; gap: 25px;">
+                    <button class="btn btn-yellow" type="submit">Sign in</button>
+                    <a href="{{ url('signup') }}" class="btn btn-yellow" type="button">Sign up</a>
+                </div>
                 <!-- <span>or</span>
                 <div class="social-group">
                     <button class="loginBtn loginBtn--facebook">Login with Facebook</button>
