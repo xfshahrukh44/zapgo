@@ -29,7 +29,7 @@
                                             <div class="col-12">
                                                 <label for="example-search-input"
                                                        class="col-form-label font-16 text-primary">Email</label>
-                                                <input class="form-control pl-0 font-16 {{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                                <input class="form-control pl-0 font-16 {{ $errors->has('email') ? ' is-invalid' : '' }}" id="email"
                                                        type="text" placeholder="email" name="email" value="{{ old('email') }}"
                                                        required autofocus>
                                                 @if ($errors->has('email'))
@@ -44,7 +44,7 @@
                                             <div class="col-12">
                                                 <label for="example-search-input"
                                                        class="col-form-label font-16 text-primary">Password</label>
-                                                <input class="form-control font-16  pl-0 {{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                                <input class="form-control font-16  pl-0 {{ $errors->has('password') ? ' is-invalid' : '' }}" id="password"
                                                        type="password" name="password" placeholder="password" value="">
                                                 @if ($errors->has('password'))
                                                     <span class="invalid-feedback" role="alert">
@@ -70,7 +70,7 @@
                                         <div class="clearfix"></div>
                                         <div class="form-group row m-b-10">
                                             <div class="col-12">
-                                                <button type="submit"
+                                                <button type="submit" id="submit-button"
                                                         class="btn btn-rounded btn-primary m-b-20 waves-effect waves-light btn-block">
                                                     Login
                                                 </button>

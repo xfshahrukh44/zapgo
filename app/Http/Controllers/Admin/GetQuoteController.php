@@ -209,9 +209,9 @@ class GetQuoteController extends Controller
         }
 
         if($request->response == 'approved'){
-            $data->bulk_status = 1;
+            $data->status = 2;
         }else{
-            $data->bulk_status = 0;
+            $data->status = 0;
         }
         $data->total_amount = $request->amount;
         $data->save();
@@ -228,7 +228,7 @@ class GetQuoteController extends Controller
         }
 
         $data->discount =  $request->amount;
-        $data->total_amount =  $request->subtotal - $request->amount;
+        $data->total_amount =  $request->amount;
         $data->save();
 
         return response()->json(['success' => true, 'message' => 'Discount updated success']);

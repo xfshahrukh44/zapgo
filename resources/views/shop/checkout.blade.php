@@ -304,18 +304,33 @@
             'price_per_day' => 1,
         ];
 
-        if ($days > 28) {
+        if ($days > 29) {
             $price_key = 'price_per_month';
-        } else if ($days > 7) {
+        } else if ($days > 6) {
             $price_key = 'price_per_week';
         } else {
             $price_key = 'price_per_day';
         }
 
+        $rental_subtotal = 0.00;
+
         foreach ($new_cart['items'] as $cart_item) {
             $day_value = $day_values[$price_key];
             $multiplier_value = $days / $day_value;
-            $product_total = (floatval($cart_item[$price_key]) * floatval($multiplier_value)) * ($cart_item['qty']);
+            $multiplier_value_temp = $days - $day_value;
+
+            if ($price_key == 'price_per_month' && $days == 30) {
+                $product_total = (floatval($cart_item[$price_key])) * ($cart_item['qty']);
+            } elseif ($price_key == 'price_per_month' && $days > 30) {
+                $product_total = (floatval($cart_item[$price_key]) + floatval($cart_item['price_per_day']) * floatval($multiplier_value_temp)) * ($cart_item['qty']);
+            } elseif ($price_key == 'price_per_week' && $days == 7) {
+                $product_total = (floatval($cart_item[$price_key])) * ($cart_item['qty']);
+            } elseif ($price_key == 'price_per_week' && $days > 7) {
+                $product_total = (floatval($cart_item[$price_key]) + floatval($cart_item['price_per_day']) * floatval($multiplier_value_temp)) * ($cart_item['qty']);
+            } else {
+                $product_total = (floatval($cart_item[$price_key]) * floatval($multiplier_value)) * ($cart_item['qty']);
+            }
+
             $rental_subtotal += $product_total;
 
             $cart_item['total'] = $product_total;

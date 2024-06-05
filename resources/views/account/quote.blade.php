@@ -66,11 +66,14 @@
                                                               <td>{{ $val->first_name .' '. $val->last_name }}</td>
                                                               <td>{{ $val->email }}</td>
                                                               @if ($val->status == 0)
-                                                                <td><button type="button" class="btn btn-danger" onclick="window.location.href='{{ route('view.payment', ['id' => $val->id]) }}'">Unpaid</button></td>
+                                                                <td><button type="button" class="btn btn-danger">Not Approved</button></td>
                                                                 <td class="viewbtn"><a href="#">...</a></td>
-                                                              @else
+                                                              @elseif($val->status == 1)
                                                                 <td><button type="button" class="btn btn-success">Paid</button></td>
                                                                 <td class="viewbtn"><a href="{{ route('view.quotes',[$val->id]) }}">View</a></td>
+                                                              @else
+                                                                <td><button type="button" class="btn btn-success" onclick="window.location.href='{{ route('view.payment', ['id' => $val->id]) }}'">Approved & Unpaid</button></td>
+                                                                <td class="viewbtn"><a href="#">...</a></td>
                                                               @endif
 
                                                             </tr>

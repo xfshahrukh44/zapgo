@@ -88,7 +88,7 @@
                                                 @endphp
                                                 <select class="form-select product" name="product[]"
                                                     aria-label="Default select example" id="product-0">
-                                                    <option selected>Select Product</option>
+                                                    <option selected disabled>Select Product</option>
                                                     @foreach ($product as $items)
                                                     @php
                                                         $price_per_day = (\App\ProductAttribute::where(['product_id' => $items->id, 'attribute_id' => 14])->first()->price) ?? 0.00;
@@ -100,15 +100,23 @@
 
                                                 </select>
                                             </div>
-                                            <div class="form-group col-3">
+                                            {{-- <div class="form-group col-3">
                                                 <div class="quantity">
                                                     <span class="minus-0 q-minus-1">-</span>
                                                     <input name="quantity[]" id="quantity-0" type="text"
                                                         class="quantity__input input-1 count" readonly value="0">
                                                     <span class="plus-0 q-plus-1">+</span>
                                                 </div>
+                                            </div> --}}
+                                            <div class="form-group col-1">
+                                                <select name="quantity[]" id="quantity-0" class="form-select quantity" style="background: transparent !important; padding: 11px;">
+                                                    <option value="" selected disabled>Quantity</option>
+                                                    @for ($i = 1; $i <= 10; $i++)
+                                                        <option value="{{ $i }}">{{ $i }}</option>
+                                                    @endfor
+                                                </select>
                                             </div>
-                                            <div class="form-group col-3">
+                                            <div class="form-group col-5">
                                                 <input type="text" name="price[]" id="price-0" class="form-control getAmount" value="0"
                                                  required readonly>
                                             </div>
@@ -185,9 +193,9 @@
             $('.date-rent-start').Zebra_DatePicker({
                 direction: true,
                 format: 'm-d-Y',
-                pair: $('#date-rent-end'),
+                pair: $('.date-rent-end'),
                 onClose: function(view, elements) {
-                    var datepicker = $('#date-rent-end').data('Zebra_DatePicker');
+                    var datepicker = $('.date-rent-end').data('Zebra_DatePicker');
                     if (datepicker) {
                         var startDate = new Date($('.date-rent-start').val());
                         var endDate = new Date($('.date-rent-end').val());
@@ -204,7 +212,7 @@
                 direction: 1,
                 format: 'm-d-Y',
                 onClose: function(view, elements) {
-                    var datepicker = $('#date-rent-end').data('Zebra_DatePicker');
+                    var datepicker = $('.date-rent-end').data('Zebra_DatePicker');
                     if (datepicker) {
                         var startDate = new Date($('.date-rent-start').val());
                         var endDate = new Date($('.date-rent-end').val());
@@ -238,17 +246,28 @@
                 console.log(diffDays + ' days');
                 let price_key;
                 let day_value;
-                if (diffDays > 28) {
+                let multiplier_value;
+                if (diffDays > 30) {
                     price_key = 'price_per_month';
-                    day_value = 28;
+                    day_value = 30;
+                    multiplier_value = diffDays - day_value;
+                } else if (diffDays == 30) {
+                    price_key = 'price_per_week';
+                    day_value = 30;
+                    multiplier_value = 1;
                 } else if (diffDays > 7) {
                     price_key = 'price_per_week';
                     day_value = 7;
+                    multiplier_value = diffDays - day_value;
+                } else if (diffDays == 7) {
+                    price_key = 'price_per_week';
+                    day_value = 7;
+                    multiplier_value = 1;
                 } else {
                     price_key = 'price_per_day';
                     day_value = 1;
+                    multiplier_value = diffDays / day_value;
                 }
-                let multiplier_value = diffDays / day_value;
                 $('#date-range-days').val(diffDays);
                 $('#amount-date').val(multiplier_value);
             }
@@ -266,29 +285,30 @@
 
                 var rowCounter = counter; 
                 clonedRow.find("select.product").attr("id", "product-" + rowCounter);
-                clonedRow.find("input[name='quantity[]']").attr("id", "quantity-" + rowCounter);
+                clonedRow.find("select.quantity").attr("id", "quantity-" + rowCounter);
+                // clonedRow.find("input[name='quantity[]']").attr("id", "quantity-" + rowCounter);
                 clonedRow.find("input[name='item_price[]']").attr("id", "item-price-" + rowCounter);
                 clonedRow.find("input[name='price[]']").attr("id", "price-" + rowCounter);
                 clonedRow.find(".minus-0").removeClass("minus-0").addClass("minus-" + rowCounter);
                 clonedRow.find(".plus-0").removeClass("plus-0").addClass("plus-" + rowCounter);
 
-                clonedRow.find(".plus-" + rowCounter).click(function() {
-                    var inputField = $(this).siblings(".quantity__input");
-                    var currentValue = parseInt(inputField.val());
-                    inputField.val(currentValue + 1);
-                    updatePrice(rowCounter);
-                    updateTotal();
-                });
+                // clonedRow.find(".plus-" + rowCounter).click(function() {
+                //     var inputField = $(this).siblings(".quantity__input");
+                //     var currentValue = parseInt(inputField.val());
+                //     inputField.val(currentValue + 1);
+                //     updatePrice(rowCounter);
+                //     updateTotal();
+                // });
 
-                clonedRow.find(".minus-" + rowCounter).click(function() {
-                    var inputField = $(this).siblings(".quantity__input");
-                    var currentValue = parseInt(inputField.val());
-                    if (currentValue > 0) {
-                        inputField.val(currentValue - 1);
-                        updatePrice(rowCounter);
-                        updateTotal();
-                    }
-                });
+                // clonedRow.find(".minus-" + rowCounter).click(function() {
+                //     var inputField = $(this).siblings(".quantity__input");
+                //     var currentValue = parseInt(inputField.val());
+                //     if (currentValue > 0) {
+                //         inputField.val(currentValue - 1);
+                //         updatePrice(rowCounter);
+                //         updateTotal();
+                //     }
+                // });
 
                 counter++;
                 clonedRow.find(".remove-row").show();
@@ -298,24 +318,39 @@
 
             function updatePrice(rowCounter) {
                 var productSelector = $("#product-" + rowCounter);
+                var quantitySelect = $("#quantity-" + rowCounter);
+                var quantity = quantitySelect.val();
                 var selectedOption = productSelector.find("option:selected");
+                console.log(quantity);
+                
                 
                 var amount_date = $('#amount-date').val();
                 var days = $('#date-range-days').val();
+                var per_day_price = parseFloat(selectedOption.data("price-per-day"));
                 var price_value;
-                if (days > 28) {
+                var price;
+                if (days == 30) {
                     price_value = parseFloat(selectedOption.data("price-per-month"));
+                    price = parseFloat(price_value);
+                } else if (days > 30) {
+                    price_value = parseFloat(selectedOption.data("price-per-month"));
+                    price = parseFloat(price_value + per_day_price * amount_date);
+                } else if (days == 7) {
+                    price_value = parseFloat(selectedOption.data("price-per-week"));
+                    price = parseFloat(price_value);
                 } else if (days > 7) {
                     price_value = parseFloat(selectedOption.data("price-per-week"));
+                    price = parseFloat(price_value + per_day_price * amount_date);
                 } else{
                     price_value = parseFloat(selectedOption.data("price"));
+                    price = parseFloat(price_value * amount_date);
                 }
-                
-                var price = parseFloat(price_value * amount_date);
+
                 $('#item-price-'+ rowCounter).val(price.toFixed(2));
 
-                var quantity = parseInt($("#quantity-" + rowCounter).val());
+                // var quantity = parseInt($("#quantity-" + rowCounter).val());
                 var totalPrice = price * quantity;
+                
                 if (!isNaN(totalPrice)) {
                     $("#price-" + rowCounter).val(totalPrice.toFixed(2));
                 } else {
@@ -353,7 +388,7 @@
                 updateTotal();
             });
 
-            $(document).on("input", "input[name='quantity[]']", function() {
+            $(document).on("change", "select.quantity", function() {
                 var rowCounter = $(this).attr("id").split("-")[1];
                 updatePrice(rowCounter);
                 updateTotal();
@@ -362,63 +397,201 @@
             $(document).on("keyup", "input[name='price[]']", function() {
                 updateTotal();
             });
-        });
-
-
-
-        $(document).on("click", ".plus-0", function() {
-            var inputField = $(this).siblings('.quantity__input');
-            var currentValue = parseInt(inputField.val());
-            inputField.val(currentValue + 1);
-
-            var productSelector = $("#product-0");
-            var selectedOption = productSelector.find("option:selected");
             
-            var amount_date = $('#amount-date').val();
-            var days = $('#date-range-days').val();
-            var price_value;
-            if (days > 28) {
-                price_value = parseFloat(selectedOption.data("price-per-month"));
-            } else if (days > 7) {
-                price_value = parseFloat(selectedOption.data("price-per-week"));
-            } else{
-                price_value = parseFloat(selectedOption.data("price"));
+            function updateAmountOnDateChange() {
+                var startDate = new Date($('.date-rent-start').val());
+                var endDate = new Date($('.date-rent-end').val());
+                updateDateRange1(startDate, endDate);
+                
+                var rowCount = $(".product-row").length;
+                console.log(rowCount);
+                
+                if(rowCount != 1){
+                    $(".product-row").each(function(index) {
+                        updatePrice(index + 1);
+                    });}
+                // }else{
+                    $(".product-row").each(function(index) {
+                        updatePrice(index);
+                    });
+                // }
+                updateTotal();
+            }
+    
+            function isProductAndQuantitySelected() {
+                var isProductSelected = false;
+                var isQuantitySelected = false;
+                
+                $("select.product, select.quantity").each(function() {
+                    if ($(this).hasClass('product') && $(this).val() !== "") {
+                        isProductSelected = true;
+                    } else if ($(this).hasClass('quantity') && $(this).val() !== "") {
+                        isQuantitySelected = true;
+                    }
+                });
+            
+                return isProductSelected && isQuantitySelected;
             }
             
-            var price = parseFloat(price_value * amount_date);
-            $('#item-price-0').val(price.toFixed(2));
-            var quantity = parseInt($("#quantity-0").val());
-            var totalPrice = price * quantity;
-            $("#price-0")   .val(totalPrice.toFixed(2));
+             $('.date-rent-start').Zebra_DatePicker({
+                direction: 1,
+                format: 'm-d-Y',
+                onSelect: function(view, elements) {
+                    if (isProductAndQuantitySelected()) {
+                        updateAmountOnDateChange();
+                    }
+                }
+            });
+            $('.date-rent-start').Zebra_DatePicker({
+                direction: true,
+                format: 'm-d-Y',
+                pair: $('.date-rent-end'),
+                onSelect: function(view, elements) {
+                    var datepicker = $('.date-rent-end').data('Zebra_DatePicker');
+                    if (datepicker) {
+                        var startDate = new Date($('.date-rent-start').val());
+                        var endDate = new Date($('.date-rent-end').val());
+                        if (endDate < startDate) {
+                            $('.date-rent-end').val($('.date-rent-start').val());
+                            datepicker.update();
+                        }
+                        if (isProductAndQuantitySelected()) {
+                            updateAmountOnDateChange();
+                        }
+                    }
+                }
+            });
+            
+            $('.date-rent-end').Zebra_DatePicker({
+                direction: 1,
+                format: 'm-d-Y',
+                onSelect: function(view, elements) {
+                    if (isProductAndQuantitySelected()) {
+                        updateAmountOnDateChange();
+                    }
+                }
+            });
+            
+            // $('.date-rent-end').Zebra_DatePicker({
+            //     direction: true,
+            //     format: 'm-d-Y',
+            //     onSelect: function(view, elements) {
+            //         if (isProductAndQuantitySelected()) {
+            //             updateAmountOnDateChange();
+            //         }
+            //     }
+            // });
+            
+            function updateDateRange1(startDate, endDate) {
+                var timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+                var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                console.log(diffDays + ' days');
+                let price_key;
+                let day_value;
+                let multiplier_value;
+                if (diffDays > 30) {
+                    price_key = 'price_per_month';
+                    day_value = 30;
+                    multiplier_value = diffDays - day_value;
+                } else if (diffDays == 30) {
+                    price_key = 'price_per_week';
+                    day_value = 30;
+                    multiplier_value = 1;
+                } else if (diffDays > 7) {
+                    price_key = 'price_per_week';
+                    day_value = 7;
+                    multiplier_value = diffDays - day_value;
+                } else if (diffDays == 7) {
+                    price_key = 'price_per_week';
+                    day_value = 7;
+                    multiplier_value = 1;
+                } else {
+                    price_key = 'price_per_day';
+                    day_value = 1;
+                    multiplier_value = diffDays / day_value;
+                }
+                $('#date-range-days').val(diffDays);
+                $('#amount-date').val(multiplier_value);
+            }
+            
         });
+        
+        
+
+
+
+        // $(document).on("click", ".plus-0", function() {
+        //     var inputField = $(this).siblings('.quantity__input');
+        //     var currentValue = parseInt(inputField.val());
+        //     inputField.val(currentValue + 1);
+
+        //     var productSelector = $("#product-0");
+        //     var selectedOption = productSelector.find("option:selected");
+            
+        //     var amount_date = $('#amount-date').val();
+        //     var days = $('#date-range-days').val();
+        //     var per_day_price = parseFloat(selectedOption.data("price-per-day"));
+        //     var price_value;
+        //     var price;
+        //     if (days == 30) {
+        //         price_value = parseFloat(selectedOption.data("price-per-month"));
+        //         price = parseFloat(price_value);
+        //     } else if (days > 30) {
+        //         price_value = parseFloat(selectedOption.data("price-per-month"));
+        //         price = parseFloat(price_value + per_day_price * amount_date);
+        //     } else if (days == 7) {
+        //         price_value = parseFloat(selectedOption.data("price-per-week"));
+        //         price = parseFloat(price_value);
+        //     } else if (days > 7) {
+        //         price_value = parseFloat(selectedOption.data("price-per-week"));
+        //         price = parseFloat(price_value + per_day_price * amount_date);
+        //     } else{
+        //         price_value = parseFloat(selectedOption.data("price"));
+        //         price = parseFloat(price_value * amount_date);
+        //     }
+
+        //     $('#item-price-0').val(price.toFixed(2));
+        //     var quantity = parseInt($("#quantity-0").val());
+        //     var totalPrice = price * quantity;
+        //     $("#price-0")   .val(totalPrice.toFixed(2));
+        // });
 
         // Decrement quantity
-        $(document).on("click", ".minus-0", function() {
-            var inputField = $(this).siblings('.quantity__input');
-            var currentValue = parseInt(inputField.val());
-            if (currentValue > 0) {
-                inputField.val(currentValue - 1);
-            }
+        // $(document).on("click", ".minus-0", function() {
+        //     var inputField = $(this).siblings('.quantity__input');
+        //     var currentValue = parseInt(inputField.val());
+        //     if (currentValue > 0) {
+        //         inputField.val(currentValue - 1);
+        //     }
 
-            var productSelector = $("#product-0");
-            var selectedOption = productSelector.find("option:selected");
-            var amount_date = parseFloat($('#amount-date').val());
-            var days = $('#date-range-days').val();
-            var price_value;
-            if (days > 28) {
-                price_value = parseFloat(selectedOption.data("price-per-month"));
-            } else if (days > 7) {
-                price_value = parseFloat(selectedOption.data("price-per-week"));
-            } else{
-                price_value = parseFloat(selectedOption.data("price"));
-            }
-            
-            var price = parseFloat(price_value * amount_date);
-            $('#item-price-0').val(price.toFixed(2));
-            var quantity = parseInt($("#quantity-0").val());
-            var totalPrice = price * quantity;
-            $("#price-0").val(totalPrice.toFixed(2));
-        });
+        //     var productSelector = $("#product-0");
+        //     var selectedOption = productSelector.find("option:selected");
+        //     var amount_date = parseFloat($('#amount-date').val());
+        //     var days = $('#date-range-days').val();
+        //     var per_day_price = parseFloat(selectedOption.data("price-per-day"));
+        //     var price_value;
+        //     var price;
+        //     if (days == 30) {
+        //         price_value = parseFloat(selectedOption.data("price-per-month"));
+        //         price = parseFloat(price_value);
+        //     } else if (days > 30) {
+        //         price_value = parseFloat(selectedOption.data("price-per-month"));
+        //         price = parseFloat(price_value + per_day_price * amount_date);
+        //     } else if (days == 7) {
+        //         price_value = parseFloat(selectedOption.data("price-per-week"));
+        //         price = parseFloat(price_value);
+        //     } else if (days > 7) {
+        //         price_value = parseFloat(selectedOption.data("price-per-week"));
+        //         price = parseFloat(price_value + per_day_price * amount_date);
+        //     } else{
+        //         price_value = parseFloat(selectedOption.data("price"));
+        //         price = parseFloat(price_value * amount_date);
+        //     }
+        //     $('#item-price-0').val(price.toFixed(2));
+        //     var quantity = parseInt($("#quantity-0").val());
+        //     var totalPrice = price * quantity;
+        //     $("#price-0").val(totalPrice.toFixed(2));
+        // });
 
     </script>
 @endsection

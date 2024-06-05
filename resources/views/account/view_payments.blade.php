@@ -170,11 +170,11 @@
                                         Total Amount
                                     </div>
                                     @php
-                                        if($quote->total_amount == null)
+                                        if($quote->discount != null)
                                         {
-                                            $total = $subtotal;
+                                            $total = $quote->discount;
                                         }else{
-                                            $total = $quote->total_amount;
+                                            $total = $subtotal;
                                         }
                                     @endphp
                                     <div class="col-5">
@@ -185,7 +185,7 @@
                         </div>
 
                         <hr />
-                        @if ($quote->status == 0)
+                        @if ($quote->status == 2)
                         
                         <h2 class="accordion-header" id="flush-headingTwo">
 
@@ -223,6 +223,12 @@
                                 </div>
                             </div>
                         </form>
+                        @elseif($quote->status == 0)
+                        <h2 class="accordion-header" id="flush-headingTwo">
+
+                            Wait for approval from admin
+
+                        </h2>
                         @else
                         <h2 class="accordion-header" id="flush-headingTwo">
 

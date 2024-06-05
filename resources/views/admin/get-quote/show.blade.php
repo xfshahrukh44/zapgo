@@ -278,24 +278,39 @@
                                 <div class="order-detail">
                                     <h3>Total Product Amount</h3>
                                     <div class="order-box">
-                                        {{ $subtotal }}
+                                        {{ number_format($subtotal, 2) }}
                                     </div>
                                 </div>
                             </div>
                 
                         </div>
                     </div>
+                    @if($getquote->status != 1)
                     <div class="col-md-6">
                         <div class="white-box card">
                             <div class="card-body">
                                 <div class="order-detail">
+                                    @if($getquote->status == 0)
                                     <h3>Discount</h3>
+                                    @else
+                                    <h3>Approve/Not Approve</h3>
+                                    @endif
                                     <div class="order-box">
                                         <form>
+                                    
                                             <input type="hidden" id="quote_id" value="{{ $getquote->id }}">
                                             <input type="hidden" id="subtotal" value="{{ $subtotal }}">
-                                            <input type="number" step="any" name="total_amount" id="total_amount">
-                                            <input type="button" class="btn btn-primary" id="submitButton" value="Add">
+                                            <!--<input type="number" step="any" name="total_amount" id="total_amount">-->
+                                            <!--<input type="button" class="btn btn-primary" id="submitButton" value="Add">-->
+                                            @if($getquote->status == 2)
+                                                <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}">Not Approve</button> 
+                                            @elseif($getquote->status == 0)
+                                                <input type="number" step="any" name="total_amount" id="total_amount">
+                                                <input type="button" class="btn btn-primary" id="submitButton" value="Add">
+                                                <button id="approved" class="btn btn-success response" data-amount = "{{ $getquote->bulk_amount }}">Approve</button>
+                                                <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}">Not Approve</button> 
+                                            @endif
+                                            
                                         </form>
                                     </div>
                                 </div>
@@ -303,6 +318,7 @@
                 
                         </div>
                     </div>
+                    @endif
                 </div>
 
             </div>
@@ -431,10 +447,12 @@
                         if(response.success && response.status == "approved"){
                             $('#approved').show();
                             $('#approved').text('Approved');
+                            $('#approved').prop('disabled', true);
                             $('#declined').hide();
                         }else{
                             $('#declined').show();
-                            $('#declined').text('Declined');
+                            $('#declined').text('Not Aprroved');
+                            $('#declined').prop('disabled', true);
                             $('#approved').hide();
                         }
                         

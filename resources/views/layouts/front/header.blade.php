@@ -9,11 +9,12 @@
         $price_per_day = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 14])->first()->price) ?? 0.00;
         $price_per_week = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 15])->first()->price) ?? 0.00;
         $price_per_month = (\App\ProductAttribute::where(['product_id' => $product_id, 'attribute_id' => 16])->first()->price) ?? 0.00;
+        $delivery_fee_config = App\Http\Traits\HelperTrait::returnFlag(1974);
         $new_cart ['items'] []= [
             'id' => $product_id,
             'name' => $product->product_title,
             'qty' => $item['qty'],
-            'delivery_charges' => $item['delivery_charges'],
+            'delivery_charges' => $delivery_fee_config,
             'price_per_day' => $price_per_day,
             'price_per_week' => $price_per_week,
             'price_per_month' => $price_per_month,
@@ -47,18 +48,33 @@
         'price_per_day' => 1,
     ];
 
-    if ($days > 28) {
+    if ($days > 29) {
         $price_key = 'price_per_month';
-    } else if ($days > 7) {
+    } else if ($days > 6) {
         $price_key = 'price_per_week';
     } else {
         $price_key = 'price_per_day';
     }
 
+    $rental_subtotal = 0.00;
+
     foreach ($new_cart['items'] as $cart_item) {
         $day_value = $day_values[$price_key];
         $multiplier_value = $days / $day_value;
-        $product_total = (floatval($cart_item[$price_key]) * floatval($multiplier_value)) * ($cart_item['qty']);
+        $multiplier_value_temp = $days - $day_value;
+
+        if ($price_key == 'price_per_month' && $days == 30) {
+            $product_total = (floatval($cart_item[$price_key])) * ($cart_item['qty']);
+        } elseif ($price_key == 'price_per_month' && $days > 30) {
+            $product_total = (floatval($cart_item[$price_key]) + floatval($cart_item['price_per_day']) * floatval($multiplier_value_temp)) * ($cart_item['qty']);
+        } elseif ($price_key == 'price_per_week' && $days == 7) {
+            $product_total = (floatval($cart_item[$price_key])) * ($cart_item['qty']);
+        } elseif ($price_key == 'price_per_week' && $days > 7) {
+            $product_total = (floatval($cart_item[$price_key]) + floatval($cart_item['price_per_day']) * floatval($multiplier_value_temp)) * ($cart_item['qty']);
+        } else {
+            $product_total = (floatval($cart_item[$price_key]) * floatval($multiplier_value)) * ($cart_item['qty']);
+        }
+
         $rental_subtotal += $product_total;
 
         $cart_item['total'] = $product_total;
@@ -474,7 +490,7 @@
                                             </p>
                                             <p class="days">
 
-                                                Quantity: <input type="number" min="1" value="{{$value['qty']}}" name="qty" class="input_qty form-control">
+                                                Quantity: <input type="number" min="1" value="{{$value['qty']}}" name="qty" class="input_qty form-control" disabled>
                                             </p>
                                             <?php
                                             //$subtotal1 += $pro_total;
@@ -609,6 +625,7 @@
 
 </script>
 <script>
+
     function datediff(first, second) {
         return Math.round((second - first) / (1000 * 60 * 60 * 24));
     }
@@ -616,6 +633,14 @@
     function parseDate(str) {
         var mdy = str.split('-');
         return new Date(mdy[2], mdy[0] - 1, mdy[1]);
+    }
+    
+    function checkDatesAndToggleQty() {
+        if ($('#date-rent-start').val() != '' && $('#date-rent-end').val() != '') {
+            $('.input_qty').prop('disabled', false);
+        } else {
+            $('.input_qty').prop('disabled', true);
+        }
     }
 
     $(document).ready(function() {
@@ -630,7 +655,8 @@
             onClose: function(view, elements) {
                 var datepicker = $('#date-rent-end').data('Zebra_DatePicker');
                 datepicker.clear_date();
-                $('.total').slideUp()
+                $('.total').slideUp();
+                checkDatesAndToggleQty();
 
             }
         });
@@ -640,6 +666,7 @@
             format: 'm-d-Y',
             onClose: function(view, elements) {
                 date_rent_end_close();
+                checkDatesAndToggleQty();
             }
         })
 
@@ -653,29 +680,104 @@
 
             let price_key = '';
             let day_values = {
-                price_per_month: 28,
+                price_per_month: 30,
                 price_per_week: 7,
                 price_per_day: 1,
             };
 
-            if (days > 28) {
+            if (days > 29) {
                 price_key = 'price_per_month'
-            } else if (days > 7) {
+            } else if (days > 6) {
                 price_key = 'price_per_week'
             } else {
                 price_key = 'price_per_day'
             }
 
+            console.log(days,price_key);
             let sub_total = 0.00;
+
             for (const item of cart.items) {
                 let day_value = day_values[price_key];
                 let multiplier_value = days / day_value;
-                let product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                let multiplier_value_temp = days - day_value;
+                let product_total;
+            
+                if(price_key == 'price_per_month' && days == 30) {
+                    product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                } else if(price_key == 'price_per_month' && days > 30) {
+                    console.log(item[price_key],item['price_per_day'],multiplier_value_temp);
+                    product_total = (parseFloat(item[price_key]) + parseFloat(item['price_per_day']) * parseFloat(multiplier_value_temp)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                } else if(price_key == 'price_per_week' && days == 7) {
+                    product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                } else if(price_key == 'price_per_week' && days > 7) {
+                    console.log(item[price_key],item['price_per_day'],multiplier_value_temp);
+                    product_total = (parseFloat(item[price_key]) + parseFloat(item['price_per_day']) * parseFloat(multiplier_value_temp)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                } else {
+                    product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                }
+            
                 sub_total += product_total;
-
+            
                 item['total'] = product_total;
             }
+
+            // let sub_total = 0.00;
+            // for (const item of cart.items) {
+            //     if(days > 29){
+            //         let product_total = (parseFloat(item['price_per_month']) ) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+            //         sub_total += product_total;
+            //         console.log(1);
+            //         item['total'] = product_total;
+            //     }else if(days > 6){
+            //         let product_total = (parseFloat(item['price_per_week'])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+            //         sub_total += product_total;
+            //         console.log(2);
+            //         item['total'] = product_total;
+            //     }else{
+            //         let day_value = day_values['price_per_day'];
+            //         let multiplier_value = days / day_value;
+            //         let product_total = (parseFloat(item['price_per_day']) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+            //         sub_total += product_total;
+            //         console.log(3);
+            //         item['total'] = product_total;
+            //     }
+
+            // }
             cart['total'] = sub_total;
+            
+            let tax = '{{ $tax }}';
+            let otherFees = '{{ $otherFees }}';
+            let envFee = '{{ $envFee }}';
+            let rentalProtection = '{{ $rentalProtection }}';
+            
+            // Check for empty strings and convert them to 0
+            tax = tax.trim() === '' ? 0 : parseFloat(tax);
+            otherFees = otherFees.trim() === '' ? 0 : parseFloat(otherFees);
+            envFee = envFee.trim() === '' ? 0 : parseFloat(envFee);
+            rentalProtection = rentalProtection.trim() === '' ? 0 : parseFloat(rentalProtection);
+            
+            // Check if variables are NaN and convert them to 0
+            tax = isNaN(tax) ? 0 : tax;
+            otherFees = isNaN(otherFees) ? 0 : otherFees;
+            envFee = isNaN(envFee) ? 0 : envFee;
+            rentalProtection = isNaN(rentalProtection) ? 0 : rentalProtection;
+            
+            let tax_final = (tax / 100) * sub_total;
+            let otherFees_final = (otherFees / 100) * sub_total;
+            let envFee_final = (envFee / 100) * sub_total;
+            let rentalProtection_final = (rentalProtection / 100) * sub_total;
+            
+            console.log(rentalProtection_final,envFee_final,otherFees_final,tax_final);
+            
+            function formatValue(value) {
+                return parseFloat(value).toFixed(2);
+            }
+            
+            $('#rensub').text(formatValue(rentalProtection_final));
+            $('#envsub').text(formatValue(envFee_final));
+            $('#othsub').text(formatValue(otherFees_final));
+            $('#taxsub').text(formatValue(tax_final));
+
 
             $('#rsub').text(sub_total.toString());
             $('#roundsub').text(cart['delivery_charges'].toString());
@@ -776,10 +878,11 @@
 
             {{--$('#rsub').text(rsub)--}}
             // $('#esub').text((esub + roundsub + rensub + envsub + othsub + taxsub).toFixed(2));
-            $('#cart-price-{{ $key }}').text(product_price)
-            $('#total_amount').text('$ ' + totalBill)
+            // $('#cart-price-{{ $key }}').text(product_price)
+            // $('#total_amount').text('$ ' + totalBill)
             $('.total').slideDown()
             $('#daterange').val(`[${$('#date-rent-start').val()},${$('#date-rent-end').val()}]`)
+            checkDatesAndToggleQty();
             // alert($('#daterange').val())
             //    $('#totalamount').val(totalBill)
         };

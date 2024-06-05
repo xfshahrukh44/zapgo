@@ -136,7 +136,17 @@
                                         <span class="text-120 text-secondary-d1">${{ $subtotal }}</span>
                                     </div>
                                 </div>
-                                @if($quote->bulk_status == 1)
+                                @if($quote->discount != null)
+                                <div class="row my-2">
+                                    <div class="col-7 text-right">
+                                        Discount
+                                    </div>
+                                    <div class="col-5">
+                                        <span class="text-110 text-secondary-d1">${{$quote->discount}}</span>
+                                    </div>
+                                </div>
+                                @endif
+                                {{-- @if($quote->bulk_status == 1)
                                 <div class="row my-2">
                                     <div class="col-7 text-right">
                                         Bulk Amount
@@ -152,23 +162,20 @@
                                 @php
                                     $total = $subtotal;
                                 @endphp
-                                @endif
-
-                                @if($quote->discount != null)
-                                <div class="row my-2">
-                                    <div class="col-7 text-right">
-                                        Discount
-                                    </div>
-                                    <div class="col-5">
-                                        <span class="text-110 text-secondary-d1">${{$quote->discount}}</span>
-                                    </div>
-                                </div>
-                                @endif
+                                @endif --}}
 
                                 <div class="row my-2 align-items-center bgc-primary-l3 p-2">
                                     <div class="col-7 text-right">
                                         Total Amount
                                     </div>
+                                    @php
+                                        if($quote->discount != null)
+                                        {
+                                            $total = $quote->discount;
+                                        }else{
+                                            $total = $subtotal;
+                                        }
+                                    @endphp
                                     <div class="col-5">
                                         <span class="text-150 text-success-d3 opacity-2">${{$total }}</span>
                                     </div>
