@@ -56,7 +56,6 @@
         $price_key = 'price_per_day';
     }
 
-<<<<<<< HEAD
     $rental_subtotal = 0.00;
 
     foreach ($new_cart['items'] as $cart_item) {
@@ -77,21 +76,6 @@
         }
 
         $rental_subtotal += $product_total;
-=======
-     foreach ($new_cart['items'] as $cart_item) {
-        if($days > 30){
-            $product_total = (floatval($cart_item['price_per_month'])) * ($cart_item['qty']);
-            $rental_subtotal += $product_total;
-        } else if($days > 6){
-            $product_total = (floatval($cart_item['price_per_week'])) * ($cart_item['qty']);
-            $rental_subtotal += $product_total;
-        }else{
-            $day_value = $day_values[$price_key];
-            $multiplier_value = $days / $day_value;
-            $product_total = (floatval($cart_item[$price_key]) * floatval($multiplier_value)) * ($cart_item['qty']);
-            $rental_subtotal += $product_total;
-        }
->>>>>>> origin/master
 
         $cart_item['total'] = $product_total;
     }
@@ -721,12 +705,8 @@
                 if(price_key == 'price_per_month' && days == 30) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_month' && days > 30) {
-<<<<<<< HEAD
                     console.log(item[price_key],item['price_per_day'],multiplier_value_temp);
                     product_total = (parseFloat(item[price_key]) + parseFloat(item['price_per_day']) * parseFloat(multiplier_value_temp)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
-=======
-                    product_total = (parseFloat(item[price_key]) + parseFloat(item['price_per_day'])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
->>>>>>> origin/master
                 } else if(price_key == 'price_per_week' && days == 7) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_week' && days > 7) {
