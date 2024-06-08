@@ -120,6 +120,11 @@
                     <span class="menu-title" data-i18n="eCommerce">Testimonials</span>
                 </a>
             </li>
+            <li class="nav-item {{ (request()->is('feedback/feedback') || request()->is('feedback/feedback/*')) ? 'active' : '' }}">
+                <a href="{{url('feedback/feedback')}}"><i class="la la-quote-left"></i>
+                    <span class="menu-title" data-i18n="eCommerce">Feedback</span>
+                </a>
+            </li>
             @php
                 $url = '/'.request()->segment(1).'/'. request()->segment(2);
             @endphp

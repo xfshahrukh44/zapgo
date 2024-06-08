@@ -834,10 +834,10 @@
                                 <p>Rental subtotal:</p>
                                 <p>${{ number_format($rental_subtotal, 2) }}</p>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <p>Purchases subtotal: </p>
                                 <p>-</p>
-                            </li>
+                            </li> --}}
                             <!--<li>-->
                             <!--    <p>In-store pickup:</p><p><strong>Free</strong></p>-->
                             <!--</li>-->
@@ -849,10 +849,10 @@
                                 <p>Rental protection plan:</p>
                                 <p>${{ number_format($rentalProtection_final, 2) }}</p>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <p>Prepay Fuel Option:</p>
                                 <p>-</p>
-                            </li>
+                            </li> --}}
                             <li>
                                 <p>Environmental Service Fee:</p>
                                 <p>${{ number_format($envFee_final, 2) }}</p>

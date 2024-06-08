@@ -527,9 +527,9 @@
                                         $envFee_final = ($envFee / 100) * $rental_subtotal;
                                         $rentalProtection_final = ($rentalProtection / 100) * $rental_subtotal;
                                     @endphp
-                                    <li>
+                                    {{-- <li>
                                         <p>Purchases subtotal: </p><p>-</p>
-                                    </li>
+                                    </li> --}}
                                     <!--<li>-->
                                     <!--    <p>In-store pickup:</p><p><strong>Free</strong></p>-->
                                     <!--</li>-->
@@ -539,9 +539,9 @@
                                     <li>
                                         <p>Rental protection plan:</p><p>$<span id="rensub">{{ number_format($rentalProtection_final, 2) }}</p>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <p>Prepay Fuel Option:</p><p>-</p>
-                                    </li>
+                                    </li> --}}
                                     <li>
                                         <p>Environmental Service Fee:</p><p>$<span id="envsub">{{ number_format($envFee_final, 2) }}</p>
                                     </li>

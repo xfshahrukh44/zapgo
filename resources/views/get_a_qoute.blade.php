@@ -36,33 +36,31 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-6">
-                                        <input type="text" name="first_name" class="form-control"
-                                            placeholder="First Name*" required="">
+                                        <input type="text" name="first_name" class="form-control" placeholder="First Name*" required=""
+                                            value="{{ old('first_name', Auth::user()->name) }}">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name*"
-                                            required="">
+                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name*" required=""
+                                            value="{{ old('last_name', Auth::user()->last_name) }}">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="email" name="email" class="form-control" placeholder="Email Name*"
-                                            required="">
+                                        <input type="email" name="email" class="form-control" placeholder="Email*" required=""
+                                            value="{{ old('email', Auth::user()->email) }}">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="phone" class="form-control"
-                                            placeholder="Phone Number*" required="">
+                                        <input type="text" name="phone" class="form-control" placeholder="Phone Number*" required=""
+                                            value="{{ old('phone', Auth::user()->phone) }}">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="company" class="form-control" placeholder="Company*"
-                                            required="">
+                                        <input type="text" name="company" class="form-control" placeholder="Company*" required=""
+                                            value="{{ old('company', Auth::user()->company_name) }}">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="address" class="form-control" placeholder="Delivery/Recovery Address*"
-                                            required="">
+                                        <input type="text" name="address" class="form-control" placeholder="Delivery/Recovery Address*" required="">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="city" class="form-control" placeholder="City*"
-                                            required="">
-                                    </div>
+                                        <input type="text" name="city" class="form-control" placeholder="City*" required="">
+                                    </div>                                    
                                     <div class="form-group col-6">
                                         @php
                                             $state = DB::table('states')->get();
@@ -134,7 +132,7 @@
                                         <input type="text" name="" id="total_amount" class="form-control" placeholder="Total Amount*" readonly>
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="number" step="any" name="bulk_amount" class="form-control" placeholder="Your Amount*">
+                                        <input type="number" step="any" name="bulk_amount" class="form-control" placeholder="Desired Amount*">
                                     </div>
 
                                     <div class="form-group col-12">

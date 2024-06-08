@@ -177,39 +177,48 @@ class LoggedInController extends Controller
 
 	}
 
-    public function updateAccount(Request $request) { 
-
+    public function updateAccount(Request $request) {
 		$user = DB::table('users')->where('id', Auth::user()->id)->first();
 		
-		$insertArr['name'] = $_POST['name']; 
-		$insertArr['email'] = $_POST['email'];
-		
-		
-		$password = $_POST['password'];
-		$confirmpass = $_POST['password_confirmation'];
-		  if($password == $confirmpass ){
-		if(trim($_POST['password']) != "") {
-		  $insertArr['password'] = Hash::make($_POST['password']);
-		} 
-		DB::table('users')
-		->where('id', Auth::user()->id)
-		->update(
-		   $insertArr
-		  );
-	  
-		Session::flash('message', 'Your password settings has been changed'); 
-		Session::flash('alert-class', 'alert-success'); 
-		return back();   
-		  }
-		  else{
-		   
-		   Session::flash('flash_message', 'Password do not match'); 
-		Session::flash('alert-class', 'alert-danger'); 
-		return back(); 
-		   
-		  }
-		   
-	   }
+		// Gather input fields except _token
+		$insertArr = [
+			'name' => $request->input('uname'),
+			'last_name' => $request->input('last_name'),
+			'email' => $request->input('email'),
+			'phone' => $request->input('phone'),
+			'company_name' => $request->input('company_name'),
+			'address' => $request->input('address'),
+			'state' => $request->input('state'),
+			'city' => $request->input('city'),
+			'zip' => $request->input('zip'),
+			'license_state' => $request->input('license_state'),
+			'license_no' => $request->input('license_no'),
+			'age' => $request->input('age')
+		];
+	
+		$password = $request->input('password');
+		$confirmpass = $request->input('password_confirmation');
+	
+		// Check if passwords match and update if they are set
+		if($password == $confirmpass) {
+			if(trim($password) != "") {
+				$insertArr['password'] = Hash::make($password);
+			}
+	
+			DB::table('users')
+				->where('id', Auth::user()->id)
+				->update($insertArr);
+	
+			Session::flash('message', 'Your account settings have been changed');
+			Session::flash('alert-class', 'alert-success');
+			return back();
+		} else {
+			Session::flash('flash_message', 'Passwords do not match');
+			Session::flash('alert-class', 'alert-danger');
+			return back();
+		}
+	}
+	
 
 
 	public function accountDetail()

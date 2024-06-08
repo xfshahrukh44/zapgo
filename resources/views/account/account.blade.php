@@ -53,10 +53,16 @@
                                                 @csrf
                                                     <div class="row">
 
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div class="single-input-item">
                                                                 <label for="last-name" class="required">Name</label>
-                                                                <input type="text" id="last-name" name="uname" placeholder="Last Name" value="<?php echo Auth::user()->name; ?>">
+                                                                <input type="text" id="last-name" name="uname" placeholder="First Name" value="<?php echo Auth::user()->name; ?>">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="single-input-item">
+                                                                <label for="last_name" class="required">Last Name</label>
+                                                                <input type="text" id="last_name" placeholder="Last Number" name="last_name" value="<?php echo Auth::user()->last_name; ?>">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -95,9 +101,13 @@
                                                     <div class="col-lg-4">
                                                         <div class="single-input-item">
                                                             <label for="address" class="required">State</label>
+                                                            @php
+                                                                $state = DB::table('states')->get();
+                                                            @endphp
                                                             <select name="state" id="">
-                                                                <option value="New York" <?php echo (Auth::user()->state == 'New York') ? 'selected' : ''; ?>>New York</option>
-                                                                <option value="New Jersey" <?php echo (Auth::user()->state == 'New Jersey') ? 'selected' : ''; ?>>New Jersey</option>
+                                                                @foreach ($state as $value)
+                                                                    <option value="{{ $value->name }}" {{ (Auth::user()->state == $value->name) ? 'selected' : '' }}>{{ $value->name }}</option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>

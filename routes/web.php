@@ -211,6 +211,7 @@ Route::get('/remove-cart', function () {
 Route::post('quoteStore', 'HomeController@quoteStore')->name('quoteStore');
 Route::post('getQuoteOrder', 'HomeController@getQuoteOrder')->name('getQuoteOrder');
 Route::post('careerSubmit','HomeController@careerSubmit')->name('contactUsSubmit');
+Route::post('feedbackSubmit','HomeController@feedbackSubmit')->name('feedbackSubmit');
 Route::post('newsletter-submit','HomeController@newsletterSubmit')->name('newsletterSubmit');
 Route::post('update-content','HomeController@updateContent')->name('update-content');
 
@@ -292,3 +293,4 @@ Route::post('admin/bulk-status', 'Admin\GetQuoteController@bulk_status')->name('
 Route::post('admin/discount', 'Admin\GetQuoteController@discount')->name('discount');
 
 Route::resource('bulkorders/bulkorders', 'bulkorders\BulkordersController');
+Route::resource('feedback/feedback', 'Feedback\FeedbackController');

@@ -26,6 +26,7 @@ use App\ProductAttribute;
 use App\Models\Location;
 use App\Models\GetQuote;
 use App\Models\QuoteProdInfo;
+use App\Models\Feedback;
 use Stripe;
 use App\Models\Bulkorder;
 
@@ -216,7 +217,7 @@ else
     public function category()
     {
         $page = Page::find(6);
-        $category = Category::all();
+        $category = Category::orderBy('name', 'asc')->get();
         return view('categories',compact('page','category'));
     }
 
@@ -267,6 +268,17 @@ else
 
 
         return response()->json(['message'=>'Thank you for contacting us. We will get back to you asap', 'status' => true]);
+        return back();
+    }
+
+    public function feedbackSubmit(Request $request)
+    {
+
+
+        Feedback::create($request->all());
+
+
+        return response()->json(['message'=>'Thank you for your feedback.', 'status' => true]);
         return back();
     }
 

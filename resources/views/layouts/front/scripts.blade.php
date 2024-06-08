@@ -134,6 +134,28 @@ $('#contactform').on('submit',function(e){
      });
     });
 
+    $('#feedbackform').on('submit',function(e){
+  //alert('hogaya');
+  $('#feedbackformsresult').html('');
+    e.preventDefault();
+
+    $.ajax({
+      url: "{{ route('feedbackSubmit')}}",
+      type:"POST",
+      data: $("#feedbackform").serialize(),
+
+      success:function(response){
+        if(response.status){
+          document.getElementById("feedbackform").reset();
+          $('#feedbackformsresult').html("<div class='alert alert-success'>" + response.message + "</div>");
+        }
+        else{
+          $('#feedbackformsresult').html("<div class='alert alert-danger'>" + response.message + "</div>");
+        }
+      },
+     });
+    });
+
 </script>
 
 <script>
@@ -176,7 +198,38 @@ $('#contactform').on('submit',function(e){
     $('.total-row').slideDown();
   })
 
+  const ratings = document.querySelectorAll(".rating");
+const ratingsContainer = document.querySelector(".ratings-container");
+const sendBtn = document.querySelector("#send");
+const panel = document.querySelector("#panel");
+const feedbackTypeInput = document.querySelector("#type");
+let selectedRating = "Satisfied";
 
+ratingsContainer.addEventListener("click", (e) => {
+  removeActive();
+  if (
+    e.target.parentNode.classList.contains("rating") &&
+    e.target.nextElementSibling
+  ) {
+    e.target.parentNode.classList.add("active");
+    selectedRating = e.target.nextElementSibling.innerHTML;
+  } else if (
+    e.target.parentNode.classList.contains("rating") &&
+    e.target.previousElementSibling
+  ) {
+    e.target.parentNode.classList.add("active");
+    selectedRating = e.target.innerHTML;
+  } else if (e.target.classList.contains("rating")) {
+    e.target.classList.add("active");
+    selectedRating = e.target.children[1].innerText;
+  }
+  feedbackTypeInput.value = selectedRating;
+  console.log(feedbackTypeInput.value);
+});
+
+function removeActive() {
+  ratings.forEach((rating) => rating.classList.remove("active"));
+}
 
 </script>
 
