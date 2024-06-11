@@ -224,7 +224,7 @@ else
     public function product_category($id)
     {
         $page = Page::find(7);
-        $categories = Category::all();
+        $categories = Category::orderBy('name', 'asc')->get();
         $category = Category::find($id);
 
 

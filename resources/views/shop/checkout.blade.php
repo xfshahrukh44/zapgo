@@ -464,7 +464,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-12">
-                                    <label>Address</label>
+                                    <label>Delivery/ Recovery Address</label>
                                     <input type="text" name="delivery_address_1" class="form-control"
                                         placeholder="2 Stasen place" required>
                                     <span class="invalid-feedback">
@@ -473,7 +473,7 @@
                                 </div>
 
                                 <div class="form-group col-12">
-                                    <label>Address Line 2</label>
+                                    <label>Delivery/ Recovery Address Line 2</label>
                                     <input type="text" name="delivery_address_2" class="form-control"
                                         placeholder="Optional">
                                     <span class="invalid-feedback">
@@ -1019,7 +1019,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="inputAddress">Address</label>
+                                <label for="inputAddress">Delivery/ Recovery Address</label>
                                 <input type="text" class="form-control" name="address" id="inputAddress"
                                     fdprocessedid="p54q">
                             </div>

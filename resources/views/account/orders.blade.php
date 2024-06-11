@@ -51,7 +51,10 @@
                                                             <th>#</th>
                                                             <th>Invoice Number</th>
                                                             <th>Date</th>
-                                                            <th>Total</th>
+                                                            @if (Auth::user()->role == 3)
+                                                            <th>Status</th>
+                                                            @endif
+                                                            {{-- <th>Total</th> --}}
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
@@ -65,7 +68,10 @@
 
                                                               <td>{{ $ORDER->invoice_number }}</td>
                                                               <td>{{date('d F, Y h:i a',strtotime($ORDER->created_at))}}</td>
-                                                              <td>${{ $ORDER->order_total  }}</td>
+                                                              {{-- <td>${{ $ORDER->order_total  }}</td> --}}
+                                                              @if (Auth::user()->role == 3)
+                                                              <td>{{ $ORDER->order_status }}</td>
+                                                              @endif
                                                               <td class="viewbtn"><a href="{{ route('invoice',[$ORDER->id]) }}">View</a></td>
 
                                                             </tr>

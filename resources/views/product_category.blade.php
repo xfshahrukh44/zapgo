@@ -53,7 +53,10 @@
               </div>
               <div class="col-lg-9">
                    <div class="row">
-                    @foreach ($category->listings as $key => $items)
+                    @php
+                    $sortedListings = $category->listings->sortBy('product_title');
+                    @endphp
+                    @foreach ($sortedListings as $key => $items)
 
                     <div class="col-lg-4">
                         <div class="main-pro-details" data-aos="fade-down" data-aos-duration="2000">
@@ -101,7 +104,11 @@
                              </div>
                              <div class="add-btn">
                                 {{-- <a href="{{ route('shopDetail',['id'=> $items->id]) }}"> --}}
-                                  <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}"> Add To Cart</button></a>
+                                   @if (Auth::user()->role == 3)
+                                        <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}" style="cursor: not-allowed;" disabled> Add To Cart</button>
+                                   @else
+                                        <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}"> Add To Cart</button>
+                                   @endif
                              </div>
                         </div>
                    </div>

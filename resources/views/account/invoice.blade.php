@@ -58,11 +58,11 @@
                                 </div>
                                 <div class="my-1">
                                     <i class="fa fa-envelope fa-flip-horizontal text-secondary"></i>
-                                    <b class="text-600">{{$order->order_email}}</b>
+                                    <b class="text-600">{{Auth::user()->email}}</b>
                                 </div>
                                 <div class="my-1">
                                     <i class="fa fa-phone fa-flip-horizontal text-secondary"></i>
-                                    <b class="text-600">{{$order->delivery_phone_no}}</b>
+                                    <b class="text-600">{{Auth::user()->phone}}</b>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
 
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Order Date:</span> {{date('d F, Y',strtotime($order->created_at))}}</div>
 
-                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Status:</span> <span class="badge badge-warning badge-pill px-25">{{$order->order_status}}</span></div>
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Status:</span> <span>{{$order->order_status}}</span></div>
                                 @if($order->transaction_id != '')
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Transaction ID:</span> {{$order->transaction_id}}</div>
                                 @endif
@@ -98,8 +98,10 @@
                         </div>
 
                         <div class="text-95 text-secondary-d3">
-                            <?php $subtotal  = 0;?>
-                            <?php $count = 1;?>
+                            @php
+                                $subtotal  = 0;
+                                $count = 1;
+                            @endphp
                             @foreach($order_products as $order_product)
                             <div class="row mb-2 mb-sm-0 py-25">
                                 <div class="d-none d-sm-block col-1">{{ $count }}</div>
@@ -108,9 +110,61 @@
                                 <div class="d-none d-sm-block col-2 text-95">${{$order_product->order_products_price}}</div>
                                 <div class="col-2 text-secondary-d2">${{$order_product->order_products_subtotal}}</div>
                             </div>
-                            <?php $subtotal+= $order_product->order_products_qty * $order_product->order_products_price; ?>
-                            <?php $count++ ;?>
+                            @php
+                                $subtotal+= $order_product->order_products_qty * $order_product->order_products_price;
+                                $count++;
+                            @endphp
                             @endforeach
+                            @php
+                                $tax = App\Http\Traits\HelperTrait::returnFlag(1973);
+                                $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
+                                $envFee = App\Http\Traits\HelperTrait::returnFlag(1976);
+                                $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
+                                $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
+
+                                $tax_final = ($tax / 100) * $subtotal;
+                                $otherFees_final = ($otherFees / 100) * $subtotal;
+                                $envFee_final = ($envFee / 100) * $subtotal;
+                                $rentalProtection_final = ($rentalProtection / 100) * $subtotal;
+                            @endphp
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count }}</div>
+                                <div class="col-9 col-sm-5">Round-trip delivery</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($deliveryFee, 2) !!}</div>
+                            </div>
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 1 }}</div>
+                                <div class="col-9 col-sm-5">Rental protection plan</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($rentalProtection_final, 2) !!}</div>
+                            </div>
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 2 }}</div>
+                                <div class="col-9 col-sm-5">Environmental Service Fee</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($envFee_final, 2) !!}</div>
+                            </div>
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 3 }}</div>
+                                <div class="col-9 col-sm-5">Other fees</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($otherFees_final, 2) !!}</div>
+                            </div>
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 4 }}</div>
+                                <div class="col-9 col-sm-5">Taxes</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($tax_final, 2) !!}</div>
+                            </div>
+                            @php
+                                $estimatedSubtotal = ($subtotal+$rentalProtection_final+$envFee_final+$otherFees_final+$tax_final+$deliveryFee);
+                            @endphp
                         </div>
 
                         <div class="row border-b-2 brc-default-l2"></div>
@@ -126,7 +180,7 @@
                                         SubTotal
                                     </div>
                                     <div class="col-5">
-                                        <span class="text-120 text-secondary-d1">${{ $subtotal }}</span>
+                                        <span class="text-120 text-secondary-d1">${!! number_format($estimatedSubtotal, 2) !!}</span>
                                     </div>
                                 </div>
                                 @if($order->order_shipping)
@@ -135,19 +189,19 @@
                                         Shipping
                                     </div>
                                     <div class="col-5">
-                                        <span class="text-110 text-secondary-d1">${{$order->order_shipping}}</span>
+                                        <span class="text-110 text-secondary-d1">${!! number_format($order->order_shipping, 2) !!}</span>
                                     </div>
                                 </div>
                                 @endif
 
-                                <div class="row my-2">
+                                {{-- <div class="row my-2">
                                     <div class="col-7 text-right">
                                         Discount
                                     </div>
                                     <div class="col-5">
-                                        <span class="text-110 text-secondary-d1">${{$order->discount}}</span>
+                                        <span class="text-110 text-secondary-d1">${!! number_format($order->discount) !!}</span>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="row my-2 align-items-center bgc-primary-l3 p-2">
                                     <div class="col-7 text-right">
@@ -157,7 +211,7 @@
                                         <?php
                                             $shipping = $order->order_shipping ;
                                         ?>
-                                        <span class="text-150 text-success-d3 opacity-2">${{$order->order_total  + $shipping }}</span>
+                                        <span class="text-150 text-success-d3 opacity-2">${!! number_format($estimatedSubtotal  + $shipping, 2) !!}</span>
                                     </div>
                                 </div>
                             </div>

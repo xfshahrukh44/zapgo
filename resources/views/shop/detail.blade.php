@@ -99,7 +99,7 @@
                                         <span class="plus bg-dark plus-1">+</span>
                                     </div>
                                     @if($product_detail->stock_inventory > 0)
-                                        <button href="javascript:void(0)" class="btn blue-custom" id="addCart">Add to cart </button>
+                                        <button href="javascript:void(0)" class="btn blue-custom" id="addCart" {{ Auth::user()->role == 3 ? 'disabled' : '' }}>Add to cart </button>
                                     @else
                                         <button href="javascript:void(0)" class="btn blue-custom disabled" id="outofstock">Out of Stock </button>
                                     @endif

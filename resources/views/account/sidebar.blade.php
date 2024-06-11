@@ -4,8 +4,8 @@
         <a  href="{{ URL('account') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'account')  ? 'active' : '' ?>"><i class="fas fa-th"></i>
             Dashboard</a>
 
-        @if (Auth::user()->role == 2)
         <a href="{{ URL('orders') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'orders')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> Orders History</a>
+        @if (Auth::user()->role == 2)
 
         <a href="{{ URL('quotes') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'quotes')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> Get A Quote</a>
         @else

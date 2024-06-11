@@ -345,6 +345,7 @@ class OrderController extends Controller
 		}
 
 		$cart = Session::get('cart');
+		dd($cart);
 
 		$subtotal = 0;
 		foreach ($cart as $key => $value) {
@@ -482,7 +483,7 @@ class OrderController extends Controller
 					$order_products->order_products_qty = $value['qty'];
 					$order_products->mat_language = $value['mat_language'];
 					$order_products->shipping = $cart['shipping'];
-					$order_products->order_products_subtotal = ($value['price'] * $value['qty']) + $value['delivery_charges'];
+					$order_products->order_products_subtotal = ($value['price'] * $value['qty']);
 					// $order_products->to_date = $date_start->format('d F, Y');
 					// $order_products->from_date = $date_from->format('d F, Y');
 					// $order_products->days = $days;

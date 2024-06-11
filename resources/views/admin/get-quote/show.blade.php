@@ -118,7 +118,7 @@
                                         <td> {{ $getquote->company }} </td>
                                     </tr>
                                     <tr>
-                                        <th> Address </th>
+                                        <th> Delivery/ Recovery Address </th>
                                         <td> {{ $getquote->address }} </td>
                                     </tr>
                                     <tr>
@@ -130,7 +130,7 @@
                                         <td> {{ $getquote->state }} </td>
                                     </tr>
                                     <tr>
-                                        <th> Bulk Amount </th>
+                                        <th> Desired Price </th>
                                         <td> {{ $getquote->bulk_amount }} 
                                             {{-- <button id="approved" class="btn btn-success response" data-amount = "{{ $getquote->bulk_amount }}" style=" padding: 3px; margin-left: 17px; font-size: 12px; display: inline-block">Approve</button> 
                                             <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}" style=" padding: 3px; margin-left: 17px; font-size: 12px; display: inline-block">Decline</button>  --}}

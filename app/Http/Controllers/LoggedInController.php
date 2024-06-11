@@ -61,10 +61,20 @@ class LoggedInController extends Controller
 	
 	public function orders()
     {
-		
-		$orders = orders::where('orders.user_id', Auth::user()->id)
+		if(Auth::user()->role == 3){
+			$productIds = Product::where('user_id', Auth::user()->id)->pluck('id');
+			$orders = DB::table('orders')
+				->join('orders_products', 'orders.id', '=', 'orders_products.orders_id')
+				->whereIn('orders_products.order_products_product_id', $productIds)
 				->orderBy('orders.id', 'desc')
+				->select('orders.*')
 				->get();
+		}else{
+			$orders = orders::where('orders.user_id', Auth::user()->id)
+					->orderBy('orders.id', 'desc')
+					->get();
+		}
+
 		return view('account.orders',['ORDERS'=>$orders]); 
 		
 	}
