@@ -120,12 +120,20 @@ class LoggedInController extends Controller
 		$query = Product::where('user_id', Auth::user()->id);
 
 		if ($request->has('search')) {
-			$query->where('title', 'like', '%' . $request->search . '%');
+			$searchTerm = $request->search;
+			$query->where(function($q) use ($searchTerm) {
+				$q->where('product_title', 'like', '%' . $searchTerm . '%')
+				->orWhere('price', 'like', '%' . $searchTerm . '%')
+				->orWhereHas('categorys', function($q) use ($searchTerm) {
+					$q->where('name', 'like', '%' . $searchTerm . '%');
+				});
+			});
 		}
 
 		$products = $query->orderBy('id', 'asc')->paginate(10);
 		return view('account.view_products', ['products' => $products]);
 	}
+
 
 	public function add_product(Request $request)
 	{
