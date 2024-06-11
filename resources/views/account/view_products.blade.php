@@ -122,6 +122,9 @@
     #footer-form,#feedback-form,.navbar-brand {
         display: none;
     }
+    .thead-light tr th {
+        background: #0092d7;
+    }
 </style>
 
 @section('js')
