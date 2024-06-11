@@ -59,7 +59,7 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                </div> 
+                                                </div>
                                                 <div class="form-group">
                                                     <label for="location">Select Location:</label>
                                                     <select name="location_id" id="location" class="form-control">
@@ -81,11 +81,11 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="delivery_charges">Delivery Charges</label>
-                                                    <input type="number" step="any" name="delivery_charges" id="delivery_charges" class="form-control" {{ 'required' == 'required' ? 'required' : '' }} value="{{ isset($product) ? $product->delivery_charges : '' }}">
+                                                    <input type="number" step="any" name="delivery_charges" id="delivery_charges" class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="stock_inventory">Stock Inventory</label>
-                                                    <input type="number" step="any" name="stock_inventory" id="stock_inventory" class="form-control" {{ 'required' == 'required' ? 'required' : '' }} value="{{ isset($product) ? $product->stock_inventory : '' }}">
+                                                    <input type="number" step="any" name="stock_inventory" id="stock_inventory" class="form-control" value="" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="description">Description</label>
@@ -95,13 +95,11 @@
                                                     <label for="image">Image</label>
                                                     <input class="form-control" name="image" type="file" id="image">
                                                 </div>
-                                                </div>
 
                                                 <div class="form-group">
                                                     <label for="additional_image">Gallery Image</label>
                                                     <input type="file" class="form-control" name="images[]" placeholder="address" multiple>
-                                                    {{-- <input class="form-control dropify" name="images[]" type="file" id="images" multiple> --}}
-                                                </div>
+                                                </div> 
 
                                                 <div class="repeater-default col-md-12">
                                                     <div data-repeater-list="attribute">
@@ -149,45 +147,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                {{-- <div class="repeater-default col-md-12">
-                                                    <div data-repeater-list="attribute">
-                                                        <div data-repeater-item="" class="row">
-                                        
-                                                                <div class="form-group mb-1 col-sm-12 col-md-3">
-                                                                    <label for="email-addr">Attribute</label>
-                                                                    <br>
-                                                                    <select class="form-control" id="attribute_id" name="attribute_id" onchange="getval(this)" required>
-                                                                        @foreach($att as $atts)
-                                                                        <option value="{{ $atts->id}}">{{ $atts->name}}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group mb-1 col-sm-12 col-md-4">
-                                                                    <label for="pass">value</label>
-                                                                    <br>
-                                                                        <select class="form-control value" id="value" name="value" required>
-                                        
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group mb-1 col-sm-12 col-md-3">
-                                                                    <label for="bio" class="cursor-pointer">Price</label>
-                                                                    <br>
-                                                                    <input type="number" name="v-price" class="form-control" id="price" required>
-                                                                </div>
-                                                                <div class="form-group col-sm-12 col-md-2 text-center mt-4">
-                                                                    <button type="button" class="btn btn-danger" data-repeater-delete=""> <i class="fa-solid fa-xmark"></i></button>
-                                                                </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group overflow-hidden">
-                                                        <div class="">
-                                                            <button type="button" data-repeater-create="" class="btn btn-primary">
-                                                                <i class="fa-solid fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
                                                 
                                                 
                                                 <button type="submit" class="btn btn-primary" style="margin: 1px 0 0 0; float: right;">Create</button>
@@ -223,29 +182,7 @@
     if($('#summary-ckeditor').length != 0){
         CKEDITOR.replace( 'summary-ckeditor' );
     }
-    if($('#summary-ckeditor1').length != 0){
-        CKEDITOR.replace( 'summary-ckeditor1' );
-    }
-    if($('#summary-ckeditor2').length != 0){
-        CKEDITOR.replace( 'summary-ckeditor2' );
-    }
-
-    $(document).ready(function() {
-        $(".repeater-default").repeater();
-        $(".file-repeater, .contact-repeater").repeater({
-            show: function() {
-                $(this).slideDown();
-            },
-            hide: function(e) {
-                if (confirm("Are you sure you want to remove this item?")) {
-                    $(this).slideUp(e);
-                }
-            }
-        });
-
-        // Hide the close button for the first item
-        $('.repeater-default [data-repeater-item]:first-of-type .btn-danger').hide();
-    });
+    !function(e,t,r){"use strict";r(".repeater-default").repeater(),r(".file-repeater, .contact-repeater").repeater({show:function(){r(this).slideDown()},hide:function(e){confirm("Are you sure you want to remove this item?")&&r(this).slideUp(e)}})}(window,document,jQuery);
 
     function getval(sel)
     {
