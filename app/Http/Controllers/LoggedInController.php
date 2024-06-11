@@ -304,6 +304,12 @@ class LoggedInController extends Controller
 		return response()->json(['error' => true, 'message' => 'Image not found.', 'status' => 0]);
 	}
 
+	public function delete_product($id)
+	{
+		Product::destroy($id);
+        return redirect('view-product')->with('flash_message', 'Product deleted!');
+	}
+
 
 
 

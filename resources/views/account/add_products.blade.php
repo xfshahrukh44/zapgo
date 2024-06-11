@@ -110,6 +110,53 @@
                                                                 <div class="form-group mb-1 col-sm-12 col-md-3">
                                                                     <label for="email-addr">Attribute</label>
                                                                     <br>
+                                                                    <select class="form-control" id="attribute_id" name="attribute_id" onchange="getval(this)">
+                                                                        @foreach($att as $atts)
+                                                                        <option value="{{ $atts->id}}">{{ $atts->name}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                                                    <label for="pass">value</label>
+                                                                    <br>
+                                                                     <select class="form-control value" id="value" name="value">
+                                        
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group mb-1 col-sm-12 col-md-3">
+                                                                    <label for="bio" class="cursor-pointer">Price</label>
+                                                                    <br>
+                                                                    <input type="number" name="v-price" class="form-control" id="price" >
+                                                                </div>
+                                                                <!--<div class="form-group mb-1 col-sm-12 col-md-2">-->
+                                                                <!--    <label for="bio" class="cursor-pointer">qty</label>-->
+                                                                <!--    <br>-->
+                                                                <!--    <input type="number" name="qty" class="form-control" id="qty" >-->
+                                                                <!--</div>-->
+                                                                <div class="form-group col-sm-12 col-md-2 text-center mt-2">
+                                                                    <button type="button" class="btn btn-danger" data-repeater-delete=""> <i class="ft-x"></i>
+                                                                        Delete</button>
+                                                                </div>
+                                        
+                                                            <hr>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group overflow-hidden">
+                                                        <div class="">
+                                                            <button type="button" data-repeater-create="" class="btn btn-primary">
+                                                                <i class="ft-plus"></i> Add
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- <div class="repeater-default col-md-12">
+                                                    <div data-repeater-list="attribute">
+                                                        <div data-repeater-item="" class="row">
+                                        
+                                                                <div class="form-group mb-1 col-sm-12 col-md-3">
+                                                                    <label for="email-addr">Attribute</label>
+                                                                    <br>
                                                                     <select class="form-control" id="attribute_id" name="attribute_id" onchange="getval(this)" required>
                                                                         @foreach($att as $atts)
                                                                         <option value="{{ $atts->id}}">{{ $atts->name}}</option>
@@ -140,7 +187,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 
                                                 
                                                 <button type="submit" class="btn btn-primary" style="margin: 1px 0 0 0; float: right;">Create</button>

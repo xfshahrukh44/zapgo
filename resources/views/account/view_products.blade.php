@@ -81,7 +81,6 @@
                                                                     <a href="{{ route('edit_product', $product->id) }}" class="btn btn-primary">Edit</a>
                                                                     <form action="{{ route('delete_product', $product->id) }}" method="POST" style="display:inline;">
                                                                         @csrf
-                                                                        @method('DELETE')
                                                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
                                                                     </form>
                                                                 </td>

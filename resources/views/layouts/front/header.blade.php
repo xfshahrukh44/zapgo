@@ -152,7 +152,7 @@
                                             {{-- <a href="{{ route('cart') }}"><img src="{{asset('images/12.png')}}" class="img-fluid" alt=""></a> --}}
 
                                             {{-- <a href="{{ route('account') }}" class="btn1"><p class="text">Welcome, {{ auth()->user()->name }}!</p></a> --}}
-                                        @elseif (Auth::user()->role == '2')
+                                        @elseif (Auth::user()->role == '2' || Auth::user()->role == '3')
                                             <a class="btn blue-custom black-btn"
                                                 href="{{route('account')}}"
                                                 style="margin-left: 20px !important;">Hi, {{ Auth::user()->name }}</a>
