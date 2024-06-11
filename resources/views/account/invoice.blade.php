@@ -181,7 +181,7 @@ section.invoice {
     margin: 60px;
 }
 
-#footer-form{
+#footer-form,#feedback-form {
     display: none;
 }
 

@@ -96,7 +96,7 @@
             color: white;
         }
 
-        #footer-form {
+        #footer-form,#feedback-form {
 
             display: none;
         }

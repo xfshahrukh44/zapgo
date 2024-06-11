@@ -68,7 +68,7 @@
 @endsection
 
 <style>
-    #footer-form{
+    #footer-form,#feedback-form {
         display: none;
     }
 

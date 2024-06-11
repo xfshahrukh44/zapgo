@@ -49,7 +49,7 @@ section.content-main {
     padding: 50px 0px;
 }
 
-div#footer-form {
+div#footer-form,#feedback-form {
     display: none;
 }
 </style>

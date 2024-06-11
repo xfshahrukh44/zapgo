@@ -14,5 +14,6 @@
      <link rel="stylesheet" href="{{ asset('css/inner.css') }}">
      <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
      <link rel="stylesheet" href="{{ asset('css/zebra_datepicker.min.css') }}">
+     <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
 
 

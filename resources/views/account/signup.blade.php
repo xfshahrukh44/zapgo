@@ -137,6 +137,19 @@
 
             </div>
 
+            <div class="mb-3">
+                <label for="role" class="form-label">Choose Role*</label>
+                @php
+                    $roles = App\Role::where('id', '!=', 1)->get();
+                @endphp
+                <select class="form-select" id="role" name="role" required>
+                    <option value="" selected>Choose Role</option>
+                    @foreach ($roles as $value)
+                     <option value="{{ $value->id }}">{{ ucfirst($value->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="terms_conditions" name="terms" required>
                 <label class="form-check-label" for="terms_conditions">I agree to the Terms and Conditions</label>
@@ -201,7 +214,7 @@
 }
 
 
-#footer-form{
+#footer-form,#feedback-form {
     display: none;
 }
 

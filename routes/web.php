@@ -158,6 +158,15 @@ Route::get('quotes','LoggedInController@quotes')->name('quotes');
 Route::get('quotes/{id}','LoggedInController@view_quotes')->name('view.quotes');
 Route::get('payment/{id}','LoggedInController@view_payment')->name('view.payment');
 Route::get('account-detail','LoggedInController@accountDetail')->name('accountDetail');
+Route::get('view-product','LoggedInController@view_product')->name('view_product');
+Route::get('add-product','LoggedInController@add_product')->name('add_product');
+Route::post('store-product','LoggedInController@store_product')->name('store_product');
+Route::get('edit-product/{id}','LoggedInController@edit_product')->name('edit_product');
+Route::post('update-product/{id}','LoggedInController@update_product')->name('update_product');
+Route::post('delete-product/{id}','LoggedInController@delete_product')->name('delete_product');
+Route::post('get-attribute','LoggedInController@get_attribute')->name('get_attribute');
+Route::post('delete-product-image','LoggedInController@delete_product_image')->name('delete_product_image');
+Route::post('delete-product-att', 'LoggedInController@deleteProVariant')->name('delete_product_variant');
 
 Route::post('update/account','LoggedInController@updateAccount')->name('update.account');
 Route::get('signout', function() {

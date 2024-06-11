@@ -197,7 +197,7 @@
 @endsection
 @section('css')
 <style type="text/css">
-#footer-form{
+#footer-form,#feedback-form {
     display: none;
 }
 

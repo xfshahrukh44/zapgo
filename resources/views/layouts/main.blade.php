@@ -271,7 +271,7 @@ p.text {
             .editable-wrapper a.edit{
                 background-color: #007bff;
             }
-            /* #footer-form{
+            /* #footer-form,#feedback-form {
                 display: none;
             } */
 

@@ -116,7 +116,8 @@ class RegisterController extends Controller
             'license_no' => $data['license_no'],
             'city' => $data['city'],
             'state' => $data['state'],
-            'zip'   => $data['zip']
+            'zip'   => $data['zip'],
+            'role'   => $data['role']
 
         ]);
     }

@@ -41,7 +41,7 @@
     margin-bottom: 10px;
 }
 
-#footer-form {
+#footer-form,#feedback-form {
     display: none;
 }
 

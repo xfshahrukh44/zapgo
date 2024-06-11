@@ -110,7 +110,7 @@ p .blue-custom {
     margin-top: 40px;
 }
 
-#footer-form{
+#footer-form,#feedback-form {
 
     display: none;
 }
