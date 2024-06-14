@@ -418,9 +418,12 @@ class ProductController extends Controller
 		$order = orders::where('id',$order_id)->first();
 		$order_products = orders_products::where('orders_id',$order_id)->get();
 
+        $orderProduct = orders_products::where('orders_id', $order_id)
+            ->join('users', 'orders_products.user_id', '=', 'users.id')
+            ->select('orders_products.*', 'users.email', 'users.phone')
+            ->first();
 
-
-		return view('admin.ecommerce.order-page')->with('title','Invoice #'.$order_id)->with(compact('order','order_products'))->with('order_id',$order_id);
+		return view('admin.ecommerce.order-page')->with('title','Invoice #'.$order_id)->with(compact('order','order_products','orderProduct'))->with('order_id',$order_id);
 
 		// return view('admin.ecommerce.order-page');
 	}

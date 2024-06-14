@@ -172,53 +172,56 @@
         </div>
     </div>
 
-    <div class="container" id="feedback-form" style="margin-top: 61px;">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-h">
-                    <h6>Feedback form</h6>
-                    <h2>Give us feedback</h2>
+    @if (Auth::check() && Auth::user()->role == 2)
+        <div class="container" id="feedback-form" style="margin-top: 61px;">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-h">
+                        <h6>Feedback form</h6>
+                        <h2>Give us feedback</h2>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="side-form">
-                    <form id="feedbackform">
-                        @csrf
-                        <input type="hidden" name="form_name" value="feedback">
-                        <div class="row">
-                            <div class="form-group">
-                                <label>How was your experience with ZapGo Rentals?</label>
-                                <input type="hidden" id="type" name="type" value="Neutral">
-                            </div>
-                            <div class="ratings-container">
-                                <div class="rating">
-                                    <i class="fa-solid fa-face-sad-tear"></i>
-                                    <small>Unhappy</small>
+                <div class="col-lg-6">
+                    <div class="side-form">
+                        <form id="feedbackform">
+                            @csrf
+                            <input type="hidden" name="form_name" value="feedback">
+                            <input type="hidden" id="user_id" name="user_id" value="{{ Auth::user()->id }}">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>How was your experience with ZapGo Rentals?</label>
+                                    <input type="hidden" id="type" name="type" value="Neutral">
                                 </div>
+                                <div class="ratings-container">
+                                    <div class="rating">
+                                        <i class="fa-solid fa-face-sad-tear"></i>
+                                        <small>Unhappy</small>
+                                    </div>
 
-                                <div class="rating active">
-                                    <i class="fa-solid fa-face-meh"></i>
-                                    <small>Neutral</small>
-                                </div>
+                                    <div class="rating active">
+                                        <i class="fa-solid fa-face-meh"></i>
+                                        <small>Neutral</small>
+                                    </div>
 
-                                <div class="rating">
-                                    <i class="fa-solid fa-face-grin-beam"></i>
-                                    <small>Satisfied</small>
+                                    <div class="rating">
+                                        <i class="fa-solid fa-face-grin-beam"></i>
+                                        <small>Satisfied</small>
+                                    </div>
                                 </div>
+                                <div class="form-group">
+                                    <label>Put the feedback message</label>
+                                    <textarea name="message" id="message" class="form-control" cols="30" rows="8" required=""
+                                        style="height: 130px;"></textarea>
+                                </div>
+                                <button class="btn blue-custom" type="submit">Send Feedback</button>
+                                <div id="feedbackformsresult"></div>
                             </div>
-                            <div class="form-group">
-                                <label>Put the feedback message</label>
-                                <textarea name="message" id="message" class="form-control" cols="30" rows="8" required=""
-                                    style="height: 130px;"></textarea>
-                            </div>
-                            <button class="btn blue-custom" type="submit">Send Feedback</button>
-                            <div id="feedbackformsresult"></div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
 
 

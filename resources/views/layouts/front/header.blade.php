@@ -155,7 +155,7 @@
                                         @elseif (Auth::user()->role == '2' || Auth::user()->role == '3')
                                             <a class="btn blue-custom black-btn"
                                                 href="{{route('account')}}"
-                                                style="margin-left: 20px !important;">Hi, {{ Auth::user()->name }}</a>
+                                                style="margin-left: 20px !important;">Hi, {{ Auth::user()->name.' '.Auth::user()->last_name }}</a>
                                         <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" class="cart_icons">
                                             <span class="cart_counts">{{ (Session::get('cart') != null) ? count(Session::get('cart')) : 0 }}</span>
                                             <img src="{{ asset('images/12.png') }}" class="img-fluid" alt="">

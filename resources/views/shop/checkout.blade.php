@@ -388,6 +388,7 @@
                             <input type="hidden" name="payment_status" value="" />
                             <input type="hidden" name="order_total" id="order_total" value="" />
                             <input type="hidden" name="payment_method" id="payment_method" value="paypal" />
+                            <input type="hidden" name="total_price" id="total_price" value="" />
                             <input type="hidden" id="f-name" name="first_name" value="<?php echo Auth::user()->name; ?>">
 
 
@@ -875,6 +876,8 @@
                             </li>
                         </ul>
 
+                        <input type="hidden" id="estimate" value="{{ $estimatedSubtotal }}">
+
 
                         <div class="summary-main" id="payments_obox">
                             <h2 class="mb-3">Payment</h2>
@@ -1120,6 +1123,8 @@
         // $(document).on('click', ".btn", function(e){
         //   $('#order-place').submit();
         // });
+        let estimate = $('#estimate').val();
+        $('#total_price').val(estimate);
 
         $('#accordion .btn-link').on('click', function(e) {
             if (!$(this).hasClass('collapsed')) {

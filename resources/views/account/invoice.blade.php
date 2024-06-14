@@ -32,6 +32,7 @@
                                         <i class="fa fa-angle-double-right text-80"></i>
                                         ID: #{{$order->invoice_number}}
                                     </small></h3>
+                                    <span ><a href="{{ $order->invoice_url }}" class="btn btn-primary" target="_blank">View Slip</a></span>
                                 </div>
                             </div>
                         </div>
@@ -344,6 +345,17 @@ hr {
 }
 .align-bottom {
     vertical-align: bottom!important;
+}
+
+.section-heading.dark-color {
+    position: relative;
+    z-index: 0;
+}
+
+.section-heading.dark-color span {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 </style>

@@ -345,7 +345,6 @@ class OrderController extends Controller
 		}
 
 		$cart = Session::get('cart');
-		dd($cart);
 
 		$subtotal = 0;
 		foreach ($cart as $key => $value) {
@@ -387,10 +386,10 @@ class OrderController extends Controller
 
 		$order->order_items = count(Session::get('cart'));
 
-		$order->order_item_total = $subtotal;
+		$order->order_item_total = $request->total_price;
 
 
-		$total +=	$subtotal + $cart['shipping'];
+		$total +=	$request->total_price + $cart['shipping'];
 
 		$order->order_total = $request->order_total;
 
@@ -431,7 +430,7 @@ class OrderController extends Controller
 						'description' => "Payment From Website",
 						'metadata' => array("name" => $request->first_name, "email" => Auth::user()->email),
 					));
-
+					$chargeJson = $charge->jsonSerialize();
 
 				} catch (Exception $e) {
 					return redirect()->back()->with('stripe_error', $e->getMessage());
@@ -447,6 +446,7 @@ class OrderController extends Controller
 				$payment_status = $chargeJson['status'];
 				$order->transaction_id = $transactionID;
 				$order->order_status = $payment_status;
+				$order->invoice_url = $chargeJson['receipt_url'];
 			}
 		}
 

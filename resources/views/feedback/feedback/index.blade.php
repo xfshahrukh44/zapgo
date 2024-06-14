@@ -47,7 +47,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Message</th><th>Type</th>
+                                        <th>User Name</th><th>Message</th><th>Type</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -55,7 +55,7 @@
                                     @foreach($feedback as $item)
                                     <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->message }}</td><td>{{ $item->type }}</td>
+                                    <td>{{ $item->users->name.' '.$item->users->last_name }}</td><td>{{ $item->message }}</td><td>{{ $item->type }}</td>
                                     <td>
 
                                         
@@ -88,7 +88,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>#</th>
-                                        <th>Message</th><th>Type</th>
+                                        <th>User Name</th><th>Message</th><th>Type</th>
                                         <th>Actions</th>
                                     </tr>
                                 </tfoot>

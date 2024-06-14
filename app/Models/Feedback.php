@@ -25,7 +25,10 @@ class Feedback extends Model
      *
      * @var array
      */
-    protected $fillable = ['message', 'type'];
+    protected $fillable = ['message', 'type', 'user_id'];
 
-    
+    public function users()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id');  
+    }
 }

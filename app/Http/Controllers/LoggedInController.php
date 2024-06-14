@@ -80,11 +80,20 @@ class LoggedInController extends Controller
 	}
 
 	public function quotes()
-    {
-		
-		$quote = GetQuote::where('user_id', Auth::user()->id)
+    {	
+		if(Auth::user()->role == 3){
+			$productIds = Product::where('user_id', Auth::user()->id)->pluck('id');
+			$quote = DB::table('get_quotes')
+				->join('quote_prod_info', 'get_quotes.id', '=', 'quote_prod_info.qoute_id')
+				->whereIn('quote_prod_info.product', $productIds)
+				->orderBy('get_quotes.id', 'desc')
+				->select('get_quotes.*')
+				->get();
+		}else{
+			$quote = GetQuote::where('user_id', Auth::user()->id)
 				->orderBy('id', 'desc')
 				->get();
+		}
 		return view('account.quote',['quote'=>$quote]); 
 		
 	}

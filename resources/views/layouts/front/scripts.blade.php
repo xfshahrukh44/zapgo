@@ -133,7 +133,9 @@ $('#contactform').on('submit',function(e){
       },
      });
     });
-
+    </script>
+    @if (Auth::check() && Auth::user()->role == 2)
+<script>
     $('#feedbackform').on('submit',function(e){
   //alert('hogaya');
   $('#feedbackformsresult').html('');
@@ -157,7 +159,7 @@ $('#contactform').on('submit',function(e){
     });
 
 </script>
-
+@endif
 <script>
       $(document).ready(function() {
     $(document).on('click', '.plus', function() {
