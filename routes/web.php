@@ -167,6 +167,7 @@ Route::post('delete-product/{id}','LoggedInController@delete_product')->name('de
 Route::post('get-attribute','LoggedInController@get_attribute')->name('get_attribute');
 Route::post('delete-product-image','LoggedInController@delete_product_image')->name('delete_product_image');
 Route::post('delete-product-att', 'LoggedInController@deleteProVariant')->name('delete_product_variant');
+Route::get('view-feedback','LoggedInController@view_feedback')->name('view_feedback');
 
 Route::post('update/account','LoggedInController@updateAccount')->name('update.account');
 Route::get('signout', function() {

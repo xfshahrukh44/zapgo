@@ -22,6 +22,7 @@ use App\Category;
 use App\Models\GetQuote;
 use App\Models\Bulkorder;
 use App\Models\Location;
+use App\Models\Feedback;
 use Auth;
 use Session;
 use App\Http\Traits\HelperTrait;
@@ -103,6 +104,13 @@ class LoggedInController extends Controller
 		$quote = GetQuote::with('quote_products')->find($id);
 		$bulkOrders = Bulkorder::where('qoute_id', $id)->first();
 		return view('account.view_quote',['quote'=>$quote, 'bulkOrders' => $bulkOrders]); 
+		
+	}
+
+	public function view_feedback()
+    {
+		$feedback = Feedback::with('users')->get();
+		return view('account.view_feedback',['feedback'=>$feedback]); 
 		
 	}
 

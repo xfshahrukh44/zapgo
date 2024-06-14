@@ -5,12 +5,13 @@
             Dashboard</a>
 
         <a href="{{ URL('orders') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'orders')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> Orders History</a>
-        {{-- @if (Auth::user()->role == 2) --}}
 
         <a href="{{ URL('quotes') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'quotes')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> Get A Quote</a>
-        {{-- @else --}}
+
         <a href="{{ URL('view-product') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'view-product')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> View/Add Product</a>
-        {{-- @endif --}}
+        @if (Auth::user()->role == 3)
+        <a href="{{ URL('view-feedback') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'view-feedback')  ? 'active' : '' ?>"><i class="fa fa-comment-dots"></i> View Feedback</a>
+        @endif
 
         <a href="{{ URL('account-detail') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'account-detail')  ? 'active' : '' ?>"><i class="fa fa-user"></i> Account Details</a>
 
