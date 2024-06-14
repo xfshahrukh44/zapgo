@@ -97,6 +97,10 @@
                         {!! $section[1]->value !!}
                    </div>
               </div>
+              @php
+               $isSunday = \Carbon\Carbon::now()->isSunday();
+               $isRoleThree = Auth::user()->role == 3;
+              @endphp
               @foreach($randomproducts as $key => $items)
               <div class="col-lg-3">
                    <div class="main-center random-products">
@@ -109,7 +113,11 @@
                         </div>
 
                         <div class="add-btn">
-                            <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrops-{{ $key }}"> Add To Cart</button></a>
+                         <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}" 
+                         style="{{ $isRoleThree ? 'cursor: not-allowed;' : '' }}" 
+                         {{ $isRoleThree || $isSunday ? 'disabled' : '' }}> 
+                         Add To Cart
+                         </button>
                         </div>
                    </div>
               </div>

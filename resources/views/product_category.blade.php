@@ -104,11 +104,17 @@
                              </div>
                              <div class="add-btn">
                                 {{-- <a href="{{ route('shopDetail',['id'=> $items->id]) }}"> --}}
-                                   @if (Auth::user()->role == 3)
-                                        <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}" style="cursor: not-allowed;" disabled> Add To Cart</button>
-                                   @else
-                                        <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}"> Add To Cart</button>
-                                   @endif
+                                   @php
+                                   $isSunday = \Carbon\Carbon::now()->isSunday();
+                                   $isRoleThree = Auth::user()->role == 3;
+                                   @endphp
+
+                                   <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}" 
+                                   style="{{ $isRoleThree ? 'cursor: not-allowed;' : '' }}" 
+                                   {{ $isRoleThree || $isSunday ? 'disabled' : '' }}> 
+                                   Add To Cart
+                                   </button>
+
                              </div>
                         </div>
                    </div>
