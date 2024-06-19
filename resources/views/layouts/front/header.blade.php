@@ -696,6 +696,8 @@
             // console.log(days,price_key);
             let sub_total = 0.00;
 
+            let rental_sub = $('#rsub').text();
+
             for (const item of cart.items) {
                 let day_value = day_values[price_key];
                 let multiplier_value = days / day_value;
@@ -709,7 +711,7 @@
                 } else if(price_key == 'price_per_week' && days == 7) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_week' && days > 7) {
-                    product_total = (parseFloat(item['price_per_day']) * parseFloat(days)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item['price_per_week']) + parseFloat(item['price_per_day']) * multiplier_value_temp) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                     if (product_total > item['price_per_month']) {
                         product_total = parseFloat(item['price_per_month']);
                     }
@@ -719,16 +721,6 @@
                         product_total = parseFloat(item['price_per_week']);
                     }
                 }
-                // console.log(product_total+' preious');
-
-                // const priceArray = [58, 225, 710];
-                // priceArray.shift();
-                // for (const price of priceArray) {
-                //     if (price < product_total) {
-                //         product_total = price;
-                //     }
-                // }
-                // console.log(product_total+' after');
             
                 sub_total += product_total;
             

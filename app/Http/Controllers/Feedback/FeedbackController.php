@@ -33,11 +33,11 @@ class FeedbackController extends Controller
             $perPage = 25;
 
             if (!empty($keyword)) {
-                $feedback = Feedback::with('users')->where('message', 'LIKE', "%$keyword%")
+                $feedback = Feedback::where('message', 'LIKE', "%$keyword%")
                 ->orWhere('type', 'LIKE', "%$keyword%")
                 ->paginate($perPage);
             } else {
-                $feedback = Feedback::with('users')->paginate($perPage);
+                $feedback = Feedback::paginate($perPage);
             }
             
             return view('feedback.feedback.index', compact('feedback'));

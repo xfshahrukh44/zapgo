@@ -134,12 +134,13 @@ $('#contactform').on('submit',function(e){
      });
     });
     </script>
-    @if (Auth::check() && Auth::user()->role == 2)
+    {{-- @if (Auth::check() && Auth::user()->role == 2) --}}
 <script>
     $('#feedbackform').on('submit',function(e){
   //alert('hogaya');
   $('#feedbackformsresult').html('');
     e.preventDefault();
+    console.log($("#feedbackform").serialize());
 
     $.ajax({
       url: "{{ route('feedbackSubmit')}}",
@@ -159,7 +160,7 @@ $('#contactform').on('submit',function(e){
     });
 
 </script>
-@endif
+{{-- @endif --}}
 <script>
       $(document).ready(function() {
     $(document).on('click', '.plus', function() {

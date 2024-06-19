@@ -109,7 +109,7 @@ class LoggedInController extends Controller
 
 	public function view_feedback()
     {
-		$feedback = Feedback::with('users')->get();
+		$feedback = Feedback::all();
 		return view('account.view_feedback',['feedback'=>$feedback]); 
 		
 	}

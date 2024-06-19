@@ -319,7 +319,6 @@
                 var quantitySelect = $("#quantity-" + rowCounter);
                 var quantity = quantitySelect.val();
                 var selectedOption = productSelector.find("option:selected");
-                console.log(quantity);
                 
                 
                 var amount_date = $('#amount-date').val();
@@ -337,9 +336,10 @@
                     price_value = parseFloat(selectedOption.data("price-per-week"));
                     price = parseFloat(price_value);
                 } else if (days > 7) {
-                    // price_value = parseFloat(selectedOption.data("price-per-week"));
+                    price_value1 = parseFloat(selectedOption.data("price-per-week"));
                     price_value = parseFloat(selectedOption.data("price-per-month"));
-                    price = parseFloat(per_day_price * days);
+                    var temp_days = days - 7;
+                    price = parseFloat(price_value1 + per_day_price * temp_days);
                     if (price > price_value) {
                         price = price_value;
                     }

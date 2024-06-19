@@ -172,7 +172,7 @@
         </div>
     </div>
 
-    @if (Auth::check() && Auth::user()->role == 2)
+    {{-- @if (Auth::check() && Auth::user()->role == 2) --}}
         <div class="container" id="feedback-form" style="margin-top: 61px;">
             <div class="row">
                 <div class="col-lg-6">
@@ -186,7 +186,7 @@
                         <form id="feedbackform">
                             @csrf
                             <input type="hidden" name="form_name" value="feedback">
-                            <input type="hidden" id="user_id" name="user_id" value="{{ Auth::user()->id }}">
+                            {{-- <input type="hidden" id="user_id" name="user_id" value="{{ Auth::user()->id }}"> --}}
                             <div class="row">
                                 <div class="form-group">
                                     <label>How was your experience with ZapGo Rentals?</label>
@@ -208,6 +208,15 @@
                                         <small>Satisfied</small>
                                     </div>
                                 </div>
+                                @if (Auth::check())
+                                @php
+                                    $name = Auth::user()->name.' '.Auth::user()->last_name;
+                                @endphp
+                                @endif
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" name="name" id="name" value="{{ $name }}" class="form-control" required="">
+                                </div>
                                 <div class="form-group">
                                     <label>Put the feedback message</label>
                                     <textarea name="message" id="message" class="form-control" cols="30" rows="8" required=""
@@ -221,7 +230,7 @@
                 </div>
             </div>
         </div>
-    @endif
+    {{-- @endif --}}
 
 
 

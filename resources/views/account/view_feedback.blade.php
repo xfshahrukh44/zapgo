@@ -13,7 +13,6 @@
                     <h1><span class="d-block">Feedback</span></h1>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -63,7 +62,7 @@
                                                             <tr>
                                                               <td>{{ $val->id }}</td>
 
-                                                              <td>{{ $val->users->name .' '. $val->users->last_name }}</td>
+                                                              <td>{{ $val->name }}</td>
                                                               <td>{{ $val->message }}</td>
                                                               <td>{{ $val->type }}</td>
 

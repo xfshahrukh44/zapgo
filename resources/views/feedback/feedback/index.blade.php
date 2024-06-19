@@ -55,7 +55,7 @@
                                     @foreach($feedback as $item)
                                     <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->users->name.' '.$item->users->last_name }}</td><td>{{ $item->message }}</td><td>{{ $item->type }}</td>
+                                    <td>{{ $item->name }}</td><td>{{ $item->message }}</td><td>{{ $item->type }}</td>
                                     <td>
 
                                         

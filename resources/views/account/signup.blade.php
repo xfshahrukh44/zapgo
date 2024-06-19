@@ -140,7 +140,7 @@
             <div class="mb-3">
                 <label for="role" class="form-label">Choose Role*</label>
                 @php
-                    $roles = App\Role::where('id', '!=', 1)->get();
+                    $roles = App\Role::where('id', '!=', 1)->where('id', '!=', 3)->get();
                 @endphp
                 <select class="form-select" id="role" name="role" required>
                     <option value="" selected>Choose Role</option>
