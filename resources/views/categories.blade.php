@@ -26,13 +26,13 @@
                    <div class="list-products">
                         <ul>
                              <li class="click-li">
-                                  <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-arrow-right"></i> All products </a>
-                                  <div class="menu-drop">
+                                  <a href="{{ route('category') }}"><i class="fa-solid fa-arrow-right"></i> All products </a>
+                                  {{-- <div class="menu-drop">
                                     @foreach ($category as $items)
                                     <a href="{{ route('product_category',['id'=> $items->id]) }}"><i class="fa-solid fa-arrow-right"></i>{{ $items->name }}</a>
                                     @endforeach
 
-                                  </div>
+                                  </div> --}}
                              </li>
                              {{-- <li class="click-li">
                                   <a href="" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-arrow-right"></i> Dehumidifie </a>

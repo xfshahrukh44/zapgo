@@ -490,7 +490,7 @@
                                             </p>
                                             <p class="days">
 
-                                                Quantity: <input type="number" min="1" value="{{$value['qty']}}" name="qty" class="input_qty form-control" disabled>
+                                                Quantity: <input type="number" min="1" value="{{$value['qty']}}" name="qty" class="input_qty form-control" style="width: 41% !important; margin-top: 10px;" disabled>
                                             </p>
                                             <?php
                                             //$subtotal1 += $pro_total;
@@ -634,7 +634,7 @@
         var mdy = str.split('-');
         return new Date(mdy[2], mdy[0] - 1, mdy[1]);
     }
-    
+
     function checkDatesAndToggleQty() {
         if ($('#date-rent-start').val() != '' && $('#date-rent-end').val() != '') {
             $('.input_qty').prop('disabled', false);
@@ -703,7 +703,7 @@
                 let multiplier_value = days / day_value;
                 let multiplier_value_temp = days - day_value;
                 let product_total;
-            
+
                 if(price_key == 'price_per_month' && days == 30) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_month' && days > 30) {
@@ -721,9 +721,9 @@
                         product_total = parseFloat(item['price_per_week']);
                     }
                 }
-            
+
                 sub_total += product_total;
-            
+
                 item['total'] = product_total;
             }
 
@@ -750,35 +750,35 @@
 
             // }
             cart['total'] = sub_total;
-            
+
             let tax = '{{ $tax }}';
             let otherFees = '{{ $otherFees }}';
             let envFee = '{{ $envFee }}';
             let rentalProtection = '{{ $rentalProtection }}';
-            
+
             // Check for empty strings and convert them to 0
             tax = tax.trim() === '' ? 0 : parseFloat(tax);
             otherFees = otherFees.trim() === '' ? 0 : parseFloat(otherFees);
             envFee = envFee.trim() === '' ? 0 : parseFloat(envFee);
             rentalProtection = rentalProtection.trim() === '' ? 0 : parseFloat(rentalProtection);
-            
+
             // Check if variables are NaN and convert them to 0
             tax = isNaN(tax) ? 0 : tax;
             otherFees = isNaN(otherFees) ? 0 : otherFees;
             envFee = isNaN(envFee) ? 0 : envFee;
             rentalProtection = isNaN(rentalProtection) ? 0 : rentalProtection;
-            
+
             let tax_final = (tax / 100) * sub_total;
             let otherFees_final = (otherFees / 100) * sub_total;
             let envFee_final = (envFee / 100) * sub_total;
             let rentalProtection_final = (rentalProtection / 100) * sub_total;
-            
+
             // console.log(rentalProtection_final,envFee_final,otherFees_final,tax_final);
-            
+
             function formatValue(value) {
                 return parseFloat(value).toFixed(2);
             }
-            
+
             $('#rensub').text(formatValue(rentalProtection_final));
             $('#envsub').text(formatValue(envFee_final));
             $('#othsub').text(formatValue(otherFees_final));

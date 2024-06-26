@@ -109,9 +109,9 @@
                                    $isRoleThree = Auth::user()->role == 3;
                                    @endphp
 
-                                   <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}" 
-                                   style="{{ $isRoleThree ? 'cursor: not-allowed;' : '' }}" 
-                                   {{ $isRoleThree || $isSunday ? 'disabled' : '' }}> 
+                                   <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}"
+                                   style="{{ $isRoleThree ? 'cursor: not-allowed;' : '' }}"
+                                   {{ $isRoleThree || $isSunday ? 'disabled' : '' }}>
                                    Add To Cart
                                    </button>
 
@@ -178,7 +178,7 @@
                         <label style="margin-left: -8px;">
                             <b>Select quantity</b>
                         </label>
-                        <input class="form-control" type="number" placeholder="Quantity" name="qty" value="1" min="1" max="{{$items->stock_inventory}}" required>
+                        <input class="form-control" type="number" placeholder="Quantity" name="qty" value="1" min="1" max="{{$items->stock_inventory}}" style="width: 29% !important; margin-top: 10px;" required>
                     </div>
               </div>
               <div class="modal-footer">
@@ -187,7 +187,7 @@
                 @else
                     <button href="javascript:void(0)" class="btn blue-custom disabled" id="outofstock">Out of Stock </button>
                 @endif
-                    
+
               </form>
                     {{-- <a href="{{ route('category') }}" class="btn blue-custom">Keep Shopping</a> --}}
                     <button type="button" class="btn blue-custom but-cs" data-bs-dismiss="modal" aria-label="Close">Keep Shopping</button>

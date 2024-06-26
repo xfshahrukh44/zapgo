@@ -170,7 +170,7 @@
                                       $envFee = App\Http\Traits\HelperTrait::returnFlag(1976);
                                       $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
                                       $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
-      
+
                                       $tax_final = ($tax / 100) * $subtotal;
                                       $otherFees_final = ($otherFees / 100) * $subtotal;
                                       $envFee_final = ($envFee / 100) * $subtotal;
@@ -281,7 +281,7 @@
                                     <tr>
                                       <td class="text-muted">Email: </td>
                                       <td class="text-color">{{ $orderProduct->email }}</td>
-                                    </tr>                                    
+                                    </tr>
                                     <tr>
                                         <td class="text-muted">Address: </td>
                                         <td class="text-color">
@@ -331,6 +331,19 @@
                                   <tr>
                                       <td class="text-muted">Order Date: </td>
                                       <td class="text-color">{{date('d F, Y',strtotime($order->created_at))}}</td>
+                                  </tr>
+                                  <tr>
+                                      <td class="text-muted">Date Range: </td>
+                                      <td class="text-color">{{ $order->start_date . ' to ' . $order->end_date }}</td>
+                                  </tr>
+                                  @php
+                                        $start_date = \Carbon\Carbon::parse($order->start_date);
+                                        $end_date = \Carbon\Carbon::parse($order->end_date);
+                                        $difference_in_days = $start_date->diffInDays($end_date);
+                                    @endphp
+                                  <tr>
+                                      <td class="text-muted">Number of Days: </td>
+                                      <td class="text-color">{{ $difference_in_days }}</td>
                                   </tr>
                                 </tbody>
                             </table>

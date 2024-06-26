@@ -19,7 +19,7 @@
     ul.footer-menu li a {
         text-decoration: none;
         color: #fff;
-        font-size: 13px; 
+        font-size: 13px;
     }
 
     .ratings-container {
@@ -52,6 +52,14 @@
                 rgba(97, 97, 114) 55%,
                 rgba(255, 255, 255, 0) 56%);
         font-size: 3.5rem;
+    }
+
+    .rating.satisfied i {
+        color: #21c721;
+    }
+
+    .rating.unhappy i {
+        color: red;
     }
 
     .rating small {
@@ -193,9 +201,9 @@
                                     <input type="hidden" id="type" name="type" value="Neutral">
                                 </div>
                                 <div class="ratings-container">
-                                    <div class="rating">
-                                        <i class="fa-solid fa-face-sad-tear"></i>
-                                        <small>Unhappy</small>
+                                    <div class="rating satisfied">
+                                        <i class="fa-solid fa-face-grin-beam"></i>
+                                        <small>Satisfied</small>
                                     </div>
 
                                     <div class="rating active">
@@ -203,9 +211,9 @@
                                         <small>Neutral</small>
                                     </div>
 
-                                    <div class="rating">
-                                        <i class="fa-solid fa-face-grin-beam"></i>
-                                        <small>Satisfied</small>
+                                    <div class="rating unhappy">
+                                        <i class="fa-solid fa-face-sad-tear"></i>
+                                        <small>Unhappy</small>
                                     </div>
                                 </div>
                                 @if (Auth::check())
@@ -317,25 +325,25 @@
                        $instagramUrl = App\Http\Traits\HelperTrait::returnFlag(1962);
                        $youtubeUrl = App\Http\Traits\HelperTrait::returnFlag(1964);
                    @endphp
-           
+
                    @if($facebookUrl)
                        <a href="{{ $facebookUrl }}"><i class="fa-brands fa-facebook-f"></i></a>
                    @endif
-           
+
                    @if($twitterUrl)
                        <a href="{{ $twitterUrl }}"><i class="fa-brands fa-twitter"></i></a>
                    @endif
-           
+
                    @if($instagramUrl)
                        <a href="{{ $instagramUrl }}"><i class="fa-brands fa-instagram"></i></a>
                    @endif
-           
+
                    @if($youtubeUrl)
                        <a href="{{ $youtubeUrl }}"><i class="fa-brands fa-youtube"></i></a>
                    @endif
                </div>
            </div>
-           
+
 
         </div>
     </div>

@@ -369,8 +369,8 @@ class OrderController extends Controller
 		// $order->building = $request->building;
 		// $order->order_shipping = $cart['shipping'];
 		// $order->country_code = $request->country_code;
-        // $order->start_date = $request->start_date;
-        // $order->end_date = $request->end_date;
+        $order->start_date = $request->start_date;
+        $order->end_date = $request->end_date;
         $order->picker_fname = $request->picker_fname;
         $order->picker_idcard = $request->picker_idcard;
         $order->picker_lname = $request->picker_lname;
@@ -390,6 +390,7 @@ class OrderController extends Controller
 
 
 		$total +=	$request->total_price + $cart['shipping'];
+        $stripe_total = $total * 100;
 
 		$order->order_total = $request->order_total;
 
@@ -425,7 +426,7 @@ class OrderController extends Controller
 				try {
 					$charge = \Stripe\Charge::create(array(
 						'customer' => $customer->id,
-						'amount'   => $total * 100,
+						'amount'   => (int)$stripe_total,
 						'currency' => 'USD',
 						'description' => "Payment From Website",
 						'metadata' => array("name" => $request->first_name, "email" => Auth::user()->email),

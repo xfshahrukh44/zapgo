@@ -381,7 +381,7 @@
             </div>
         </div>
     </section>
-    
+
     <section class="check-sec">
         @if (Auth::user()->role == 3 || Auth::user()->role == 1)
             <div class="container-fluid">
@@ -421,9 +421,9 @@
                                             data-tabs="tabs">
                                             <li>
 
-                                                <label for="trip" class="radio-1" id="tripLabel">Round-trip
+                                                <label for="trip" class="radio-1 active" id="tripLabel">Round-trip
                                                     delivery</label>
-                                                <input type="radio" name="round_trip" value="1" id="trip"
+                                                <input type="radio" name="round_trip" value="1" id="trip" checked
                                                     required>
 
                                             </li>
@@ -744,7 +744,7 @@
                                         <?php // $subtotal += $value['price'] * $value['qty'];
                                         $prod_image = App\Product::where('id', $value['id'])->first();
                                         $day = Session::get('daterange') != null ? $date_start->diffInDays($date_from) : 1;
-                                        
+
                                         // Fetch the per week price
                                         $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();
                                         $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
@@ -757,20 +757,20 @@
                                             ->where('attribute_id', $monthAttributeValue->attribute_id)
                                             ->first();
                                         $per_month_price = $monthProductAttribute->price; // Calculate per month price
-                                        
+
                                         if ($day >= 28) {
                                             $monthCount = floor($day / 28); // Calculate number of months (each month is 28 days)
                                             $remainingDays = $day % 28; // Calculate remaining days after whole months
-                                        
+
                                             // Fetch the price for a month
                                             $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
                                             $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
                                                 ->where('attribute_id', $monthAttributeValue->attribute_id)
                                                 ->first();
-                                        
+
                                             // Calculate subtotal for whole months
                                             $subtotal = $monthProductAttribute->price * $monthCount;
-                                        
+
                                             // If there are remaining days, calculate additional daily rate
                                             if ($remainingDays > 0) {
                                                 // If there's a day price, add it
@@ -779,7 +779,7 @@
                                                     $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
                                                         ->where('attribute_id', $dailyAttributeValue->attribute_id)
                                                         ->first();
-                                        
+
                                                     // Add additional daily rate for remaining days
                                                     $subtotal += $dailyProductAttribute->price * $remainingDays;
                                                 }
@@ -787,10 +787,10 @@
                                         } elseif ($day >= 7) {
                                             $weekCount = floor($day / 7); // Calculate number of weeks
                                             $remainingDays = $day % 7; // Calculate remaining days after whole weeks
-                                        
+
                                             // Calculate subtotal for whole weeks
                                             $subtotal = $weekProductAttribute->price * $weekCount;
-                                        
+
                                             // If there are remaining days, calculate additional daily rate
                                             if ($remainingDays > 0) {
                                                 // If there's a day price, add it
@@ -799,7 +799,7 @@
                                                     $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
                                                         ->where('attribute_id', $dailyAttributeValue->attribute_id)
                                                         ->first();
-                                        
+
                                                     // Add additional daily rate for remaining days
                                                     $subtotal += $dailyProductAttribute->price * $remainingDays;
                                                 }
@@ -809,7 +809,7 @@
                                             $subtotal = $value['price'] * $value['qty'] * $day;
                                             // dump($subtotal);
                                         }
-                                        
+
                                         if ($day < 7 && $subtotal >= $per_week_price) {
                                             $subtotal = $per_week_price;
                                         } elseif ($day < 28 && $subtotal >= $per_month_price) {
@@ -833,25 +833,25 @@
                                     </p>
                                 </div>
                                 <?php $day = $date_start->diffInDays($date_from);
-                                
+
                                 // dd($subtotal);
-                                
+
                                 ?>
 
                             </div>
                             <?php
-                            
+
                             $tax = App\Http\Traits\HelperTrait::returnFlag(1973);
                             $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
                             $envFee = App\Http\Traits\HelperTrait::returnFlag(1976);
                             $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
                             $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
-                            
+
                             $tax_final = ($tax / 100) * $rental_subtotal;
                             $otherFees_final = ($otherFees / 100) * $rental_subtotal;
                             $envFee_final = ($envFee / 100) * $rental_subtotal;
                             $rentalProtection_final = ($rentalProtection / 100) * $rental_subtotal;
-                            
+
                             ?>
                             <ul class="total-row">
                                 <li>
