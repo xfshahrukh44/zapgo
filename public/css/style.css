@@ -246,17 +246,16 @@ header {
 /* rent-sec css start */
 
 
-.rent-sec:before {
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  top: 0;
-  content: "";
-  background: #ffffffe0;
-  width: 60%;
-  height: 100%;
-  box-shadow: 65px 0px 110px 0px white;
-}
+/*.rent-sec:before {*/
+/*  position: absolute;*/
+/*  z-index: -1;*/
+/*  left: 0;*/
+/*  top: 0;*/
+/*  content: "";*/
+/*  background: #ffffffe0;*/
+/*  height: 100%;*/
+/*  box-shadow: 65px 0px 110px 0px white;*/
+/*}*/
 
 .equipment h1 {
   background: var(--blue-color);
@@ -269,7 +268,8 @@ header {
 }
 
 .equipment h1 span {
-  background: var(--black-color);
+  /*background: var(--black-color);*/
+  backgroung:#fff;
   -webkit-background-clip: text;
   font-family: FontsFree-Net-BebasNeueBold;
   font-size: 105px;

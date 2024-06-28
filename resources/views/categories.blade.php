@@ -84,7 +84,7 @@
               </div>
               <div class="col-lg-9">
                    <div class="row">
-                    @foreach ($category as $items)
+                    @foreach ($mainproduct as $items)
 
                     <div class="col-lg-3">
                         <div class="main-pro-details" data-aos="fade-down" data-aos-duration="2000">
@@ -92,8 +92,8 @@
                                   <div class="product-img owl-carousel owl-theme">
                                        <div class="item">
                                             <div class="cleaner-img">
-                                                 <a href="{{ route('product_category',['id' => $items->id]) }}">
-                                                      <img src="{{ $items->image }}" class="img-fluid" alt="">
+                                                 <a href="">
+                                                      <img src="{{ url($items->image) }}" class="img-fluid" alt="">
                                                  </a>
                                             </div>
                                        </div>
@@ -101,8 +101,8 @@
                              </div>
                              <div class="card-plus">
                                   <div class="dehum">
-                                       <a href="{{ route('product_category',['id' => $items->id]) }}">
-                                            <h4>{{ $items->name }}</h4>
+                                       <a href="">
+                                            <h4>{{ $items->product_title }}</h4>
                                        </a>
                                   </div>
                              </div>
@@ -135,8 +135,14 @@
 }
 
 .about-inner {
-  height: 400px;
+  height: 700px !important;
   align-items: end;
+}
+
+
+.about-inner .equipment h1 {
+    margin-top: -360px !important;
+    color:#fff !important;
 }
 
 </style>

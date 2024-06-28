@@ -92,10 +92,13 @@
 }
 
 .about-inner {
-  height: 400px;
+  height: 700px !important;
   align-items: end;
 }
 
+.about-inner .equipment h1 {
+    margin-top: -360px !important;
+}
 
 </style>
 @endsection

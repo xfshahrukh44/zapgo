@@ -173,6 +173,7 @@ else
             // dd('Success ');
             return redirect()->back()->with('stripe_error', $e->getMessage());
         }
+        
         $chargeJson = $charge->jsonSerialize();
 			// Check whether the charge is successful
 			if ($chargeJson['amount_refunded'] == 0 && empty($chargeJson['failure_code']) && $chargeJson['paid'] == 1 && $chargeJson['captured'] == 1) {
@@ -218,7 +219,11 @@ else
     {
         $page = Page::find(6);
         $category = Category::orderBy('name', 'asc')->get();
-        return view('categories',compact('page','category'));
+        $mainproduct = Product::orderBy('product_title', 'asc')->get();
+        
+        // dd($mainproduct);
+        
+        return view('categories',compact('page','category','mainproduct'));
     }
 
     public function product_category($id)

@@ -531,6 +531,7 @@ h2.animate-charcter {
     padding: 5px 10px;
 }
 
+
 </style>
 @endsection
 
