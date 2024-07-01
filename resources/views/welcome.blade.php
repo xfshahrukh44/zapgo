@@ -531,7 +531,20 @@ h2.animate-charcter {
     padding: 5px 10px;
 }
 
+.equipment p {
+  color: var(--white-color) !important;
+}
 
+.rent-sec:before {
+    position: absolute;
+    z-index: -1;
+    content: "";
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: #00000087;
+}
 </style>
 @endsection
 

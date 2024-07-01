@@ -92,7 +92,7 @@
                                   <div class="product-img owl-carousel owl-theme">
                                        <div class="item">
                                             <div class="cleaner-img">
-                                                 <a href="">
+                                                 <a href="{{ route('shopDetail',['id' => $items->id]) }}">
                                                       <img src="{{ url($items->image) }}" class="img-fluid" alt="">
                                                  </a>
                                             </div>
@@ -101,7 +101,7 @@
                              </div>
                              <div class="card-plus">
                                   <div class="dehum">
-                                       <a href="">
+                                       <a href="{{ route('shopDetail',['id' => $items->id]) }}">
                                             <h4>{{ $items->product_title }}</h4>
                                        </a>
                                   </div>

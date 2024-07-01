@@ -194,8 +194,8 @@ header {
   left: 0;
   right: 0;
   top: 0;
-  background: #ffffffcc;
-  box-shadow: 0 0 119px 70px white;
+  background: #ffffff;
+  /*box-shadow: 0 0 119px 70px white;*/
 }
 #logo-main img {
   width: 250px;
@@ -277,7 +277,7 @@ header {
 .equipment p {
   width: 35%;
   font-weight: bold;
-  color: var(--black-color);
+  color: var(--white-color);
   font-size: 13px;
   margin-bottom: 25px;
 }
