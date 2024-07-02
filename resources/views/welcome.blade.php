@@ -113,7 +113,7 @@
                         </div>
 
                         <div class="add-btn">
-                         <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $key }}" 
+                         <button type="button" class="btn blue-custom" data-bs-toggle="modal" data-bs-target="#staticBackdrops-{{ $key }}" 
                          style="{{ $isRoleThree ? 'cursor: not-allowed;' : '' }}" 
                          {{ $isRoleThree || $isSunday ? 'disabled' : '' }}> 
                          Add To Cart
