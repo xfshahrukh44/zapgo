@@ -8,8 +8,8 @@
 
         <a href="{{ URL('quotes') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'quotes')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> Get A Quote</a>
 
-        <a href="{{ URL('view-product') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'view-product')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> View/Add Product</a>
         @if (Auth::user()->role == 3)
+        <a href="{{ URL('view-product') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'view-product')  ? 'active' : '' ?>"><i class="fa fa-cart-arrow-down"></i> View/Add Product</a>
         <a href="{{ URL('view-feedback') }}" class="<?php echo (isset($segment[0]) AND $segment[0] == 'view-feedback')  ? 'active' : '' ?>"><i class="fa fa-comment-dots"></i> View Feedback</a>
         @endif
 

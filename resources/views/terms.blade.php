@@ -42,7 +42,7 @@
 
 .about-inner {
   height: 400px;
-  align-items: end;
+  align-items: center;
 }
 
 section.content-main {

@@ -92,12 +92,12 @@
 }
 
 .about-inner {
-  height: 700px !important;
-  align-items: end;
+  height: 500px !important;
+  align-items: center;
 }
 
 .about-inner .equipment h1 {
-    margin-top: -360px !important;
+    /* margin-top: -360px !important; */
 }
 
 </style>

@@ -202,8 +202,8 @@ p.text {
 }
 
 .about-inner {
-  height: 400px;
-  align-items: end;
+  height: 500px;
+  align-items: center;
 }
 
             .account-details-form label.required {
@@ -317,14 +317,14 @@ p.text {
                 font-size: 20px;
                 margin: 0;
             }
-            
+
             .h-p div {
                 display: flex;
                 align-items: center;
                 gap: 10px;
                 flex-wrap: wrap;
             }
-            
+
             .h-p div img {
                 height: 100px;
                 width: 100px;

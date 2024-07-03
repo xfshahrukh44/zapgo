@@ -23,7 +23,7 @@
                                 @csrf
                                 <input type="hidden" id="date-range-days" value="0">
                                 <input type="hidden" id="amount-date" value="1">
-                                
+
                                 <div class="date-row">
                                     <div class="form-group col-6" style=" margin-left: 12px; ">
                                         <input style="max-width: 210px;" type="text" class="date-rent-start form-control"
@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="form-group col-6">
                                         <input type="text" name="city" class="form-control" placeholder="City*" required="">
-                                    </div>                                    
+                                    </div>
                                     <div class="form-group col-6">
                                         @php
                                             $state = DB::table('states')->get();
@@ -71,9 +71,9 @@
                                             @foreach ($state as $value)
                                              <option value="{{ $value->name }}">{{ $value->name }}</option>
                                             @endforeach
-        
+
                                         </select>
-        
+
                                     </div>
 
                                     <!-- Container for product rows -->
@@ -92,7 +92,7 @@
                                                         $price_per_day = (\App\ProductAttribute::where(['product_id' => $items->id, 'attribute_id' => 14])->first()->price) ?? 0.00;
                                                         $price_per_week = (\App\ProductAttribute::where(['product_id' => $items->id, 'attribute_id' => 15])->first()->price) ?? 0.00;
                                                         $price_per_month = (\App\ProductAttribute::where(['product_id' => $items->id, 'attribute_id' => 16])->first()->price) ?? 0.00;
-                                                    @endphp 
+                                                    @endphp
                                                         <option value="{{ $items->id }}" data-price="{{ $items->price }}" data-price-per-day="{{ $price_per_day }}" data-price-per-week="{{ $price_per_week }}" data-price-per-month="{{ $price_per_month }}">{{ $items->product_title }}</option>
                                                     @endforeach
 
@@ -170,13 +170,13 @@
         }
 
         .about-inner {
-            height: 400px;
-            align-items: end;
+            height: 500px;
+            align-items: center;
         }
         .Zebra_DatePicker_Icon_Wrapper {
             width: 99% !important;
-        } 
-        
+        }
+
         .Zebra_DatePicker_Icon_Wrapper .date-rent-start,
         .Zebra_DatePicker_Icon_Wrapper .date-rent-end {
             max-width: 98.5% !important;
@@ -281,7 +281,7 @@
                 var clonedRow = $(".product-row").first().clone();
                 clonedRow.appendTo("#product-container");
 
-                var rowCounter = counter; 
+                var rowCounter = counter;
                 clonedRow.find("select.product").attr("id", "product-" + rowCounter);
                 clonedRow.find("select.quantity").attr("id", "quantity-" + rowCounter);
                 // clonedRow.find("input[name='quantity[]']").attr("id", "quantity-" + rowCounter);
@@ -319,8 +319,8 @@
                 var quantitySelect = $("#quantity-" + rowCounter);
                 var quantity = quantitySelect.val();
                 var selectedOption = productSelector.find("option:selected");
-                
-                
+
+
                 var amount_date = $('#amount-date').val();
                 var days = $('#date-range-days').val();
                 var per_day_price = parseFloat(selectedOption.data("price-per-day"));
@@ -356,7 +356,7 @@
 
                 // var quantity = parseInt($("#quantity-" + rowCounter).val());
                 var totalPrice = price * quantity;
-                
+
                 if (!isNaN(totalPrice)) {
                     $("#price-" + rowCounter).val(totalPrice.toFixed(2));
                 } else {
@@ -403,15 +403,15 @@
             $(document).on("keyup", "input[name='price[]']", function() {
                 updateTotal();
             });
-            
+
             function updateAmountOnDateChange() {
                 var startDate = new Date($('.date-rent-start').val());
                 var endDate = new Date($('.date-rent-end').val());
                 updateDateRange1(startDate, endDate);
-                
+
                 var rowCount = $(".product-row").length;
                 console.log(rowCount);
-                
+
                 if(rowCount != 1){
                     $(".product-row").each(function(index) {
                         updatePrice(index + 1);
@@ -423,11 +423,11 @@
                 // }
                 updateTotal();
             }
-    
+
             function isProductAndQuantitySelected() {
                 var isProductSelected = false;
                 var isQuantitySelected = false;
-                
+
                 $("select.product, select.quantity").each(function() {
                     if ($(this).hasClass('product') && $(this).val() !== "") {
                         isProductSelected = true;
@@ -435,10 +435,10 @@
                         isQuantitySelected = true;
                     }
                 });
-            
+
                 return isProductSelected && isQuantitySelected;
             }
-            
+
              $('.date-rent-start').Zebra_DatePicker({
                 direction: 1,
                 format: 'm-d-Y',
@@ -467,7 +467,7 @@
                     }
                 }
             });
-            
+
             $('.date-rent-end').Zebra_DatePicker({
                 direction: 1,
                 format: 'm-d-Y',
@@ -477,7 +477,7 @@
                     }
                 }
             });
-            
+
             // $('.date-rent-end').Zebra_DatePicker({
             //     direction: true,
             //     format: 'm-d-Y',
@@ -487,7 +487,7 @@
             //         }
             //     }
             // });
-            
+
             function updateDateRange1(startDate, endDate) {
                 var timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
                 var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -519,10 +519,10 @@
                 $('#date-range-days').val(diffDays);
                 $('#amount-date').val(multiplier_value);
             }
-            
+
         });
-        
-        
+
+
 
 
 
@@ -533,7 +533,7 @@
 
         //     var productSelector = $("#product-0");
         //     var selectedOption = productSelector.find("option:selected");
-            
+
         //     var amount_date = $('#amount-date').val();
         //     var days = $('#date-range-days').val();
         //     var per_day_price = parseFloat(selectedOption.data("price-per-day"));

@@ -4,7 +4,7 @@
     <!-- BODY START HERE -->
     <!-- ============================================================== -->
 
-    <section class="rent-sec about-inner">
+    <section class="rent-sec about-inner product-inner">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -26,9 +26,9 @@
                 <div class="col-lg-6">
                     <div class="inner-to-slides">
                         <div class="inner-slides owl-carousel owl-theme">
-                            
+
                             <div class="item">
-                                    
+
                                     <div class="cleaner-inner-img">
                                         <figure>
                                             <img src="{{ asset($product_detail->image) }}">
@@ -36,9 +36,9 @@
                                     </div>
                                 </div>
                             @foreach ($productimages as $items)
-                            
+
                                 <div class="item">
-                                    
+
                                     <div class="cleaner-inner-img">
                                         <figure>
                                             <img src="{{ asset($items->image) }}" alt="">
@@ -146,8 +146,8 @@
         }
 
         .about-inner {
-            height: 400px;
-            align-items: end;
+            height: 500px !important;
+            align-items: center;
         }
 
 
@@ -452,17 +452,18 @@
         .week-and-day .input-attr {
             width: 75%;
         }
-        
+
         .cleaner-inner-img figure {
             height: 400px;
             width: 600px;
         }
-        
+
         .cleaner-inner-img figure img {
             width: 100% !important;
             height: 100%;
             object-fit: contain;
         }
+
     </style>
 @endsection
 @section('js')

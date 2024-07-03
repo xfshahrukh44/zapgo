@@ -91,7 +91,7 @@
                        </div>
                        @empty
                        <div class="not-found">
-                           
+
                        <p>No Products Found.</p>
                        </div>
 
@@ -123,8 +123,8 @@
 }
 
 .about-inner {
-  height: 400px;
-  align-items: end;
+  height: 500px;
+  align-items: center;
 }
 
 .main-pro-details{

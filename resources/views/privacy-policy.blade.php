@@ -41,8 +41,8 @@
 }
 
 .about-inner {
-  height: 400px;
-  align-items: end;
+  height: 500px;
+  align-items: center;
 }
 
 section.content-main {
@@ -51,6 +51,12 @@ section.content-main {
 
 div#footer-form,#feedback-form {
     display: none;
+}
+
+ul {
+    margin-top: 20px;
+    padding-left: 1rem;
+    list-style: disc;
 }
 </style>
 @endsection

@@ -229,8 +229,8 @@
 
 
 .about-inner {
-  height: 400px;
-  align-items: end;
+  height: 500px;
+  align-items: center;
 }
 
 .modal-body .week-and-day ul li.active {
