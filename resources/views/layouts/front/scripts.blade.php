@@ -236,3 +236,23 @@ function removeActive() {
 
 </script>
 
+@php
+    $service_date = App\Http\Traits\HelperTrait::returnFlag(1978);
+    $service_date_formatted = date('Y-m-d', strtotime($service_date));
+@endphp
+
+@if (!empty($service_date))
+<script>
+    $(document).ready(function() {
+        var serviceDate = "{{ $service_date_formatted }}";
+        var currentDate = new Date().toISOString().split('T')[0];
+
+        if (currentDate === serviceDate) {
+            $("#addCart").prop("disabled", true);
+            $(".addCart").prop("disabled", true);
+        }
+    });
+</script>
+@endif
+
+

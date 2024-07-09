@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('before-css')
-    
+
 @endpush
 
 @section('content')
@@ -42,8 +42,9 @@
                               @csrf
                               <div class="form-body">
                                     <div class="row">
-                                        <?php 
-                                            $_getConfig = DB::table('m_flag')->where('is_active','1')->where('is_config','1')->get();
+                                        <?php
+                                            $_getConfig = DB::table('m_flag')->where('is_active','1')->where('is_config','1')->where('id', '!=', 1978)->get();
+                                            $_getService = DB::table('m_flag')->where('is_active','1')->where('is_config','1')->where('id', 1978)->first();
                                         ?>
                                         @foreach($_getConfig as $_Config)
                                             @if($_Config->type='1')
@@ -62,6 +63,13 @@
                                             </div>
                                             @endif
                                         @endforeach
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="{{ $_getService->flag_type }}">{{ $_getService->flag_show_text }}</label>
+                                                <input id="{{ $_getService->flag_type }}" class="form-control" name="{{ $_getService->flag_type }}" type="date" value="{{ $_getService->flag_value }}" min="{{ date('Y-m-d') }}">
+                                            </div>
+                                        </div>
+
                                   </div>
                               </div>
                               <div class="form-actions text-right pb-0">
@@ -118,5 +126,5 @@
 @endsection
 
 @push('js')
-    
+
 @endpush
