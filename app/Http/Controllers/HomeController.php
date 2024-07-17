@@ -29,6 +29,7 @@ use App\Models\QuoteProdInfo;
 use App\Models\Feedback;
 use Stripe;
 use App\Models\Bulkorder;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -326,6 +327,16 @@ else
                 return response()->json(['message'=>'Error Occurred', 'status' => false]);
             }
         }
+    }
+    
+    public function stkPush(Request $request){
+        Log::info('STK Push endpoint hit');
+        Log::info($request->all());
+        return [
+            'ResultCode' => 0,
+            'ResultDesc' => 'Accept Service',
+            'ThirdPartyTransID' => rand(3000, 10000)
+        ];
     }
 
     // public function store(Request $request)

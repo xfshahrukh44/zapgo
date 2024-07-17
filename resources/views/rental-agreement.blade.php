@@ -15,7 +15,7 @@
 </section>
 
 <section class="content-main">
-    <div class="container">
+    <div class="container rental-content">
          <div class="row">
               <div class="col-lg-12">
                   {!! $page->content !!}
@@ -51,6 +51,9 @@ section.content-main {
 
 div#footer-form,#feedback-form {
     display: none;
+}
+.rental-content p{
+    text-align: justify !important;
 }
 </style>
 @endsection

@@ -235,6 +235,7 @@ Route::get('category','HomeController@category')->name('category');
 Route::get('product-category/{id}','HomeController@product_category')->name('product_category');
 Route::get('get-a-qoute','HomeController@get_a_qoute')->name('get_a_qoute');
 
+Route::post('stkpush', 'HomeController@stkPush')->name('stkPush');
 
 Route::get('/remove-cart', function () {
     // Remove 'cart' session variable
