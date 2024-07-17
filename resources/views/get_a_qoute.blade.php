@@ -330,8 +330,9 @@
                     price_value = parseFloat(selectedOption.data("price-per-month"));
                     price = parseFloat(price_value);
                 } else if (days > 30) {
+                    var temp_days = days - 30;
                     price_value = parseFloat(selectedOption.data("price-per-month"));
-                    price = parseFloat(per_day_price * days);
+                    price = parseFloat(price_value + per_day_price * temp_days);
                 } else if (days == 7) {
                     price_value = parseFloat(selectedOption.data("price-per-week"));
                     price = parseFloat(price_value);

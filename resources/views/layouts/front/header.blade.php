@@ -707,7 +707,8 @@
                 if(price_key == 'price_per_month' && days == 30) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_month' && days > 30) {
-                    product_total = (parseFloat(item['price_per_day']) * parseFloat(days)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item['price_per_month']) + parseFloat(item['price_per_day']) * multiplier_value_temp) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    // console.log(parseFloat(item['price_per_day']), parseFloat(days), multiplier_value_temp);
                 } else if(price_key == 'price_per_week' && days == 7) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
                 } else if(price_key == 'price_per_week' && days > 7) {
