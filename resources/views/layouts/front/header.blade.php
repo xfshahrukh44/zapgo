@@ -672,7 +672,6 @@
 
         const date_rent_end_close = (qty_element) => {
             let cart = JSON.parse('{!! json_encode($new_cart) !!}');
-            console.log(cart);
 
 
             let days = datediff(parseDate($('#date-rent-start').val()), parseDate($('#date-rent-end').val()));
@@ -680,12 +679,12 @@
 
             let price_key = '';
             let day_values = {
-                price_per_month: 30,
+                price_per_month: 28,
                 price_per_week: 7,
                 price_per_day: 1,
             };
 
-            if (days > 29) {
+            if (days > 27) {
                 price_key = 'price_per_month'
             } else if (days > 6) {
                 price_key = 'price_per_week'
@@ -703,11 +702,28 @@
                 let multiplier_value = days / day_value;
                 let multiplier_value_temp = days - day_value;
                 let product_total;
+                console.log(days);
 
-                if(price_key == 'price_per_month' && days == 30) {
+                if(price_key == 'price_per_month' && days == 28) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
-                } else if(price_key == 'price_per_month' && days > 30) {
-                    product_total = (parseFloat(item['price_per_month']) + parseFloat(item['price_per_day']) * multiplier_value_temp) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                } else if(price_key == 'price_per_month' && days > 28) {
+                    let month_count = Math.floor(days / 28);
+                    let extra_days = days % 28;
+                    product_total = (parseFloat(item['price_per_month']) * month_count + parseFloat(item['price_per_day']) * extra_days) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+
+
+                    for (let i = 1; i <= month_count; i++) {
+                        if (product_total > (item['price_per_month'] * (i + 1)) && days <= 28 * (i + 1)) {
+                            product_total = parseFloat(item['price_per_month'] * (i + 1));
+                        }
+                    }
+                    // console.log(product_total, parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']));
+                    // if (product_total > parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']) && days <= 28 + 7) {
+                    //     product_total = parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']);
+                    // } else if (product_total > parseFloat(item['price_per_month']) + parseFloat(item['price_per_week'] * 2) && days <= 28 + 7 * 2) {
+                    //     product_total = parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']) * 2;
+                    // }
+
                     // console.log(parseFloat(item['price_per_day']), parseFloat(days), multiplier_value_temp);
                 } else if(price_key == 'price_per_week' && days == 7) {
                     product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
