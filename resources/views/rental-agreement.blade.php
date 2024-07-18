@@ -55,6 +55,10 @@ div#footer-form,#feedback-form {
 .rental-content p{
     text-align: justify !important;
 }
+
+.container.rental-content h5 {
+    margin: 21px 0 5px;
+}
 </style>
 @endsection
 
