@@ -705,11 +705,11 @@
                 console.log(days);
 
                 if(price_key == 'price_per_month' && days == 28) {
-                    product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item[price_key]));
                 } else if(price_key == 'price_per_month' && days > 28) {
                     let month_count = Math.floor(days / 28);
                     let extra_days = days % 28;
-                    product_total = (parseFloat(item['price_per_month']) * month_count + parseFloat(item['price_per_day']) * extra_days) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item['price_per_month']) * month_count + parseFloat(item['price_per_day']) * extra_days);
 
 
                     for (let i = 1; i <= month_count; i++) {
@@ -726,18 +726,20 @@
 
                     // console.log(parseFloat(item['price_per_day']), parseFloat(days), multiplier_value_temp);
                 } else if(price_key == 'price_per_week' && days == 7) {
-                    product_total = (parseFloat(item[price_key])) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item[price_key]));
                 } else if(price_key == 'price_per_week' && days > 7) {
-                    product_total = (parseFloat(item['price_per_week']) + parseFloat(item['price_per_day']) * multiplier_value_temp) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item['price_per_week']) + parseFloat(item['price_per_day']) * multiplier_value_temp);
                     if (product_total > item['price_per_month']) {
                         product_total = parseFloat(item['price_per_month']);
                     }
                 } else {
-                    product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                    product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value));
                     if (product_total > item['price_per_week']) {
                         product_total = parseFloat(item['price_per_week']);
                     }
                 }
+
+                product_total = product_total * (qty_element ? qty_element.val() : parseInt(item['qty']));
 
                 sub_total += product_total;
 
