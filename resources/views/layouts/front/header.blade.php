@@ -720,14 +720,9 @@
                             product_total = parseFloat(item['price_per_month'] * (i + 1));
                         }
                     }
-                    // console.log(product_total, parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']));
-                    // if (product_total > parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']) && days <= 28 + 7) {
-                    //     product_total = parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']);
-                    // } else if (product_total > parseFloat(item['price_per_month']) + parseFloat(item['price_per_week'] * 2) && days <= 28 + 7 * 2) {
-                    //     product_total = parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']) * 2;
-                    // }
-
-                    // console.log(parseFloat(item['price_per_day']), parseFloat(days), multiplier_value_temp);
+                    if (product_total > parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']) && days <= 28 + 7) {
+                        product_total = parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']);
+                    }
                 } else if(price_key == 'price_per_week' && days == 7) {
                     product_total = (parseFloat(item[price_key]));
                 } else if(price_key == 'price_per_week' && days > 7) {
