@@ -181,7 +181,7 @@
                              <div class="blub-h">
                                   <h6>Exceptional Service</h6>
                                   <p>We place a high priority on customer satisfaction and make every effort to exceed
-                                       your expectations. Our team of specialists is always readyfor yourassistance.
+                                       your expectations. Our team specialists is always ready for your assistance.
                                   </p>
                              </div>
                         </div>
@@ -203,8 +203,7 @@
                              </figure>
                              <div class="blub-h">
                                   <h6>Rapid Response</h6>
-                                  <p>Time is crucial in theequipment rentalindustry. We offer fastdelivery and support
-                                       to ensure you can start your projects promptly.</p>
+                                  <p>Time is crucial in the equipment rental industry. We offer fast delivery and support to ensure you can start your projects promptly.</p>
                              </div>
                         </div>
                    </div>

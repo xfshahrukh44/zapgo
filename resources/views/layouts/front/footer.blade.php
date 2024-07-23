@@ -223,7 +223,7 @@
                                 @endif
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" name="name" id="name" value="{{ $name }}" class="form-control" required="">
+                                    <input type="text" name="name" id="name" value="{{ $name }}" class="form-control" required="" pattern="[A-Za-z\s]+" title="Please enter a valid name (letters and spaces only)">
                                 </div>
                                 <div class="form-group">
                                     <label>Put the feedback message</label>
