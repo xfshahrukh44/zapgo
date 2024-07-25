@@ -133,6 +133,7 @@ class ProductController extends Controller
             $product->location_id = $request->input('location_id');
             $product->delivery_charges = $request->input('delivery_charges');
             $product->stock_inventory = $request->input('stock_inventory');
+            $product->env_fee = $request->input('env_fee');
             $file = $request->file('image');
 
             //make sure yo have image folder inside your public
@@ -266,6 +267,7 @@ class ProductController extends Controller
         $requestData['location_id'] = $request->input('location_id');
         $requestData['delivery_charges'] = $request->input('delivery_charges');
         $requestData['stock_inventory'] = $request->input('stock_inventory');
+        $requestData['env_fee'] = $request->input('env_fee');
 
         // dump($request->input());
         // die();

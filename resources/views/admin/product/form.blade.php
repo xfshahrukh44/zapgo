@@ -39,6 +39,12 @@
         </div>
         <div class="col-md-12">
             <div class="form-group">
+                {!! Form::label('env_fee', 'Environmental Fee') !!}
+                {!! Form::number('env_fee', null, ['class' => 'form-control', 'step' => 'any']) !!}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
                 {!! Form::label('description', 'Description') !!}
                 {!! Form::textarea('description', null, ('required' == 'required') ? ['class' => 'form-control', 'id' => 'summary-ckeditor', 'required' => 'required'] : ['class' => 'form-control']) !!}
             </div>

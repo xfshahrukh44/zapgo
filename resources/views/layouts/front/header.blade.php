@@ -121,6 +121,8 @@
         $cart_item['total'] = $product_total;
     }
 
+    // dd($envFee_total);
+
     $rental_subtotal = $rental_subtotal + $envFee_total;
     $new_cart['sub_total'] = $rental_subtotal + $envFee_total;
 @endphp
@@ -656,7 +658,7 @@
                 product_total = product_total * (qty_element ? qty_element.val() : parseInt(item['qty']));
 
                 let envFee_final = (env_fee / 100) * product_total;
-                $('#envsub'+item['id']).text(envFee_final);
+                $('#envsub'+item['id']).text(parseFloat(envFee_final).toFixed(2));
 
                 sub_total += product_total;
 

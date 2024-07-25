@@ -1648,7 +1648,7 @@
 
 
         // Define the URL of the checkout page
-        var checkoutPageUrl = "https://democustom-html.com/custom-backend/zapgo/public/checkout";
+        var checkoutPageUrl = "{{ route('checkout') }}";
 
         // Check if the page has already been redirected
         if (!sessionStorage.getItem('redirected')) {

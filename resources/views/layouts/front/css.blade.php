@@ -27,4 +27,18 @@
         width: 50%;
         text-align: center;
     }
+
+    .disabled-link {
+        pointer-events: none;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 </style>
+
+@if(Session::get('subs') == 'yes')
+<style>
+    a.cart_icons {
+        pointer-events: none;
+    }
+</style>
+@endif

@@ -239,10 +239,11 @@ class ProductController extends Controller
 
 
 		Session::put('cart', $cart);
-		Session::put('subs', $request->subs ?? 0);
+		Session::put('subs', 'yes');
         // dd(Session::get('cart'));
 		Session::flash('message', 'Your Cart Updated Successfully');
 		Session::flash('alert-class', 'alert-success');
+
 		return view('shop.checkout');
 	}
 
@@ -320,8 +321,6 @@ class ProductController extends Controller
 
 	public function checkout()
 	{
-
-		// dd(Session::get('cart1'));
 
 		if (Session::get('cart') && count(Session::get('cart')) > 0) {
 			$countries = DB::table('countries')
