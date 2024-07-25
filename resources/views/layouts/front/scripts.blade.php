@@ -235,15 +235,16 @@ function removeActive() {
 
 @php
     $service_dates = App\Http\Traits\HelperTrait::returnFlag(1978);
+    $service_dates_arr = explode(", ", $service_dates);
     // $service_date_formatted = date('Y-m-d', strtotime($service_date));
 @endphp
 
-@if (!empty($service_dates))
+@if (!empty($service_dates_arr))
 <script>
     $(document).ready(function() {
-        var serviceDates = @json($service_dates); // Convert PHP array to JavaScript array
-        console.log(serviceDates);
+        var serviceDates = @json($service_dates_arr); // Convert PHP array to JavaScript array
         var currentDate = new Date().toISOString().split('T')[0];
+        console.log(serviceDates,currentDate);
 
         if (serviceDates.includes(currentDate)) {
             $("#addCart").prop("disabled", true);
