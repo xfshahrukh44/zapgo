@@ -168,9 +168,9 @@
 
 
         /* #stripe-submit {
-                    margin-left: 315px;
+                        margin-left: 315px;
 
-                } */
+                    } */
 
         .tabs-sign {
             position: relative;
@@ -281,6 +281,7 @@
                 'price_per_day' => $price_per_day,
                 'price_per_week' => $price_per_week,
                 'price_per_month' => $price_per_month,
+                'env_fee' => $item['env_fee'],
             ];
         }
         $new_cart['delivery_charges'] = $new_cart['items'][0]['delivery_charges'];
@@ -311,7 +312,7 @@
             'price_per_day' => 1,
         ];
 
-        if ($days > 29) {
+        if ($days > 27) {
             $price_key = 'price_per_month';
         } elseif ($days > 6) {
             $price_key = 'price_per_week';
@@ -320,36 +321,71 @@
         }
 
         $rental_subtotal = 0.0;
+        $envFee_total = 0.0;
 
         foreach ($new_cart['items'] as $cart_item) {
             $day_value = $day_values[$price_key];
             $multiplier_value = $days / $day_value;
             $multiplier_value_temp = $days - $day_value;
 
-            if ($price_key == 'price_per_month' && $days == 30) {
-                $product_total = floatval($cart_item[$price_key]) * $cart_item['qty'];
-            } elseif ($price_key == 'price_per_month' && $days > 30) {
-                $product_total =
-                    (floatval($cart_item[$price_key]) +
-                        floatval($cart_item['price_per_day']) * floatval($multiplier_value_temp)) *
-                    $cart_item['qty'];
-            } elseif ($price_key == 'price_per_week' && $days == 7) {
-                $product_total = floatval($cart_item[$price_key]) * $cart_item['qty'];
-            } elseif ($price_key == 'price_per_week' && $days > 7) {
-                $product_total =
-                    (floatval($cart_item[$price_key]) +
-                        floatval($cart_item['price_per_day']) * floatval($multiplier_value_temp)) *
-                    $cart_item['qty'];
+            if ($price_key == 'price_per_month') {
+                if ($days == 28) {
+                    $product_total = floatval($cart_item[$price_key]);
+                } elseif ($days > 28) {
+                    $month_count = floor($days / 28);
+                    $extra_days = $days % 28;
+
+                    $product_total =
+                        floatval($cart_item['price_per_month']) * $month_count +
+                        floatval($cart_item['price_per_day']) * $extra_days;
+
+                    for ($i = 1; $i <= $month_count; $i++) {
+                        if (
+                            $product_total > floatval($cart_item['price_per_month']) * ($i + 1) &&
+                            $days <= 28 * ($i + 1)
+                        ) {
+                            $product_total = floatval($cart_item['price_per_month']) * ($i + 1);
+                        }
+                    }
+                    if (
+                        $product_total >
+                            floatval($cart_item['price_per_month']) + floatval($cart_item['price_per_week']) &&
+                        $days <= 28 + 7
+                    ) {
+                        $product_total =
+                            floatval($cart_item['price_per_month']) + floatval($cart_item['price_per_week']);
+                    }
+                }
+            } elseif ($price_key == 'price_per_week') {
+                if ($days == 7) {
+                    $product_total = floatval($cart_item[$price_key]);
+                } elseif ($days > 7) {
+                    $product_total =
+                        floatval($cart_item['price_per_week']) +
+                        floatval($cart_item['price_per_day']) * $multiplier_value_temp;
+                    if ($product_total > floatval($cart_item['price_per_month'])) {
+                        $product_total = floatval($cart_item['price_per_month']);
+                    }
+                }
             } else {
-                $product_total = floatval($cart_item[$price_key]) * floatval($multiplier_value) * $cart_item['qty'];
+                $product_total = floatval($cart_item[$price_key]) * $multiplier_value;
+                if ($product_total > floatval($cart_item['price_per_week'])) {
+                    $product_total = floatval($cart_item['price_per_week']);
+                }
             }
 
+            $env_fee = $cart_item['env_fee'] ?? 0;
+            $envFee_final = ($env_fee / 100) * $product_total;
+
+            $product_total = $product_total * floatval($cart_item['qty']);
+            $envFee_total += $envFee_final;
             $rental_subtotal += $product_total;
 
             $cart_item['total'] = $product_total;
         }
 
-        $new_cart['sub_total'] = $rental_subtotal;
+        $rental_subtotal = $rental_subtotal + $envFee_total;
+        $new_cart['sub_total'] = $rental_subtotal + $envFee_total;
     @endphp
 
     @php
@@ -423,8 +459,8 @@
 
                                                 <label for="trip" class="radio-1 active" id="tripLabel">Round-trip
                                                     delivery</label>
-                                                <input type="radio" name="round_trip" value="1" id="trip" checked
-                                                    required>
+                                                <input type="radio" name="round_trip" value="1" id="trip"
+                                                    checked required>
 
                                             </li>
                                         </ul>
@@ -436,9 +472,11 @@
                                                     @else
                                                         <div class="second-menu">
                                                             <p>Delivery is only available with a ZapGo Rentals account.</p>
-                                                            <a href="#" class="btn blue-custom" id="signin" data-bs-toggle="modal"
+                                                            <a href="#" class="btn blue-custom" id="signin"
+                                                                data-bs-toggle="modal"
                                                                 data-bs-target="#sign_tabs_poppup">Sign in</a>
-                                                            <a href="#" class="btn blue-custom" id="signup" data-bs-toggle="modal"
+                                                            <a href="#" class="btn blue-custom" id="signup"
+                                                                data-bs-toggle="modal"
                                                                 data-bs-target="#sign-UP_tabs_poppup">Create a free
                                                                 accounts</a>
                                                         </div>
@@ -756,7 +794,7 @@
                                         $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
                                             ->where('attribute_id', $monthAttributeValue->attribute_id)
                                             ->first();
-                                        $per_month_price = $monthProductAttribute->price; // Calculate per month price
+                                        $per_month_price = $monthProductAttribute->price; // Calculate per month price\
 
                                         if ($day >= 28) {
                                             $monthCount = floor($day / 28); // Calculate number of months (each month is 28 days)
@@ -815,10 +853,26 @@
                                         } elseif ($day < 28 && $subtotal >= $per_month_price) {
                                             $subtotal = $per_month_price;
                                         }
+
+                                        if(!empty($prod_image->env_fee)){
+                                            $envFee_final = ($prod_image->env_fee / 100) * $subtotal;
+                                            $subtotal = $envFee_final + $subtotal;
+                                        }else{
+                                            $subtotal = $envFee_final + $subtotal;
+                                        }
+
+
+
                                         ?>
+                                        @if(!empty($prod_image->env_fee))
+                                        <h5>{{ $value['name'] }} <span>${{ $value['price'] * $value['qty'] }} x
+                                                {{ $day }} Day + ${{ $envFee_final }} = ${{ $subtotal }}</span>
+                                        </h5>
+                                        @else
                                         <h5>{{ $value['name'] }} <span>${{ $value['price'] * $value['qty'] }} x
                                                 {{ $day }} Day = ${{ $subtotal }}</span>
                                         </h5>
+                                        @endif
                                         <hr>
                                     @endforeach
 
@@ -881,10 +935,6 @@
                                 <p>-</p>
                             </li> --}}
                                 <li>
-                                    <p>Environmental Service Fee:</p>
-                                    <p>${{ number_format($envFee_final, 2) }}</p>
-                                </li>
-                                <li>
                                     <p>Other fees:</p>
                                     <p>${{ number_format($otherFees_final, 2) }}</p>
                                 </li>
@@ -897,7 +947,6 @@
                                     $estimatedSubtotal =
                                         $rental_subtotal +
                                         $rentalProtection_final +
-                                        $envFee_final +
                                         $otherFees_final +
                                         $tax_final +
                                         $deliveryFee;

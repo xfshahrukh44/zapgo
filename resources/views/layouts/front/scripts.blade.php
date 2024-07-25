@@ -6,8 +6,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
-
 <!-- Option 2: Separate Popper and Bootstrap JS -->
 <!--
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
@@ -18,7 +16,6 @@
 <script src="{{ asset('js/script.js') }}"></script>
 <script src="{{ asset('js/zebra_datepicker.min.js') }}"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
 <script>
 
 	function editableContent(){
@@ -237,17 +234,18 @@ function removeActive() {
 </script>
 
 @php
-    $service_date = App\Http\Traits\HelperTrait::returnFlag(1978);
-    $service_date_formatted = date('Y-m-d', strtotime($service_date));
+    $service_dates = App\Http\Traits\HelperTrait::returnFlag(1978);
+    // $service_date_formatted = date('Y-m-d', strtotime($service_date));
 @endphp
 
-@if (!empty($service_date))
+@if (!empty($service_dates))
 <script>
     $(document).ready(function() {
-        var serviceDate = "{{ $service_date_formatted }}";
+        var serviceDates = @json($service_dates); // Convert PHP array to JavaScript array
+        console.log(serviceDates);
         var currentDate = new Date().toISOString().split('T')[0];
 
-        if (currentDate === serviceDate) {
+        if (serviceDates.includes(currentDate)) {
             $("#addCart").prop("disabled", true);
             $(".addCart").prop("disabled", true);
         }

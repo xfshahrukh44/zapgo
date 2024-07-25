@@ -22,7 +22,7 @@
             max-width: 1570px !important;
         }
     }
-    
+
     .product-inner .equipment {
         width: 50%;
         text-align: center;

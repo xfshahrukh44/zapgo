@@ -66,7 +66,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="{{ $_getService->flag_type }}">{{ $_getService->flag_show_text }}</label>
-                                                <input id="{{ $_getService->flag_type }}" class="form-control" name="{{ $_getService->flag_type }}" type="date" value="{{ $_getService->flag_value }}" min="{{ date('Y-m-d') }}">
+                                                <input id="{{ $_getService->flag_type }}" class="form-control" name="{{ $_getService->flag_type }}" type="text" value="{{ $_getService->flag_value }}">
                                             </div>
                                         </div>
 
@@ -126,5 +126,14 @@
 @endsection
 
 @push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#{{ $_getService->flag_type }}", {
+            mode: 'multiple',
+            dateFormat: 'Y-m-d',
+            minDate: 'today'
+        });
+    });
+</script>
 
 @endpush

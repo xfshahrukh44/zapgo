@@ -163,11 +163,11 @@ class ProductController extends Controller
                 $cart[$cartId]['delivery_charges'] = $productFirstrow->delivery_charges;
                 $cart[$cartId]['qty'] = $quantity;
                 $cart[$cartId]['price'] = $productFirstrow->price;
+                $cart[$cartId]['env_fee'] = $productFirstrow->env_fee ?? '';
                 $cart[$cartId]['date_range'] = $request->daterange_start . ' ' . $request->daterange_end;
 
                 // Update the cart session
                 Session::put('cart', $cart);
-//                dd($cart);
 
                 // Set flash message
                 Session::flash('flash_message', 'Product Added to Cart');
@@ -239,6 +239,7 @@ class ProductController extends Controller
 
 
 		Session::put('cart', $cart);
+		Session::put('subs', $request->subs ?? 0);
         // dd(Session::get('cart'));
 		Session::flash('message', 'Your Cart Updated Successfully');
 		Session::flash('alert-class', 'alert-success');
