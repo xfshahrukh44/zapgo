@@ -452,7 +452,7 @@
                                         <h4>Order details</h4>
                                     </div>
 
-                                    <div class="tabs-sign" id="order_detail_box">
+                                    <div class="tabs-sign" id="order_detail_box" style="display: block;">
                                         <ul id="myTabs" class="nav nav-pills nav-justified" role="tablist"
                                             data-tabs="tabs">
                                             <li>
