@@ -280,18 +280,42 @@
                                 integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
                                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                             <?php //$subtotal1 = 0;
-                                  $pro_total = 0;?>
+                                  $pro_total = 0;
+                                  $totalCartPrice = 0;
+                            ?>
                             @if ($cart != null)
-                                @foreach ($cart as $key => $value)
-                                    <?php
-                                    if ($key == 'shipping') {
-                                        //continue;
-                                    }
-                                    $prod_image = App\Product::where('id', $value['id'])->first();
+                                @foreach ($new_cart['items'] as $key => $value)
+                                    @php
+                                        $prod_image = App\Product::where('id', $value['id'])->first();
+                                        $date_start = Session::get('daterange') ? $date_start : now(); // Define date_start if not already defined
+                                        $day = (Session::get('daterange') != null) ? $date_start->diffInDays($date_from) : 1;
+                                        $qty = $qty_element ? intval($qty_element->val()) : intval($value['qty']);
+                                        $pricePerDay = $value['price_per_day'];
+                                        $pricePerWeek = $value['price_per_week'];
+                                        $pricePerMonth = $value['price_per_month'];
+                                        $envFee = $value['env_fee'];
+                                        $taxes = $value['taxes'];
 
+                                        $daysInMonth = 30;
+                                        $daysInWeek = 7;
+                                        $months = floor($day / $daysInMonth);
+                                        $remainingDays = $day % $daysInMonth;
+                                        $weeks = floor($remainingDays / $daysInWeek);
+                                        $remainingDays = $remainingDays % $daysInWeek;
+                                        $days = $remainingDays;
 
-                                    ?>
+                                        $totalPrice = ($months * $pricePerMonth) + ($weeks * $pricePerWeek) + ($days * $pricePerDay);
+                                        $itemTotalPrice = $totalPrice * $qty;
 
+                                        $envFeeFinal = ($envFee / 100) * $itemTotalPrice;
+                                        $taxFinal = ($taxes / 100) * $itemTotalPrice;
+
+                                        $total_price = number_format($itemTotalPrice, 2, '.', '');
+                                        $env_fee_final = number_format($envFeeFinal, 2, '.', '');
+                                        $tax_final = number_format($taxFinal, 2, '.', '');
+
+                                        $totalCartPrice += $total_price + $env_fee_final + $tax_final;
+                                    @endphp
                                     <div class="row cart-items">
                                         <div class="col-md-12 delete-cart">
                                             <a href="javascript:void(0)"
@@ -304,191 +328,55 @@
                                         </div>
                                         <div class="col-md-6 text">
                                             <h3>{{ $value['name'] }}</h3>
-                                        <?php
-                                        $day = (Session::get('daterange') != null) ? $date_start->diffInDays($date_from) : 1;
-
-                                        // Fetch the per week price
-                                        $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();
-                                        $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                                                    ->where('attribute_id', $weekAttributeValue->attribute_id)
-                                                                                    ->first();
-                                        $per_week_price = $weekProductAttribute->price; // Calculate per week price
-                                        // Fetch the per month price
-                                        $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
-                                        $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                                                        ->where('attribute_id', $monthAttributeValue->attribute_id)
-                                                                                        ->first();
-                                        $per_month_price = $monthProductAttribute->price; // Calculate per month price
-
-                                        if ($day >= 28) {
-                                            $monthCount = floor($day / 28); // Calculate number of months (each month is 28 days)
-                                            $remainingDays = $day % 28; // Calculate remaining days after whole months
-
-                                            // Fetch the price for a month
-                                            $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
-                                            $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                                                        ->where('attribute_id', $monthAttributeValue->attribute_id)
-                                                                                        ->first();
-
-                                            // Calculate subtotal for whole months
-                                            $pro_total = $monthProductAttribute->price * $monthCount;
-
-                                            // If there are remaining days, calculate additional daily rate
-                                            if ($remainingDays > 0) {
-                                                // If there's a day price, add it
-                                                $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
-                                                if ($dailyAttributeValue) {
-                                                    $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                                                                ->where('attribute_id', $dailyAttributeValue->attribute_id)
-                                                                                                ->first();
-
-                                                    // Add additional daily rate for remaining days
-                                                    $pro_total += $dailyProductAttribute->price * $remainingDays;
-                                                }
-                                            }
-                                        } elseif ($day >= 7) {
-                                                $weekCount = floor($day / 7); // Calculate number of weeks
-                                                $remainingDays = $day % 7; // Calculate remaining days after whole weeks
-
-                                                // Calculate subtotal for whole weeks
-                                                $pro_total = $weekProductAttribute->price * $weekCount;
-
-                                                // If there are remaining days, calculate additional daily rate
-                                                if ($remainingDays > 0) {
-                                                    // If there's a day price, add it
-                                                    $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
-                                                    if ($dailyAttributeValue) {
-                                                        $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                                                                    ->where('attribute_id', $dailyAttributeValue->attribute_id)
-                                                                                                    ->first();
-
-                                                        // Add additional daily rate for remaining days
-                                                        $pro_total += $dailyProductAttribute->price * $remainingDays;
-                                                    }
-                                                }
-
-                                        }else {
-                                            // For rentals less than 7 days, use the standard daily rate
-                                            $pro_total = $value['price'] * $value['qty'] * $day;
-                                        }
-
-                                        if ($day < 7 && $pro_total >= $per_week_price) {
-                                            $pro_total = $per_week_price;
-                                        }elseif ($day < 28 && $pro_total >= $per_month_price) {
-                                            $pro_total = $per_month_price;
-                                        }
-
-                                        $pro_total = $pro_total * $value['qty'];
-
-                                        ?>
-                                            {{-- @dump($day) --}}
-                                            <p style="display: none;">
-                                                <strong>days: </strong>
-                                                <span id="days">1</span>
-                                            </p>
                                             <p class="days">
-
-                                                $<span id="cart-price-{{ $key }}">{{ $pro_total }}</span>
+                                                $<span id="cart-price-{{ $value['id'] }}">{{ $total_price }}</span>
                                             </p>
-                                            <?php
-                                            if(!empty($prod_image->env_fee)){
-                                                $envFee_final = ($prod_image->env_fee / 100) * $pro_total;
-                                            }
-                                            //$subtotal1 += $pro_total;
-                                            ?>
-                                            @if(!empty($prod_image->env_fee))
-                                                <p>Environmental Fee:</p><p>$<span id="envsub{{ $prod_image->id }}">{{ number_format($envFee_final, 2) }}</p>
-                                            @endif
+                                            <p>Environmental Fee:</p><p>$<span id="envsub{{ $value['id'] }}">{{ $env_fee_final }}</span></p>
+                                            <p>Taxes:</p><p>$<span id="taxessub{{ $value['id'] }}">{{ $tax_final }}</span></p>
                                             <p class="days">
-
-                                                Quantity: <input type="number" min="1" value="{{$value['qty']}}" name="qty" class="input_qty form-control" style="width: 41% !important; margin-top: 10px;" disabled>
+                                                Quantity: <input type="number" min="1" value="{{ $value['qty'] }}" name="qty" class="input_qty form-control" style="width: 41% !important; margin-top: 10px;" disabled>
                                             </p>
-
                                         </div>
                                     </div>
-                                    <input type="hidden" name="product_id" id="" value="<?php echo $value['id']; ?>">
+                                    <input type="hidden" name="product_id" value="{{ $value['id'] }}">
                                 @endforeach
 
-                                <div class="Rentals-bottom" id="main-box-layout">
+                                @php
+                                    $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
+                                    $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
+                                    $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
 
-
-                                </div>
+                                    $otherFees_final = ($otherFees / 100) * $totalCartPrice;
+                                    $rentalProtection_final = ($rentalProtection / 100) * $totalCartPrice;
+                                @endphp
 
                                 <ul class="total-row">
                                     <li>
                                         <p>Taxes and fees will be calculated before rental confirmation.</p>
                                     </li>
                                     <li>
-{{--                                        <input type="hidden" name="subs" id="subs" value="{{ number_format($subtotal1, 2) }}">--}}
-{{--                                        <p>Rental subtotal:</p><p>$<span id="rsub">{{ number_format($subtotal1, 2) }}</span></p>--}}
-                                        <input type="hidden" name="subs" id="subs" value="{{ number_format($rental_subtotal, 2) }}">
-                                        <p>Rental subtotal:</p><p>$<span id="rsub">{{ number_format($rental_subtotal, 2) }}</span><span id="xdays" style=" font-size: 11px; "></span></p>
+                                        <p>Rental subtotal:</p><p>$<span id="rsub">{{ $totalCartPrice }}</span></p>
+                                    </li>
+                                    <li>
+                                        <p>Round-trip delivery:</p><p>$<span id="roundsub">{{ $deliveryFee }}</span></p>
+                                    </li>
+                                    <li>
+                                        <p>Rental protection plan:</p><p>$<span id="rensub">{{ $rentalProtection_final }}</span></p>
+                                    </li>
+                                    <li>
+                                        <p>Other fees:</p><p>$<span id="othsub">{{ $otherFees_final }}</span></p>
                                     </li>
                                     @php
-                                        $tax = App\Http\Traits\HelperTrait::returnFlag(1973);
-                                        $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
-                                        $envFee = App\Http\Traits\HelperTrait::returnFlag(1976);
-                                        $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
-                                        $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
-
-                                        $tax_final = ($tax / 100) * $rental_subtotal;
-                                        $otherFees_final = ($otherFees / 100) * $rental_subtotal;
-                                        $rentalProtection_final = ($rentalProtection / 100) * $rental_subtotal;
-                                    @endphp
-                                    {{-- <li>
-                                        <p>Purchases subtotal: </p><p>-</p>
-                                    </li> --}}
-                                    <!--<li>-->
-                                    <!--    <p>In-store pickup:</p><p><strong>Free</strong></p>-->
-                                    <!--</li>-->
-                                    <li>
-                                        <p>Round-trip delivery: </p><p>$<span id="roundsub">{!! number_format($deliveryFee, 2) !!}</p>
-                                    </li>
-                                    <li>
-                                        <p>Rental protection plan:</p><p>$<span id="rensub">{{ number_format($rentalProtection_final, 2) }}</p>
-                                    </li>
-                                    {{-- <li>
-                                        <p>Prepay Fuel Option:</p><p>-</p>
-                                    </li> --}}
-
-                                    <li>
-                                        <p>Other fees:</p><p>$<span id="othsub">{{ number_format($otherFees_final, 2) }}</p>
-                                    </li>
-
-                                    <li>
-                                        <p>Taxes:</p><p>$<span id="taxsub">{{ number_format($tax_final, 2) }}</p>
-                                    </li>
-                                    @php
-                                        $estimatedSubtotal = ($rental_subtotal+$rentalProtection_final+$otherFees_final+$tax_final+$deliveryFee);
+                                        $estimatedSubtotal = $totalCartPrice + $rentalProtection_final + $otherFees_final + $deliveryFee;
                                     @endphp
                                     <li>
-                                        <input type="hidden" name="esubs" id="esubs" value="{{ number_format($rental_subtotal, 2) }}">
+                                        <input type="hidden" name="esubs" id="esubs" value="{{ number_format($totalCartPrice, 2) }}">
                                         <p>Estimated subtotal:</p><p>$<span id="esub">{{ number_format($estimatedSubtotal, 2) }}</span></p>
                                     </li>
-
-
-
-
-                                    {{-- <li>
-                            <p>Other fees <span>$86.10</span></p>
-                        </li> --}}
-                                    {{-- <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <p>Subtotal<span>$2,849.56</span></p>
-                        </li>
-                        <li>
-                            p>Taxes<span>$252.90</span></p>
-                        </li><
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <p><span>Estimated total</span><span>$3,102.46</span></p>
-                        </li> --}}
                                 </ul>
+
+
+
                                 @if ($cart != null)
                                 <a href="javascript:void(0)" class="updateCart btn blue-custom" id="updateCartCheck">Proceed to Checkout</a>
                                 @else
@@ -611,21 +499,21 @@
             // Example usage
             console.log('Total Price:', calculateTotalCost(cart, days, qty_element));
 
-            for (const item of cart.items) {
-                let day_value = day_values[price_key];
-                let multiplier_value = days / day_value;
-                // console.log(item[price_key]);
+            // for (const item of cart.items) {
+            //     let day_value = day_values[price_key];
+            //     let multiplier_value = days / day_value;
+            //     // console.log(item[price_key]);
 
-                let product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
-                product_total = product_total.toFixed(2);
+            //     let product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+            //     product_total = product_total.toFixed(2);
 
-                sub_total += parseFloat(product_total);
+            //     sub_total += parseFloat(product_total);
 
-                item['total'] = product_total;
-            }
+            //     item['total'] = product_total;
+            // }
 
 
-            cart['total'] = sub_total;
+            // cart['total'] = sub_total;
 
             let tax = '{{ $tax }}';
             let otherFees = '{{ $otherFees }}';
@@ -655,16 +543,16 @@
                 return parseFloat(value).toFixed(2);
             }
 
-            $('#rensub').text(formatValue(rentalProtection_final));
+            // $('#rensub').text(formatValue(rentalProtection_final));
 
-            $('#othsub').text(formatValue(otherFees_final));
-            $('#taxsub').text(formatValue(tax_final));
+            // $('#othsub').text(formatValue(otherFees_final));
+            // $('#taxsub').text(formatValue(tax_final));
 
 
-            $('#rsub').text(sub_total.toString());
-            $('#roundsub').text(cart['delivery_charges'].toString());
-            let grand_total = sub_total + parseFloat($('#roundsub').text().replaceAll('$', '')) + parseFloat($('#rensub').text().replaceAll('$', '')) + parseFloat($('#othsub').text().replaceAll('$', '')) + parseFloat($('#taxsub').text().replaceAll('$', ''));
-            $('#esub').text(grand_total.toFixed(2).toString());
+            // $('#rsub').text(sub_total.toString());
+            // $('#roundsub').text(cart['delivery_charges'].toString());
+            // let grand_total = sub_total + parseFloat($('#roundsub').text().replaceAll('$', '')) + parseFloat($('#rensub').text().replaceAll('$', '')) + parseFloat($('#othsub').text().replaceAll('$', '')) + parseFloat($('#taxsub').text().replaceAll('$', ''));
+            // $('#esub').text(grand_total.toFixed(2).toString());
             $('.total').slideDown()
             $('#daterange').val(`[${$('#date-rent-start').val()},${$('#date-rent-end').val()}]`)
             checkDatesAndToggleQty();
@@ -746,16 +634,77 @@
             const taxFinal = (taxes / 100) * itemTotalPrice;
 
             // Add to cart
-            item.total_price = itemTotalPrice;
-            item.env_fee_final = envFeeFinal;
-            item.tax_final = taxFinal;
+            item.total_price = parseFloat(itemTotalPrice.toFixed(2));
+            item.env_fee_final = parseFloat(envFeeFinal.toFixed(2));
+            item.tax_final = parseFloat(taxFinal.toFixed(2));
 
             // Add to total cart price
-            totalCartPrice += itemTotalPrice;
+            totalCartPrice += item.total_price + item.env_fee_final + item.tax_final;
         });
 
-        cart.total_cart_price = totalCartPrice; // Total cart price
+        //Other Fees
+        let otherFees = '{{ $otherFees }}';
+        otherFees = otherFees.trim() === '' ? 0 : parseFloat(otherFees);
+        otherFees = isNaN(otherFees) ? 0 : otherFees;
+        let otherFees_final = (otherFees / 100) * parseFloat(totalCartPrice);
+
+        //Rental Protection
+        let rentalProtection = '{{ $rentalProtection }}';
+        rentalProtection = rentalProtection.trim() === '' ? 0 : parseFloat(rentalProtection);
+        rentalProtection = isNaN(rentalProtection) ? 0 : rentalProtection;
+        let rentalProtection_final = (rentalProtection / 100) * parseFloat(totalCartPrice);
+
+        cart.total_cart_price = parseFloat(totalCartPrice.toFixed(2));
+        cart.other_fees_final = parseFloat(otherFees_final.toFixed(2));
+        cart.rental_protection_final = parseFloat(rentalProtection_final.toFixed(2));
+        updateCartHTML(cart);
         return cart;
+    }
+
+    function updateCartHTML(cart) {
+        // Update item prices
+        cart.items.forEach(item => {
+            const itemPriceSpan = document.querySelector(`#cart-price-${item.id}`);
+            if (itemPriceSpan) {
+                itemPriceSpan.textContent = item.total_price.toFixed(2);
+            }
+
+            const envFeeSpan = document.querySelector(`#envsub${item.id}`);
+            if (envFeeSpan) {
+                envFeeSpan.textContent = item.env_fee_final.toFixed(2);
+            }
+
+            const taxSpan = document.querySelector(`#taxsub${item.id}`);
+            if (taxSpan) {
+                taxSpan.textContent = item.tax_final.toFixed(2);
+            }
+        });
+
+        // Update total prices
+        const rsubSpan = document.querySelector('#rsub');
+        if (rsubSpan) {
+            rsubSpan.textContent = cart.total_cart_price.toFixed(2);
+        }
+
+        const roundsubSpan = document.querySelector('#roundsub');
+        if (roundsubSpan) {
+            roundsubSpan.textContent = cart.round_trip_delivery.toFixed(2);
+        }
+
+        const rensubSpan = document.querySelector('#rensub');
+        if (rensubSpan) {
+            rensubSpan.textContent = cart.rental_protection_final.toFixed(2);
+        }
+
+        const othsubSpan = document.querySelector('#othsub');
+        if (othsubSpan) {
+            othsubSpan.textContent = cart.other_fees_final.toFixed(2);
+        }
+
+        const esubSpan = document.querySelector('#esub');
+        if (esubSpan) {
+            esubSpan.textContent = (cart.total_cart_price + cart.other_fees_final + cart.rental_protection_final).toFixed(2);
+        }
     }
 
 </script>
