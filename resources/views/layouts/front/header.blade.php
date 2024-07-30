@@ -662,6 +662,8 @@
     }
 
     function updateCartHTML(cart) {
+
+        let deliveryCharges = parseFloat(cart.delivery_charges);
         // Update item prices
         cart.items.forEach(item => {
             const itemPriceSpan = document.querySelector(`#cart-price-${item.id}`);
@@ -688,7 +690,7 @@
 
         const roundsubSpan = document.querySelector('#roundsub');
         if (roundsubSpan) {
-            roundsubSpan.textContent = cart.round_trip_delivery.toFixed(2);
+            roundsubSpan.textContent = deliveryCharges.toFixed(2);
         }
 
         const rensubSpan = document.querySelector('#rensub');
@@ -703,7 +705,7 @@
 
         const esubSpan = document.querySelector('#esub');
         if (esubSpan) {
-            esubSpan.textContent = (cart.total_cart_price + cart.other_fees_final + cart.rental_protection_final).toFixed(2);
+            esubSpan.textContent = (cart.total_cart_price + cart.other_fees_final + deliveryCharges + cart.rental_protection_final).toFixed(2);
         }
     }
 
