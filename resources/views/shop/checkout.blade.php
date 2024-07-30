@@ -282,6 +282,7 @@
                 'price_per_week' => $price_per_week,
                 'price_per_month' => $price_per_month,
                 'env_fee' => $item['env_fee'],
+                'taxes' => $item['taxes'],
             ];
         }
         $new_cart['delivery_charges'] = $new_cart['items'][0]['delivery_charges'];
@@ -304,88 +305,6 @@
         } else {
             $days = 1;
         }
-
-        $price_key = '';
-        $day_values = [
-            'price_per_month' => 28,
-            'price_per_week' => 7,
-            'price_per_day' => 1,
-        ];
-
-        if ($days > 27) {
-            $price_key = 'price_per_month';
-        } elseif ($days > 6) {
-            $price_key = 'price_per_week';
-        } else {
-            $price_key = 'price_per_day';
-        }
-
-        $rental_subtotal = 0.0;
-        $envFee_total = 0.0;
-
-        foreach ($new_cart['items'] as $cart_item) {
-            $day_value = $day_values[$price_key];
-            $multiplier_value = $days / $day_value;
-            $multiplier_value_temp = $days - $day_value;
-
-            if ($price_key == 'price_per_month') {
-                if ($days == 28) {
-                    $product_total = floatval($cart_item[$price_key]);
-                } elseif ($days > 28) {
-                    $month_count = floor($days / 28);
-                    $extra_days = $days % 28;
-
-                    $product_total =
-                        floatval($cart_item['price_per_month']) * $month_count +
-                        floatval($cart_item['price_per_day']) * $extra_days;
-
-                    for ($i = 1; $i <= $month_count; $i++) {
-                        if (
-                            $product_total > floatval($cart_item['price_per_month']) * ($i + 1) &&
-                            $days <= 28 * ($i + 1)
-                        ) {
-                            $product_total = floatval($cart_item['price_per_month']) * ($i + 1);
-                        }
-                    }
-                    if (
-                        $product_total >
-                            floatval($cart_item['price_per_month']) + floatval($cart_item['price_per_week']) &&
-                        $days <= 28 + 7
-                    ) {
-                        $product_total =
-                            floatval($cart_item['price_per_month']) + floatval($cart_item['price_per_week']);
-                    }
-                }
-            } elseif ($price_key == 'price_per_week') {
-                if ($days == 7) {
-                    $product_total = floatval($cart_item[$price_key]);
-                } elseif ($days > 7) {
-                    $product_total =
-                        floatval($cart_item['price_per_week']) +
-                        floatval($cart_item['price_per_day']) * $multiplier_value_temp;
-                    if ($product_total > floatval($cart_item['price_per_month'])) {
-                        $product_total = floatval($cart_item['price_per_month']);
-                    }
-                }
-            } else {
-                $product_total = floatval($cart_item[$price_key]) * $multiplier_value;
-                if ($product_total > floatval($cart_item['price_per_week'])) {
-                    $product_total = floatval($cart_item['price_per_week']);
-                }
-            }
-
-            $env_fee = $cart_item['env_fee'] ?? 0;
-            $envFee_final = ($env_fee / 100) * $product_total;
-
-            $product_total = $product_total * floatval($cart_item['qty']);
-            $envFee_total += $envFee_final;
-            $rental_subtotal += $product_total;
-
-            $cart_item['total'] = $product_total;
-        }
-
-        $rental_subtotal = $rental_subtotal + $envFee_total;
-        $new_cart['sub_total'] = $rental_subtotal + $envFee_total;
     @endphp
 
     @php
@@ -777,102 +696,45 @@
                                     // dd($cart);
                                     $subtotal = 0;
                                     $addon_total = 0;
-                                    $variation = 0; ?>
-                                    @foreach ($cart as $key => $value)
-                                        <?php // $subtotal += $value['price'] * $value['qty'];
+                                    $totalCartPrice = 0; ?>
+                                    @foreach ($new_cart['items'] as $key => $value)
+                                    @php
                                         $prod_image = App\Product::where('id', $value['id'])->first();
-                                        $day = Session::get('daterange') != null ? $date_start->diffInDays($date_from) : 1;
+                                        $date_start = Session::get('daterange') ? $date_start : now(); // Define date_start if not already defined
+                                        $day = (Session::get('daterange') != null) ? $date_start->diffInDays($date_from) : 1;
+                                        $qty = intval($value['qty']);
+                                        $pricePerDay = $value['price_per_day'];
+                                        $pricePerWeek = $value['price_per_week'];
+                                        $pricePerMonth = $value['price_per_month'];
+                                        $envFee = $value['env_fee'];
+                                        $taxes = $value['taxes'];
 
-                                        // Fetch the per week price
-                                        $weekAttributeValue = App\AttributeValue::where('value', 'Week')->first();
-                                        $weekProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                            ->where('attribute_id', $weekAttributeValue->attribute_id)
-                                            ->first();
-                                        $per_week_price = $weekProductAttribute->price; // Calculate per week price
-                                        // Fetch the per month price
-                                        $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
-                                        $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                            ->where('attribute_id', $monthAttributeValue->attribute_id)
-                                            ->first();
-                                        $per_month_price = $monthProductAttribute->price; // Calculate per month price\
+                                        $daysInMonth = 30;
+                                        $daysInWeek = 7;
+                                        $months = floor($day / $daysInMonth);
+                                        $remainingDays = $day % $daysInMonth;
+                                        $weeks = floor($remainingDays / $daysInWeek);
+                                        $remainingDays = $remainingDays % $daysInWeek;
+                                        $days = $remainingDays;
 
-                                        if ($day >= 28) {
-                                            $monthCount = floor($day / 28); // Calculate number of months (each month is 28 days)
-                                            $remainingDays = $day % 28; // Calculate remaining days after whole months
+                                        $totalPrice = ($months * $pricePerMonth) + ($weeks * $pricePerWeek) + ($days * $pricePerDay);
+                                        $itemTotalPrice = $totalPrice * $qty;
 
-                                            // Fetch the price for a month
-                                            $monthAttributeValue = App\AttributeValue::where('value', 'Month')->first();
-                                            $monthProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                ->where('attribute_id', $monthAttributeValue->attribute_id)
-                                                ->first();
+                                        $envFeeFinal = ($envFee / 100) * $itemTotalPrice;
+                                        $taxFinal = ($taxes / 100) * $itemTotalPrice;
 
-                                            // Calculate subtotal for whole months
-                                            $subtotal = $monthProductAttribute->price * $monthCount;
+                                        $total_price = number_format($itemTotalPrice, 2, '.', '');
+                                        $env_fee_final = number_format($envFeeFinal, 2, '.', '');
+                                        $tax_final = number_format($taxFinal, 2, '.', '');
 
-                                            // If there are remaining days, calculate additional daily rate
-                                            if ($remainingDays > 0) {
-                                                // If there's a day price, add it
-                                                $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
-                                                if ($dailyAttributeValue) {
-                                                    $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                        ->where('attribute_id', $dailyAttributeValue->attribute_id)
-                                                        ->first();
-
-                                                    // Add additional daily rate for remaining days
-                                                    $subtotal += $dailyProductAttribute->price * $remainingDays;
-                                                }
-                                            }
-                                        } elseif ($day >= 7) {
-                                            $weekCount = floor($day / 7); // Calculate number of weeks
-                                            $remainingDays = $day % 7; // Calculate remaining days after whole weeks
-
-                                            // Calculate subtotal for whole weeks
-                                            $subtotal = $weekProductAttribute->price * $weekCount;
-
-                                            // If there are remaining days, calculate additional daily rate
-                                            if ($remainingDays > 0) {
-                                                // If there's a day price, add it
-                                                $dailyAttributeValue = App\AttributeValue::where('value', 'Day')->first();
-                                                if ($dailyAttributeValue) {
-                                                    $dailyProductAttribute = App\ProductAttribute::where('product_id', $prod_image['id'])
-                                                        ->where('attribute_id', $dailyAttributeValue->attribute_id)
-                                                        ->first();
-
-                                                    // Add additional daily rate for remaining days
-                                                    $subtotal += $dailyProductAttribute->price * $remainingDays;
-                                                }
-                                            }
-                                        } else {
-                                            // For rentals less than 7 days, use the standard daily rate
-                                            $subtotal = $value['price'] * $value['qty'] * $day;
-                                            // dump($subtotal);
-                                        }
-
-                                        if ($day < 7 && $subtotal >= $per_week_price) {
-                                            $subtotal = $per_week_price;
-                                        } elseif ($day < 28 && $subtotal >= $per_month_price) {
-                                            $subtotal = $per_month_price;
-                                        }
-
-                                        if(!empty($prod_image->env_fee)){
-                                            $envFee_final = ($prod_image->env_fee / 100) * $subtotal;
-                                            $subtotal = $envFee_final + $subtotal;
-                                        }else{
-                                            $subtotal = $envFee_final + $subtotal;
-                                        }
-
-
-
-                                        ?>
-                                        @if(!empty($prod_image->env_fee))
-                                        <h5>{{ $value['name'] }} <span>${{ $value['price'] * $value['qty'] }} x
-                                                {{ $day }} Day + ${{ $envFee_final }} = ${{ $subtotal }}</span>
+                                        $totalCartPrice += $total_price + $env_fee_final + $tax_final;
+                                    @endphp
+                                        <h5>{{ $value['name'] }} <span> = ${{ $total_price }}</span>
                                         </h5>
-                                        @else
-                                        <h5>{{ $value['name'] }} <span>${{ $value['price'] * $value['qty'] }} x
-                                                {{ $day }} Day = ${{ $subtotal }}</span>
+                                        <h5>Environmental Fee <span> = {{ $env_fee_final }}</span>
                                         </h5>
-                                        @endif
+                                        <h5>Taxes <span> = {{ $tax_final }}</span>
+                                        </h5>
                                         <hr>
                                     @endforeach
 
@@ -893,67 +755,36 @@
                                 ?>
 
                             </div>
-                            <?php
+                            @php
+                                $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
+                                $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
+                                $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
 
-                            $tax = App\Http\Traits\HelperTrait::returnFlag(1973);
-                            $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
-                            $envFee = App\Http\Traits\HelperTrait::returnFlag(1976);
-                            $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
-                            $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
-
-                            $tax_final = ($tax / 100) * $rental_subtotal;
-                            $otherFees_final = ($otherFees / 100) * $rental_subtotal;
-                            $envFee_final = ($envFee / 100) * $rental_subtotal;
-                            $rentalProtection_final = ($rentalProtection / 100) * $rental_subtotal;
-
-                            ?>
+                                $otherFees_final = ($otherFees / 100) * $totalCartPrice;
+                                $rentalProtection_final = ($rentalProtection / 100) * $totalCartPrice;
+                            @endphp
                             <ul class="total-row">
                                 <li>
                                     <p>Taxes and fees will be calculated before rental confirmation.</p>
                                 </li>
                                 <li>
-                                    <p>Rental subtotal:</p>
-                                    <p>${{ number_format($rental_subtotal, 2) }}</p>
-                                </li>
-                                {{-- <li>
-                                <p>Purchases subtotal: </p>
-                                <p>-</p>
-                            </li> --}}
-                                <!--<li>-->
-                                <!--    <p>In-store pickup:</p><p><strong>Free</strong></p>-->
-                                <!--</li>-->
-                                <li>
-                                    <p>Round-trip delivery: </p>
-                                    <p>${!! number_format($deliveryFee, 2) !!}</p>
+                                    <p>Rental subtotal:</p><p>$<span id="rsub">{{ $totalCartPrice }}</span></p>
                                 </li>
                                 <li>
-                                    <p>Rental protection plan:</p>
-                                    <p>${{ number_format($rentalProtection_final, 2) }}</p>
+                                    <p>Round-trip delivery:</p><p>$<span id="roundsub">{{ $deliveryFee }}</span></p>
                                 </li>
-                                {{-- <li>
-                                <p>Prepay Fuel Option:</p>
-                                <p>-</p>
-                            </li> --}}
                                 <li>
-                                    <p>Other fees:</p>
-                                    <p>${{ number_format($otherFees_final, 2) }}</p>
+                                    <p>Rental protection plan:</p><p>$<span id="rensub">{{ $rentalProtection_final }}</span></p>
                                 </li>
-
                                 <li>
-                                    <p>Taxes:</p>
-                                    <p>${{ number_format($tax_final, 2) }}</p>
+                                    <p>Other fees:</p><p>$<span id="othsub">{{ $otherFees_final }}</span></p>
                                 </li>
                                 @php
-                                    $estimatedSubtotal =
-                                        $rental_subtotal +
-                                        $rentalProtection_final +
-                                        $otherFees_final +
-                                        $tax_final +
-                                        $deliveryFee;
+                                    $estimatedSubtotal = $totalCartPrice + $rentalProtection_final + $otherFees_final + $deliveryFee;
                                 @endphp
                                 <li>
-                                    <p>Estimated subtotal:</p>
-                                    <p>${{ number_format($estimatedSubtotal, 2) }}</p>
+                                    <input type="hidden" name="esubs" id="esubs" value="{{ number_format($totalCartPrice, 2) }}">
+                                    <p>Estimated subtotal:</p><p>$<span id="esub">{{ number_format($estimatedSubtotal, 2) }}</span></p>
                                 </li>
                             </ul>
 
@@ -963,27 +794,6 @@
                             <div class="summary-main" id="payments_obox">
                                 <h2 class="mb-3">Payment</h2>
                                 <div class="accordion accordion-flush" id="order_payment_box">
-                                    <!--<div class="accordion-item">-->
-                                    <!--    <h2 class="accordion-header" id="flush-headingOne">-->
-                                    <!--        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
-                                    <!--            data-bs-target="#flush-collapseOne" aria-expanded="false"-->
-                                    <!--            aria-controls="flush-collapseOne">-->
-                                    <!--            Pay with Paypal-->
-                                    <!--        </button>-->
-                                    <!--    </h2>-->
-                                    <!--    <div id="flush-collapseOne" class="accordion-collapse collapse"-->
-                                    <!--        aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">-->
-                                    <!--        <div class="accordion-body">-->
-                                    <!--            <div class="card-body">-->
-
-                                    <!--                <input type="hidden" name="product_id" value="" />-->
-                                    <!--                <input type="hidden" name="price" value="{{ $subtotal }}" />-->
-                                    <!--                <input type="hidden" name="qty" value="value['qty']" />-->
-                                    <!--                <div id="paypal-button-container-popup"></div>-->
-                                    <!--            </div>-->
-                                    <!--        </div>-->
-                                    <!--    </div>-->
-                                    <!--</div>-->
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="flush-headingTwo">
                                             <button class="accordion-button collapsed" type="button"

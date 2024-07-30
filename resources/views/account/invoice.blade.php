@@ -1,6 +1,5 @@
 @extends('layouts.main')
 @section('content')
-
 <?php $segment = Request::segments(); ?>
 
 
@@ -89,12 +88,14 @@
                         <!-- /.col -->
                     </div>
 
-                    <div class="mt-4">
+                    <div class="mt-4 invoice_table">
                         <div class="row text-600 text-white bgc-default-tp1 py-25">
                             <div class="d-none d-sm-block col-1">#</div>
-                            <div class="col-9 col-sm-5">Description</div>
-                            <div class="d-none d-sm-block col-4 col-sm-2">Qty</div>
-                            <div class="d-none d-sm-block col-sm-2">Unit Price</div>
+                            <div class="col-8 col-sm-5">Description</div>
+                            <div class="d-none d-sm-block col-2 col-sm-1">Qty</div>
+                            <div class="d-none d-sm-block col-sm-1">Unit Price</div>
+                            <div class="d-none d-sm-block col-2 col-sm-1">Envt. Fee</div>
+                            <div class="d-none d-sm-block col-2 col-sm-1">Taxes</div>
                             <div class="col-2">Amount</div>
                         </div>
 
@@ -104,67 +105,90 @@
                                 $count = 1;
                             @endphp
                             @foreach($order_products as $order_product)
+                                @php
+                                    $product = App\Product::where('id', $order_product->order_products_product_id)->first();
+                                    $order = App\orders::where('id', $order_product->orders_id)->first();
+                                    $envFee = (float)$product->env_fee;
+                                    $taxes = (float)$product->taxes;
+
+                                    $start = new DateTime($order->start_date);
+                                    $end = new DateTime($order->end_date);
+                                    $interval = $start->diff($end);
+                                    $day = $interval->days;
+
+                                    $pricePerDay = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 14])->first()->price) ?? 0.00;
+                                    $pricePerWeek = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 15])->first()->price) ?? 0.00;
+                                    $pricePerMonth = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 16])->first()->price) ?? 0.00;
+                                    $daysInMonth = 30;
+                                    $daysInWeek = 7;
+                                    $months = floor($day / $daysInMonth);
+                                    $remainingDays = $day % $daysInMonth;
+                                    $weeks = floor($remainingDays / $daysInWeek);
+                                    $remainingDays = $remainingDays % $daysInWeek;
+                                    $days = $remainingDays;
+
+                                    $totalPrice = ($months * $pricePerMonth) + ($weeks * $pricePerWeek) + ($days * $pricePerDay);
+                                    $itemTotalPrice = $totalPrice * $order_product->order_products_qty;
+
+                                    $envFeeFinal = ($envFee / 100) * $itemTotalPrice;
+                                    $taxFinal = ($taxes / 100) * $itemTotalPrice;
+
+                                    $total_price = number_format($itemTotalPrice, 2, '.', '');
+                                    $env_fee_final = number_format($envFeeFinal, 2, '.', '');
+                                    $tax_final = number_format($taxFinal, 2, '.', '');
+                                @endphp
                             <div class="row mb-2 mb-sm-0 py-25">
                                 <div class="d-none d-sm-block col-1">{{ $count }}</div>
-                                <div class="col-9 col-sm-5">{{$order_product->order_products_name}}</div>
+                                <div class="col-8 col-sm-5">{{$order_product->order_products_name}}</div>
                                 <div class="d-none d-sm-block col-2">{{$order_product->order_products_qty}}</div>
-                                <div class="d-none d-sm-block col-2 text-95">${{$order_product->order_products_price}}</div>
-                                <div class="col-2 text-secondary-d2">${{$order_product->order_products_subtotal}}</div>
+                                <div class="d-none d-sm-block col-2">${{ number_format($order_product->order_products_price, 2) }}</div>
+                                <div class="d-none d-sm-block col-2">${{ number_format($envFeeFinal, 2) }}</div>
+                                <div class="d-none d-sm-block col-2">${{ number_format($taxFinal, 2) }}</div>
+                                <div class="col-2 text-secondary-d2">${{ number_format($itemTotalPrice, 2) }}</div>
+
                             </div>
                             @php
-                                $subtotal+= $order_product->order_products_qty * $order_product->order_products_price;
+                                $subtotal += $total_price + $env_fee_final + $tax_final;
                                 $count++;
                             @endphp
                             @endforeach
                             @php
-                                $tax = App\Http\Traits\HelperTrait::returnFlag(1973);
                                 $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
-                                $envFee = App\Http\Traits\HelperTrait::returnFlag(1976);
                                 $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
                                 $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
 
-                                $tax_final = ($tax / 100) * $subtotal;
                                 $otherFees_final = ($otherFees / 100) * $subtotal;
-                                $envFee_final = ($envFee / 100) * $subtotal;
                                 $rentalProtection_final = ($rentalProtection / 100) * $subtotal;
                             @endphp
                             <div class="row mb-2 mb-sm-0 py-25">
                                 <div class="d-none d-sm-block col-1">{{ $count }}</div>
-                                <div class="col-9 col-sm-5">Round-trip delivery</div>
+                                <div class="col-8 col-sm-5">Round-trip delivery</div>
                                 <div class="d-none d-sm-block col-2">---</div>
-                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
                                 <div class="col-2 text-secondary-d2">${!! number_format($deliveryFee, 2) !!}</div>
                             </div>
                             <div class="row mb-2 mb-sm-0 py-25">
                                 <div class="d-none d-sm-block col-1">{{ $count + 1 }}</div>
-                                <div class="col-9 col-sm-5">Rental protection plan</div>
+                                <div class="col-8 col-sm-5">Rental protection plan</div>
                                 <div class="d-none d-sm-block col-2">---</div>
-                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
                                 <div class="col-2 text-secondary-d2">${!! number_format($rentalProtection_final, 2) !!}</div>
                             </div>
                             <div class="row mb-2 mb-sm-0 py-25">
                                 <div class="d-none d-sm-block col-1">{{ $count + 2 }}</div>
-                                <div class="col-9 col-sm-5">Environmental Service Fee</div>
+                                <div class="col-8 col-sm-5">Other fees</div>
                                 <div class="d-none d-sm-block col-2">---</div>
-                                <div class="d-none d-sm-block col-2 text-95">---</div>
-                                <div class="col-2 text-secondary-d2">${!! number_format($envFee_final, 2) !!}</div>
-                            </div>
-                            <div class="row mb-2 mb-sm-0 py-25">
-                                <div class="d-none d-sm-block col-1">{{ $count + 3 }}</div>
-                                <div class="col-9 col-sm-5">Other fees</div>
                                 <div class="d-none d-sm-block col-2">---</div>
-                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
                                 <div class="col-2 text-secondary-d2">${!! number_format($otherFees_final, 2) !!}</div>
                             </div>
-                            <div class="row mb-2 mb-sm-0 py-25">
-                                <div class="d-none d-sm-block col-1">{{ $count + 4 }}</div>
-                                <div class="col-9 col-sm-5">Taxes</div>
-                                <div class="d-none d-sm-block col-2">---</div>
-                                <div class="d-none d-sm-block col-2 text-95">---</div>
-                                <div class="col-2 text-secondary-d2">${!! number_format($tax_final, 2) !!}</div>
-                            </div>
                             @php
-                                $estimatedSubtotal = ($subtotal+$rentalProtection_final+$envFee_final+$otherFees_final+$tax_final+$deliveryFee);
+                                $estimatedSubtotal = ($subtotal + $rentalProtection_final + $otherFees_final + $deliveryFee);
                             @endphp
                         </div>
 
@@ -212,7 +236,7 @@
                                         <?php
                                             $shipping = $order->order_shipping ;
                                         ?>
-                                        <span class="text-150 text-success-d3 opacity-2">${!! number_format($estimatedSubtotal  + $shipping, 2) !!}</span>
+                                        <span class="text-150 text-success-d3 opacity-2">${!! number_format($estimatedSubtotal + $shipping, 2) !!}</span>
                                     </div>
                                 </div>
                             </div>
@@ -220,6 +244,7 @@
 
                         <hr />
                     </div>
+
                 </div>
             </div>
         </div>
@@ -357,7 +382,9 @@ hr {
     top: 0;
     right: 0;
 }
-
+.mt-4.invoice_table .col-2 {
+    width: 8.33333333% !important;
+}
 </style>
 @endsection
 @section('js')

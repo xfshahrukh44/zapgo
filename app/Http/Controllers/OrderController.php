@@ -496,6 +496,7 @@ class OrderController extends Controller
 
 			Session::forget('cart');
             Session::forget('subs');
+            Session::forget('daterange');
 
 			Session::flash('message', 'Your Order has been placed Successfully');
 			Session::flash('alert-class', 'alert-success');

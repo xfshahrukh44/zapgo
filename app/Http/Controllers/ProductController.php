@@ -186,62 +186,40 @@ class ProductController extends Controller
 	public function updateCart(Request $request)
 	{
 		$cart = Session::get('cart');
-
-        // dd($cart);
 		$pro_id = $_POST['product_id'];
-		// dd($_POST['row']);
         $qty = $_POST['qty'];
 		$count = 0;
-// 		if (sizeof($_POST['row']) >= 1) {
-// 			foreach ($cart as $key => $value) {
-// 				foreach ($value as $key_item => $value_item) {
 
-//                     $key_final = (int)$value_item;
-//                     if($key == $key_final){
-
-//                         $productFirstrow = Product::where('id', $key_final)->first();
-//                         // dump($productFirstrow);
-//                         $cart[$pro_id]['id'] = $productFirstrow->id;
-//                         $cart[$pro_id]['name'] = $productFirstrow->product_title;
-//                         $cart[$pro_id]['price'] = $productFirstrow->price;
-//                         $cart[$pro_id]['qty'] = (int)($_POST['row'][$count]);
-
-
-//                     }
-//                     Session::put('cart', $cart);
-// 				}
-// 				$count = $count + 1;
-// 			}
-// 		}
         if ($request->daterange_start && $request->daterange_end) {
             Session::forget('daterange');
             $date_range = '['.$request->daterange_start.', '.$request->daterange_end.']';
             Session::put('daterange', $date_range);
         }
 
+		 // Get all quantities from the request
+         $quantities = $request->input('qty', []);
 
+         foreach ($quantities as $pro_id => $qty) {
+             // Ensure the quantity is an integer
+             $qty = intval($qty);
 
-
-		 $productFirstrow = Product::where('id', $pro_id)->first();
-		 $cart[$pro_id]['id'] = $pro_id;
-		 $cart[$pro_id]['name'] = $productFirstrow->product_title;
-		 $cart[$pro_id]['delivery_charges'] = $productFirstrow->delivery_charges;
-		 $cart[$pro_id]['price'] = $productFirstrow->price;
-		 $cart[$pro_id]['qty'] = $qty;
-        $cart[$pro_id]['date_range'] = $request->daterange_start . ' ' . $request->daterange_end;
-
-
-		// $variation_total = 0;
-		// foreach ($cart[$pro_id]['variation'] as $key => $value) {
-		// 	$variation_total += $value['attribute_price'];
-		// }
-
-		// $cart[$pro_id]['variation_price'] = $variation_total * $qty;
+             // Get product details
+             $product = Product::where('id', $pro_id)->first();
+             if ($product) {
+                 // Update cart item
+                 $cart[$pro_id]['id'] = $pro_id;
+                 $cart[$pro_id]['name'] = $product->product_title;
+                 $cart[$pro_id]['delivery_charges'] = $product->delivery_charges;
+                 $cart[$pro_id]['price'] = $product->price;
+                 $cart[$pro_id]['qty'] = $qty;
+                 $cart[$pro_id]['date_range'] = $request->daterange_start . ' ' . $request->daterange_end;
+             }
+         }
 
 
 		Session::put('cart', $cart);
+        // dd($cart);
 		Session::put('subs', 'yes');
-        // dd(Session::get('cart'));
 		Session::flash('message', 'Your Cart Updated Successfully');
 		Session::flash('alert-class', 'alert-success');
 

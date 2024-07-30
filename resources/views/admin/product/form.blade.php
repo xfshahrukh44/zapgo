@@ -25,12 +25,12 @@
                 {!! Form::text('price', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
             </div>
         </div>
-        <div class="col-md-12">
+        {{-- <div class="col-md-12">
             <div class="form-group">
                 {!! Form::label('delivery_charges', 'Delivery Charges') !!}
                 {!! Form::text('delivery_charges', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
             </div>
-        </div>
+        </div> --}}
         <div class="col-md-12">
             <div class="form-group">
                 {!! Form::label('stock_inventory', 'Stock Inventory') !!}
@@ -41,6 +41,12 @@
             <div class="form-group">
                 {!! Form::label('env_fee', 'Environmental Fee') !!}
                 {!! Form::number('env_fee', null, ['class' => 'form-control', 'step' => 'any']) !!}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                {!! Form::label('taxes', 'Taxes') !!}
+                {!! Form::number('taxes', null, ['class' => 'form-control', 'step' => 'any']) !!}
             </div>
         </div>
         <div class="col-md-12">

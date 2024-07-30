@@ -37,8 +37,8 @@
 
 @if(Session::get('subs') == 'yes')
 <style>
-    a.cart_icons {
+    /* a.cart_icons {
         pointer-events: none;
-    }
+    } */
 </style>
 @endif
