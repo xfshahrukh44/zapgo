@@ -339,7 +339,7 @@
 
     <section class="check-sec">
         @if (Auth::user()->role == 3 || Auth::user()->role == 1)
-            <div class="container-fluid">
+            <div class="container-fluid ">
                 <h3>You are not authorize to order the product</h3>
             </div>
         @else
@@ -1361,6 +1361,8 @@
 
                 $(this).toggleClass('active');
             });
+            
+            $('#order_detail_box').slideToggle();
 
 
             $('#order_detail').click(function() {
