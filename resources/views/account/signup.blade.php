@@ -1,6 +1,15 @@
 @extends('layouts.main')
 @section('content')
-
+@section('css')
+<style>
+.about-inner {
+  height: 365px !important;
+  align-items: center;
+}
+.equipment h1 span {
+    margin-top: 48px;
+}
+</style>
 <section class="rent-sec about-inner">
     <div class="container">
         <div class="row">

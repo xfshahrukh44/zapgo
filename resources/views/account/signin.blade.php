@@ -18,8 +18,12 @@
 }
 
 .about-inner {
-  height: 500px;
+  height: 365px !important;
   align-items: center;
+}
+
+.equipment h1 span {
+    margin-top: 48px;
 }
 
 .btn-yellow{

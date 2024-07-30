@@ -582,15 +582,16 @@
             let endDay = endDate.getDate();
             let days = datediff(parseDate($('#date-rent-start').val()), parseDate($('#date-rent-end').val()));
             $('#days').text(days)
+            console.log(days);
 
             let price_key = '';
             let day_values = {
-                price_per_month: 28,
+                price_per_month: 30,
                 price_per_week: 7,
                 price_per_day: 1,
             };
 
-            if (days > 27) {
+            if (days > 29) {
                 price_key = 'price_per_month'
             } else if (days > 6) {
                 price_key = 'price_per_week'
@@ -603,75 +604,27 @@
             let envFee_total = 0.00;
 
             let rental_sub = $('#rsub').text();
-            var xday ='';
+            // const result = calculateRentalPrice(days);
+            // console.log(cart);
+
+            // Example usage
+            console.log('Total Price:', calculateTotalCost(cart, days, qty_element));
 
             for (const item of cart.items) {
                 let day_value = day_values[price_key];
                 let multiplier_value = days / day_value;
-                let multiplier_value_temp = days - day_value;
-                let product_total;
-                let env_fee = item['env_fee'] || 0;
-                // console.log(days);
+                // console.log(item[price_key]);
 
-                if(price_key == 'price_per_month' && days == 28) {
-                    product_total = (parseFloat(item[price_key]));
-                } else if(price_key == 'price_per_month' && days > 28) {
-                    let month_count = Math.floor(days / 28);
-                    let extra_days = days % 28;
-                    product_total = (parseFloat(item['price_per_month']) * month_count + parseFloat(item['price_per_day']) * extra_days);
+                let product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value)) * (qty_element ? qty_element.val() : parseInt(item['qty']));
+                product_total = product_total.toFixed(2);
 
-
-                    for (let i = 1; i <= month_count; i++) {
-                        if (product_total > (item['price_per_month'] * (i + 1)) && days <= 28 * (i + 1)) {
-                            product_total = parseFloat(item['price_per_month'] * (i + 1));
-                        }
-                    }
-                    if (product_total > parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']) && days <= 28 + 7) {
-                        product_total = parseFloat(item['price_per_month']) + parseFloat(item['price_per_week']);
-                    }
-
-                    if(days <= 30 + 1){
-                        if (endDay == 30) {
-                            xday = '(x1day)';
-                        }else if(endDay == 31){
-                            xday = '(x2day)';
-                        }else{
-                            xday = '';
-                        }
-                    }
-                } else if(price_key == 'price_per_week' && days == 7) {
-                    product_total = (parseFloat(item[price_key]));
-                } else if(price_key == 'price_per_week' && days > 7) {
-                    product_total = (parseFloat(item['price_per_week']) + parseFloat(item['price_per_day']) * multiplier_value_temp);
-                    if (product_total > item['price_per_month']) {
-                        product_total = parseFloat(item['price_per_month']);
-                    }
-                } else {
-                    product_total = (parseFloat(item[price_key]) * parseFloat(multiplier_value));
-                    if (product_total > item['price_per_week']) {
-                        product_total = parseFloat(item['price_per_week']);
-                    }
-                }
-                // var pt = product_total;
-                // let envFee_final2 = (env_fee / 100) * pt;
-
-                product_total = product_total * (qty_element ? qty_element.val() : parseInt(item['qty']));
-
-                let envFee_final = (env_fee / 100) * product_total;
-                $('#envsub'+item['id']).text(parseFloat(envFee_final).toFixed(2));
-
-                sub_total += product_total;
-
-                envFee_total += envFee_final;
+                sub_total += parseFloat(product_total);
 
                 item['total'] = product_total;
-
             }
 
-            sub_total = sub_total + envFee_total;
 
-
-            cart['total'] = sub_total + envFee_total;
+            cart['total'] = sub_total;
 
             let tax = '{{ $tax }}';
             let otherFees = '{{ $otherFees }}';
@@ -708,15 +661,95 @@
 
 
             $('#rsub').text(sub_total.toString());
-            $('#xdays').text(xday);
             $('#roundsub').text(cart['delivery_charges'].toString());
             let grand_total = sub_total + parseFloat($('#roundsub').text().replaceAll('$', '')) + parseFloat($('#rensub').text().replaceAll('$', '')) + parseFloat($('#othsub').text().replaceAll('$', '')) + parseFloat($('#taxsub').text().replaceAll('$', ''));
             $('#esub').text(grand_total.toFixed(2).toString());
             $('.total').slideDown()
             $('#daterange').val(`[${$('#date-rent-start').val()},${$('#date-rent-end').val()}]`)
             checkDatesAndToggleQty();
-            // alert($('#daterange').val())
-            //    $('#totalamount').val(totalBill)
         };
     });
+
+    // function calculateRentalPrice(n) {
+    //     const dailyRate = 35;
+    //     const weeklyRate = 145;
+    //     const monthlyRate = 438;
+    //     const daysInMonth = 30;
+    //     const daysInWeek = 7;
+
+    //     // Calculate the number of months
+    //     const months = Math.floor(n / daysInMonth);
+    //     let remainingDays = n % daysInMonth;
+
+    //     // Calculate the number of weeks from the remaining days
+    //     const weeks = Math.floor(remainingDays / daysInWeek);
+    //     remainingDays = remainingDays % daysInWeek;
+
+    //     // The remaining days
+    //     const days = remainingDays;
+
+    //     // Calculate the total price
+    //     const totalPrice = (months * monthlyRate) + (weeks * weeklyRate) + (days * dailyRate);
+
+    //     // Optionally, find the minimum cost if it would be cheaper to use weekly or monthly rates
+    //     const totalWeeks = Math.ceil(n / daysInWeek);
+    //     const totalMonths = Math.ceil(n / daysInMonth);
+    //     const priceByWeeks = totalWeeks * weeklyRate;
+    //     const priceByMonths = totalMonths * monthlyRate;
+
+    //     const minimumPrice = Math.min(totalPrice, priceByWeeks, priceByMonths);
+
+    //     console.log('Months:', months, 'Weeks:', weeks, 'Days:', days);
+    //     console.log('Total Price:', totalPrice);
+    //     console.log('Minimum Price:', minimumPrice);
+
+    //     return {
+    //         months,
+    //         weeks,
+    //         days,
+    //         totalPrice,
+    //         minimumPrice
+    //     };
+    // }
+
+    const daysInMonth = 30;
+    const daysInWeek = 7;
+
+    // Calculate total cost function
+    function calculateTotalCost(cart, n, qty_element) {
+        let totalCartPrice = 0;
+
+        cart.items.forEach(item => {
+            const qty = qty_element ? qty_element.val() : parseInt(item['qty']);
+            const pricePerDay = item.price_per_day;
+            const pricePerWeek = item.price_per_week;
+            const pricePerMonth = item.price_per_month;
+            const envFee = item.env_fee;
+
+            // Calculate the number of months, weeks, and days
+            const months = Math.floor(n / daysInMonth);
+            let remainingDays = n % daysInMonth;
+            const weeks = Math.floor(remainingDays / daysInWeek);
+            remainingDays = remainingDays % daysInWeek;
+            const days = remainingDays;
+
+            // Calculate total price for the current item
+            const totalPrice = (months * pricePerMonth) + (weeks * pricePerWeek) + (days * pricePerDay);
+            const itemTotalPrice = totalPrice * qty; // Multiply by quantity
+
+            // Calculate the environmental fee
+            const envFeeFinal = (envFee / 100) * itemTotalPrice;
+
+            // Add to cart
+            item.total_price = itemTotalPrice;
+            item.env_fee_final = envFeeFinal;
+
+            // Add to total cart price
+            totalCartPrice += itemTotalPrice;
+        });
+
+        cart.total_cart_price = totalCartPrice; // Total cart price
+        return cart;
+    }
+
 </script>

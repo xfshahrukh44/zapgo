@@ -164,6 +164,7 @@ class ProductController extends Controller
                 $cart[$cartId]['qty'] = $quantity;
                 $cart[$cartId]['price'] = $productFirstrow->price;
                 $cart[$cartId]['env_fee'] = $productFirstrow->env_fee ?? '';
+                $cart[$cartId]['taxes'] = $productFirstrow->taxes ?? '';
                 $cart[$cartId]['date_range'] = $request->daterange_start . ' ' . $request->daterange_end;
 
                 // Update the cart session
