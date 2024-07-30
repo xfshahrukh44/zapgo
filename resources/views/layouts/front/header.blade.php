@@ -19,6 +19,7 @@
             'price_per_week' => $price_per_week,
             'price_per_month' => $price_per_month,
             'env_fee' => $item['env_fee'],
+            'taxes' => $item['taxes'],
         ];
     }
     $new_cart['delivery_charges'] = $new_cart['items'][0]['delivery_charges'];
@@ -725,6 +726,7 @@
             const pricePerWeek = item.price_per_week;
             const pricePerMonth = item.price_per_month;
             const envFee = item.env_fee;
+            const taxes = item.taxes;
 
             // Calculate the number of months, weeks, and days
             const months = Math.floor(n / daysInMonth);
@@ -740,9 +742,13 @@
             // Calculate the environmental fee
             const envFeeFinal = (envFee / 100) * itemTotalPrice;
 
+            //Calculate Taxes
+            const taxFinal = (taxes / 100) * itemTotalPrice;
+
             // Add to cart
             item.total_price = itemTotalPrice;
             item.env_fee_final = envFeeFinal;
+            item.tax_final = taxFinal;
 
             // Add to total cart price
             totalCartPrice += itemTotalPrice;
