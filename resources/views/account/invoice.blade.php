@@ -103,6 +103,8 @@
                             @php
                                 $subtotal  = 0;
                                 $count = 1;
+                                $env_check = 0;
+                                $taxes_check = 0;
                             @endphp
                             @foreach($order_products as $order_product)
                                 @php
@@ -149,6 +151,8 @@
                             </div>
                             @php
                                 $subtotal += $total_price + $env_fee_final + $tax_final;
+                                $env_check += $env_fee_final;
+                                $tax_check += $tax_final;
                                 $count++;
                             @endphp
                             @endforeach
@@ -176,6 +180,15 @@
                                 <div class="d-none d-sm-block col-2">---</div>
                                 <div class="d-none d-sm-block col-2">---</div>
                                 <div class="d-none d-sm-block col-2">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($env_check, 2) !!}</div>
+                            </div>
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 1 }}</div>
+                                <div class="col-8 col-sm-5">Environmental Service Fee</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
                                 <div class="col-2 text-secondary-d2">${!! number_format($rentalProtection_final, 2) !!}</div>
                             </div>
                             <div class="row mb-2 mb-sm-0 py-25">
@@ -186,6 +199,15 @@
                                 <div class="d-none d-sm-block col-2">---</div>
                                 <div class="d-none d-sm-block col-2">---</div>
                                 <div class="col-2 text-secondary-d2">${!! number_format($otherFees_final, 2) !!}</div>
+                            </div>
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 1 }}</div>
+                                <div class="col-8 col-sm-5">Taxes</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($tax_check, 2) !!}</div>
                             </div>
                             @php
                                 $estimatedSubtotal = ($subtotal + $rentalProtection_final + $otherFees_final + $deliveryFee);

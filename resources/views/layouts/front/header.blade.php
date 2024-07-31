@@ -200,6 +200,8 @@
                             <?php //$subtotal1 = 0;
                                   $pro_total = 0;
                                   $totalCartPrice = 0;
+                                  $env_check = 0;
+                                  $taxes_check = 0;
                             ?>
                             @if ($cart != null)
                                 @foreach ($new_cart['items'] as $key => $value)
@@ -233,6 +235,9 @@
                                         $tax_final = number_format($taxFinal, 2, '.', '');
 
                                         $totalCartPrice += $total_price + $env_fee_final + $tax_final;
+
+                                        $env_check += $env_fee_final;
+                                        $tax_check += $tax_final;
                                     @endphp
                                     <div class="row cart-items">
                                         <div class="col-md-12 delete-cart">
@@ -282,14 +287,20 @@
                                         <p>Rental protection plan:</p><p>$<span id="rensub">{{ $rentalProtection_final }}</span></p>
                                     </li>
                                     <li>
+                                        <p>Environmental Services Fee:</p><p>$<span id="envsersub">{{ $env_check }}</span></p>
+                                    </li>
+                                    <li>
                                         <p>Other fees:</p><p>$<span id="othsub">{{ $otherFees_final }}</span></p>
+                                    </li>
+                                    <li>
+                                        <p>Taxes:</p><p>$<span id="taxsub">{{ $tax_check }}</span></p>
                                     </li>
                                     @php
                                         $estimatedSubtotal = $totalCartPrice + $rentalProtection_final + $otherFees_final + $deliveryFee;
                                     @endphp
                                     <li>
                                         <input type="hidden" name="esubs" id="esubs" value="{{ number_format($totalCartPrice, 2) }}">
-                                        <p>Estimated subtotal:</p><p>$<span id="esub">{{ number_format($estimatedSubtotal, 2) }}</span></p>
+                                        <p>Total:</p><p>$<span id="esub">{{ number_format($estimatedSubtotal, 2) }}</span></p>
                                     </li>
                                 </ul>
 
@@ -405,6 +416,8 @@
     // Calculate total cost function
     function calculateTotalCost(cart, n, qty_element) {
         let totalCartPrice = 0;
+        let envCheck = 0;
+        let taxesCheck = 0;
 
         cart.items.forEach(item => {
             const qty = parseFloat($(`#qty${item.id}`).val());
@@ -439,6 +452,9 @@
 
             // Add to total cart price
             totalCartPrice += item.total_price + item.env_fee_final + item.tax_final;
+
+            envCheck += item.env_fee_final;
+            taxesCheck += item.tax_final;
         });
 
         // Calculate other fees
@@ -457,6 +473,8 @@
         cart.total_cart_price = parseFloat(totalCartPrice.toFixed(2));
         cart.other_fees_final = parseFloat(otherFees_final.toFixed(2));
         cart.rental_protection_final = parseFloat(rentalProtection_final.toFixed(2));
+        cart.env_check = parseFloat(envCheck.toFixed(2));
+        cart.tax_check = parseFloat(taxesCheck.toFixed(2));
 
         updateCartHTML(cart);
 
@@ -501,9 +519,19 @@
             rensubSpan.textContent = cart.rental_protection_final.toFixed(2);
         }
 
+        const envserSpan = document.querySelector('#envsersub');
+        if (envserSpan) {
+            envserSpan.textContent = cart.env_check.toFixed(2);
+        }
+
         const othsubSpan = document.querySelector('#othsub');
         if (othsubSpan) {
             othsubSpan.textContent = cart.other_fees_final.toFixed(2);
+        }
+
+        const taxSpan = document.querySelector('#taxsub');
+        if (taxSpan) {
+            taxSpan.textContent = cart.tax_check.toFixed(2);
         }
 
         const esubSpan = document.querySelector('#esub');
