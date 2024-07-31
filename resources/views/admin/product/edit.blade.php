@@ -185,5 +185,39 @@
                 },
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkbox = document.getElementById('enableEnvFee');
+            const envFeeInput = document.getElementById('envFee');
+
+            // Function to toggle environmental fee input based on checkbox
+            function toggleEnvFee() {
+                if (checkbox.checked) {
+                    envFeeInput.disabled = false;
+                } else {
+                    envFeeInput.disabled = true;
+                    envFeeInput.value = 0;
+                }
+            }
+
+            // Initialize the input state based on the environmental fee value
+            function initializeState() {
+                const envFeeValue = parseFloat(envFeeInput.value);
+                if (envFeeValue > 0) {
+                    checkbox.checked = true;
+                    envFeeInput.disabled = false;
+                } else {
+                    checkbox.checked = false;
+                    envFeeInput.disabled = true;
+                    envFeeInput.value = 0;
+                }
+            }
+
+            // Call initializeState to set initial state on page load
+            initializeState();
+
+            // Add event listener for checkbox change
+            checkbox.addEventListener('change', toggleEnvFee);
+        });
   </script>
 @endpush

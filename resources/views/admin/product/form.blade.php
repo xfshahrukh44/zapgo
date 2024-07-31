@@ -39,8 +39,15 @@
         </div>
         <div class="col-md-12">
             <div class="form-group">
+                {!! Form::checkbox('enable_env_fee', '1', false, ['id' => 'enableEnvFee']) !!}
+                {!! Form::label('enable_env_fee', 'Enable Environmental Fee') !!}
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
                 {!! Form::label('env_fee', 'Environmental Fee') !!}
-                {!! Form::number('env_fee', null, ['class' => 'form-control', 'step' => 'any']) !!}
+                {!! Form::number('env_fee', $product->env_fee, ['class' => 'form-control', 'step' => 'any', 'id' => 'envFee']) !!}
             </div>
         </div>
         <div class="col-md-12">
