@@ -696,7 +696,9 @@
                                     // dd($cart);
                                     $subtotal = 0;
                                     $addon_total = 0;
-                                    $totalCartPrice = 0; ?>
+                                    $totalCartPrice = 0;
+                                    $env_check = 0;
+                                    $taxes_check = 0; ?>
                                     @foreach ($new_cart['items'] as $key => $value)
                                     @php
                                         $prod_image = App\Product::where('id', $value['id'])->first();
@@ -728,6 +730,8 @@
                                         $tax_final = number_format($taxFinal, 2, '.', '');
 
                                         $totalCartPrice += $total_price + $env_fee_final + $tax_final;
+                                        $env_check += $env_fee_final;
+                                        $tax_check += $tax_final;
                                     @endphp
                                         <h5>{{ $value['name'] }} <span> = ${{ $total_price }}</span>
                                         </h5>
@@ -777,14 +781,20 @@
                                     <p>Rental protection plan:</p><p>$<span id="rensub">{{ $rentalProtection_final }}</span></p>
                                 </li>
                                 <li>
+                                    <p>Environmental Service Fee:</p><p>$<span>{{ $env_check }}</span></p>
+                                </li>
+                                <li>
                                     <p>Other fees:</p><p>$<span id="othsub">{{ $otherFees_final }}</span></p>
+                                </li>
+                                <li>
+                                    <p>Taxes:</p><p>$<span>{{ $tax_check }}</span></p>
                                 </li>
                                 @php
                                     $estimatedSubtotal = $totalCartPrice + $rentalProtection_final + $otherFees_final + $deliveryFee;
                                 @endphp
                                 <li>
                                     <input type="hidden" name="esubs" id="esubs" value="{{ number_format($totalCartPrice, 2) }}">
-                                    <p>Estimated subtotal:</p><p>$<span id="esub">{{ number_format($estimatedSubtotal, 2) }}</span></p>
+                                    <p>Total:</p><p>$<span id="esub">{{ number_format($estimatedSubtotal, 2) }}</span></p>
                                 </li>
                             </ul>
 
@@ -1361,7 +1371,7 @@
 
                 $(this).toggleClass('active');
             });
-            
+
             $('#order_detail_box').slideToggle();
 
 
