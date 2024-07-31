@@ -735,10 +735,10 @@
                                     @endphp
                                         <h5>{{ $value['name'] }} <span> = ${{ $total_price }}</span>
                                         </h5>
-                                        <h5>Environmental Fee <span> = {{ $env_fee_final }}</span>
+                                        {{-- <h5>Environmental Fee <span> = {{ $env_fee_final }}</span>
                                         </h5>
                                         <h5>Taxes <span> = {{ $tax_final }}</span>
-                                        </h5>
+                                        </h5> --}}
                                         <hr>
                                     @endforeach
 

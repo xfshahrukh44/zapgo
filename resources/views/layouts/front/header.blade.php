@@ -254,8 +254,8 @@
                                             <p class="days">
                                                 $<span id="cart-price-{{ $value['id'] }}">{{ $total_price }}</span>
                                             </p>
-                                            <p>Environmental Fee:</p><p>$<span id="envsub{{ $value['id'] }}">{{ $env_fee_final }}</span></p>
-                                            <p>Taxes:</p><p>$<span id="taxessub{{ $value['id'] }}">{{ $tax_final }}</span></p>
+                                            {{-- <p>Environmental Fee:</p><p>$<span id="envsub{{ $value['id'] }}">{{ $env_fee_final }}</span></p>
+                                            <p>Taxes:</p><p>$<span id="taxessub{{ $value['id'] }}">{{ $tax_final }}</span></p> --}}
                                             <p class="days">
                                                 Quantity: <input type="number" min="1" value="{{ $value['qty'] }}" name="qty[{{ $value['id'] }}]" class="input_qty form-control" id="qty{{ $value['id'] }}" style="width: 41% !important; margin-top: 10px;" data-product-id="{{ $value['id'] }}" disabled>
                                             </p>
@@ -492,15 +492,15 @@
                 itemPriceSpan.textContent = item.total_price.toFixed(2);
             }
 
-            const envFeeSpan = document.querySelector(`#envsub${item.id}`);
-            if (envFeeSpan) {
-                envFeeSpan.textContent = item.env_fee_final.toFixed(2);
-            }
+            // const envFeeSpan = document.querySelector(`#envsub${item.id}`);
+            // if (envFeeSpan) {
+            //     envFeeSpan.textContent = item.env_fee_final.toFixed(2);
+            // }
 
-            const taxSpan = document.querySelector(`#taxessub${item.id}`);
-            if (taxSpan) {
-                taxSpan.textContent = item.tax_final.toFixed(2);
-            }
+            // const taxSpan = document.querySelector(`#taxessub${item.id}`);
+            // if (taxSpan) {
+            //     taxSpan.textContent = item.tax_final.toFixed(2);
+            // }
         });
 
         // Update total prices
