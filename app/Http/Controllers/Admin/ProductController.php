@@ -104,7 +104,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
 
 	    //echo "<pre>";
 	    //print_r($_FILES);
