@@ -729,7 +729,7 @@
                                         $env_fee_final = number_format($envFeeFinal, 2, '.', '');
                                         $tax_final = number_format($taxFinal, 2, '.', '');
 
-                                        $totalCartPrice += $total_price + $env_fee_final + $tax_final;
+                                        $totalCartPrice += $total_price;
                                         $env_check += $env_fee_final;
                                         $tax_check += $tax_final;
                                     @endphp
@@ -790,7 +790,7 @@
                                     <p>Taxes:</p><p>$<span>{{ $tax_check }}</span></p>
                                 </li>
                                 @php
-                                    $estimatedSubtotal = $totalCartPrice + $rentalProtection_final + $otherFees_final + $deliveryFee;
+                                    $estimatedSubtotal = $totalCartPrice + $rentalProtection_final + $otherFees_final + $deliveryFee + $env_check + $tax_check;
                                 @endphp
                                 <li>
                                     <input type="hidden" name="esubs" id="esubs" value="{{ number_format($totalCartPrice, 2) }}">

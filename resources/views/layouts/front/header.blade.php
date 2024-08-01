@@ -234,7 +234,7 @@
                                         $env_fee_final = number_format($envFeeFinal, 2, '.', '');
                                         $tax_final = number_format($taxFinal, 2, '.', '');
 
-                                        $totalCartPrice += $total_price + $env_fee_final + $tax_final;
+                                        $totalCartPrice += $total_price;
 
                                         $env_check += $env_fee_final;
                                         $tax_check += $tax_final;
@@ -278,25 +278,25 @@
                                         <p>Taxes and fees will be calculated before rental confirmation.</p>
                                     </li>
                                     <li>
-                                        <p>Rental subtotal:</p><p>$<span id="rsub">{{ $totalCartPrice }}</span></p>
+                                        <p>Rental subtotal:</p><p>$<span id="rsub">{{ number_format($totalCartPrice, 2) }}</span></p>
                                     </li>
                                     <li>
-                                        <p>Round-trip delivery:</p><p>$<span id="roundsub">{{ $deliveryFee }}</span></p>
+                                        <p>Round-trip delivery:</p><p>$<span id="roundsub">{{ number_format($deliveryFee, 2) }}</span></p>
                                     </li>
                                     <li>
-                                        <p>Rental protection plan:</p><p>$<span id="rensub">{{ $rentalProtection_final }}</span></p>
+                                        <p>Rental protection plan:</p><p>$<span id="rensub">{{ number_format($rentalProtection_final, 2) }}</span></p>
                                     </li>
                                     <li>
-                                        <p>Environmental Services Fee:</p><p>$<span id="envsersub">{{ $env_check }}</span></p>
+                                        <p>Environmental Services Fee:</p><p>$<span id="envsersub">{{ number_format($env_check, 2) }}</span></p>
                                     </li>
                                     <li>
-                                        <p>Other fees:</p><p>$<span id="othsub">{{ $otherFees_final }}</span></p>
+                                        <p>Other fees:</p><p>$<span id="othsub">{{ number_format($otherFees_final, 2) }}</span></p>
                                     </li>
                                     <li>
-                                        <p>Taxes:</p><p>$<span id="taxsub">{{ $tax_check }}</span></p>
+                                        <p>Taxes:</p><p>$<span id="taxsub">{{ number_format($tax_check, 2) }}</span></p>
                                     </li>
                                     @php
-                                        $estimatedSubtotal = $totalCartPrice + $rentalProtection_final + $otherFees_final + $deliveryFee;
+                                        $estimatedSubtotal = $totalCartPrice + $rentalProtection_final + $otherFees_final + $deliveryFee + $env_check + $tax_check;
                                     @endphp
                                     <li>
                                         <input type="hidden" name="esubs" id="esubs" value="{{ number_format($totalCartPrice, 2) }}">
@@ -451,7 +451,7 @@
             item.qty = qty;
 
             // Add to total cart price
-            totalCartPrice += item.total_price + item.env_fee_final + item.tax_final;
+            totalCartPrice += item.total_price;
 
             envCheck += item.env_fee_final;
             taxesCheck += item.tax_final;
@@ -536,7 +536,7 @@
 
         const esubSpan = document.querySelector('#esub');
         if (esubSpan) {
-            esubSpan.textContent = (cart.total_cart_price + cart.other_fees_final + deliveryCharges + cart.rental_protection_final).toFixed(2);
+            esubSpan.textContent = (cart.total_cart_price + cart.other_fees_final + deliveryCharges + cart.rental_protection_final + cart.env_check + cart.tax_check).toFixed(2);
         }
     }
 

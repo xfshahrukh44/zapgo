@@ -130,18 +130,26 @@ class ProductController extends Controller
             $product->description = $request->input('description');
 			$product->category = $request->input('item_id');
             $product->location_id = $request->input('location_id');
-            $product->delivery_charges = $request->input('delivery_charges');
+            $product->delivery_charges = $request->input('delivery_charges') ?? 0;
             $product->stock_inventory = $request->input('stock_inventory');
             $product->env_fee = $request->input('env_fee');
-            $file = $request->file('image');
+            // $file = $request->file('image');
 
             //make sure yo have image folder inside your public
-            $destination_path = 'uploads/products/';
-            $profileImage = date("Ymdhis").".".$file->getClientOriginalExtension();
+            // $destination_path = 'uploads/products/';
+            // $profileImage = date("Ymdhis").".".$file->getClientOriginalExtension();
 
-            Image::make($file)->save(public_path($destination_path) . DIRECTORY_SEPARATOR. $profileImage);
+            // Image::make($file)->save(public_path($destination_path) . DIRECTORY_SEPARATOR. $profileImage);
 
-            $product->image = $destination_path.$profileImage;
+            // $product->image = $destination_path.$profileImage;
+
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filePath = date("Ymdhis").".".$file->getClientOriginalExtension();
+                $file->move(public_path('uploads/products/'), $filePath);
+                $product->image = 'uploads/products/' . $filePath;
+            }
+
             $product->save();
 
 
@@ -149,15 +157,13 @@ class ProductController extends Controller
 
                 $photos=request()->file('images');
                 foreach ($photos as $photo) {
-                    $destinationPath = 'uploads/products/';
-
-                    $filename = date("Ymdhis").uniqid().".".$photo->getClientOriginalExtension();
-                    //dd($photo,$filename);
-                    Image::make($photo)->save(public_path($destinationPath) . DIRECTORY_SEPARATOR. $filename);
+                    $photoPath = date("Ymdhis").".".$photo->getClientOriginalExtension();
+                    $photo->move(public_path('uploads/products/'), $photoPath);
+                    $destination_path = 'uploads/products/' . $photoPath;
 
                     DB::table('product_imagess')->insert([
 
-                        ['image' => $destination_path.$filename, 'product_id' => $product->id]
+                        ['image' => $destination_path, 'product_id' => $product->id]
 
                     ]);
 
