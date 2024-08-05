@@ -419,7 +419,7 @@
     });
 
 
-    const daysInMonth = 30;
+    const daysInMonth = 28;
     const daysInWeek = 7;
 
     // Calculate total cost function
@@ -430,11 +430,15 @@
 
         cart.items.forEach(item => {
             const qty = parseFloat($(`#qty${item.id}`).val());
-            const pricePerDay = item.price_per_day;
-            const pricePerWeek = item.price_per_week;
-            const pricePerMonth = item.price_per_month;
+            const pricePerDay = parseFloat(item.price_per_day);
+            const pricePerWeek = parseFloat(item.price_per_week);
+            const pricePerMonth = parseFloat(item.price_per_month);
             const envFee = item.env_fee;
             const taxes = item.taxes;
+
+            const priceFor35Days = pricePerMonth + pricePerWeek;
+            const priceFor42Days = pricePerMonth + pricePerWeek * 2;
+            const priceFor49Days = pricePerMonth + pricePerWeek * 3;
 
             // Calculate the number of months, weeks, and days
             const months = Math.floor(n / daysInMonth);
@@ -451,12 +455,29 @@
             const priceByWeeks = totalWeeks * pricePerWeek;
             const priceByMonths = totalMonths * pricePerMonth;
 
-            const totalPrice = Math.min(totalPriceTemp, priceByWeeks, priceByMonths);
+            let totalPrice = Math.min(totalPriceTemp, priceByWeeks, priceByMonths);
 
-            // console.log('Months:', months, 'Weeks:', weeks, 'Days:', days);
-            // console.log(totalPriceTemp, priceByWeeks, priceByMonths);
-            // console.log('Total Price:', totalPriceTemp);
-            // console.log('Minimum Price:', totalPrice);
+            if (n > 30 && n <= 35) {
+                totalPrice = Math.min(totalPrice, priceFor35Days);
+                if(totalPrice > pricePerMonth * 2){
+                    totalPrice = pricePerMonth * 2;
+                }
+            } else if(n > 35 && n <= 42){
+                totalPrice = Math.min(totalPrice, priceFor42Days);
+                if(totalPrice > pricePerMonth * 2){
+                    totalPrice = pricePerMonth * 2;
+                }
+            } else if(n > 42 && n <= 49){
+                totalPrice = Math.min(totalPrice, priceFor49Days);
+                if(totalPrice > pricePerMonth * 2){
+                    totalPrice = pricePerMonth * 2;
+                }
+            }
+
+            console.log('Months:', months, 'Weeks:', weeks, 'Days:', days);
+            console.log(totalPriceTemp, priceByWeeks, priceByMonths, priceFor35Days);
+            console.log('Total Price:', totalPriceTemp);
+            console.log('Minimum Price:', totalPrice);
 
             const itemTotalPrice = totalPrice * qty; // Multiply by quantity
 
@@ -566,8 +587,11 @@
         const dailyRate = 35;
         const weeklyRate = 145;
         const monthlyRate = 438;
-        const daysInMonth = 30;
+        const daysInMonth = 28;
         const daysInWeek = 7;
+        const priceFor35Days = monthlyRate + weeklyRate;
+        const priceFor42Days = monthlyRate + weeklyRate * 2;
+        const priceFor49Days = monthlyRate + weeklyRate * 3;
 
         // Calculate the number of months and remaining days
         const months = Math.floor(n / daysInMonth);
@@ -590,18 +614,28 @@
         // Find the minimum price among different options
         let minimumPrice = Math.min(totalPrice, priceByWeeks, priceByMonths);
 
-        // if(n > 30){
-        //     minimumPrice += dailyRate;
-        //     if(minimumPrice < monthlyRate * 2){
-        //         minimumPrice = monthlyRate;
-        //     }
-        // }
+        if (n > 30 && n <= 35) {
+            minimumPrice = Math.min(minimumPrice, priceFor35Days);
+            if(minimumPrice > monthlyRate * 2){
+                minimumPrice = monthlyRate * 2;
+            }
+        } else if(n > 35 && n <= 42){
+            minimumPrice = Math.min(minimumPrice, priceFor42Days);
+            if(minimumPrice > monthlyRate * 2){
+                minimumPrice = monthlyRate * 2;
+            }
+        } else if(n > 42 && n <= 49){
+            minimumPrice = Math.min(minimumPrice, priceFor49Days);
+            if(minimumPrice > monthlyRate * 2){
+                minimumPrice = monthlyRate * 2;
+            }
+        }
 
-        console.log('Months:', months, 'Weeks:', weeks, 'Days:', remainingDays);
-        console.log('Total Price:', totalPrice);
-        console.log('Price by Weeks:', priceByWeeks);
-        console.log('Price by Months:', priceByMonths);
-        console.log('Minimum Price:', minimumPrice);
+        // console.log('Months:', months, 'Weeks:', weeks, 'Days:', remainingDays);
+        // console.log('Total Price:', totalPrice);
+        // console.log('Price by Weeks:', priceByWeeks);
+        // console.log('Price by Months:', priceByMonths);
+        // console.log('Minimum Price:', minimumPrice);
     }
 
 

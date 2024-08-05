@@ -121,7 +121,10 @@
                                     $pricePerDay = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 14])->first()->price) ?? 0.00;
                                     $pricePerWeek = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 15])->first()->price) ?? 0.00;
                                     $pricePerMonth = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 16])->first()->price) ?? 0.00;
-                                    $daysInMonth = 30;
+                                    $priceFor35Days = (float)$pricePerMonth + (float)$pricePerWeek;
+                                    $priceFor42Days = (float)$pricePerMonth + (float)$pricePerWeek * 2;
+                                    $priceFor49Days = (float)$pricePerMonth + (float)$pricePerWeek * 3;
+                                    $daysInMonth = 28;
                                     $daysInWeek = 7;
                                     $months = floor($day / $daysInMonth);
                                     $remainingDays = $day % $daysInMonth;
@@ -138,6 +141,24 @@
                                     $priceByMonths = $totalMonths * $pricePerMonth;
 
                                     $totalPrice = min($totalPriceTemp, $priceByWeeks, $priceByMonths);
+
+                                    if ($day > 30 && $day <= 35) {
+                                        $totalPrice = min($totalPrice, $priceFor35Days);
+                                        if ($totalPrice > $pricePerMonth * 2) {
+                                            $totalPrice = $pricePerMonth * 2;
+                                        }
+                                    } elseif ($day > 35 && $day <= 42) {
+                                        $totalPrice = min($totalPrice, $priceFor42Days);
+                                        if ($totalPrice > $pricePerMonth * 2) {
+                                            $totalPrice = $pricePerMonth * 2;
+                                        }
+                                    } elseif ($day > 42 && $day <= 49) {
+                                        $totalPrice = min($totalPrice, $priceFor49Days);
+                                        if ($totalPrice > $pricePerMonth * 2) {
+                                            $totalPrice = $pricePerMonth * 2;
+                                        }
+                                    }
+
 
                                     $itemTotalPrice = $totalPrice * $order_product->order_products_qty;
 
