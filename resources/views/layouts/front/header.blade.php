@@ -224,7 +224,15 @@
                                         $remainingDays = $remainingDays % $daysInWeek;
                                         $days = $remainingDays;
 
-                                        $totalPrice = ($months * $pricePerMonth) + ($weeks * $pricePerWeek) + ($days * $pricePerDay);
+                                        $totalPriceTemp = ($months * $pricePerMonth) + ($weeks * $pricePerWeek) + ($days * $pricePerDay);
+
+                                        $totalWeeks = ceil($day / $daysInWeek);
+                                        $totalMonths = ceil($day / $daysInMonth);
+
+                                        $priceByWeeks = $totalWeeks * $pricePerWeek;
+                                        $priceByMonths = $totalMonths * $pricePerMonth;
+
+                                        $totalPrice = min($totalPriceTemp, $priceByWeeks, $priceByMonths);
                                         $itemTotalPrice = $totalPrice * $qty;
 
                                         $envFeeFinal = ($envFee / 100) * $itemTotalPrice;
@@ -401,6 +409,7 @@
             cart.items = updatedCart;
 
             updatedCartData = calculateTotalCost(cart, days, qty_element);
+            calculateRentalPrice(days);
             console.log('Total Price:', updatedCartData);
 
             $('.total').slideDown()
@@ -435,7 +444,20 @@
             const days = remainingDays;
 
             // Calculate total price for the current item
-            const totalPrice = (months * pricePerMonth) + (weeks * pricePerWeek) + (days * pricePerDay);
+            const totalPriceTemp = (months * pricePerMonth) + (weeks * pricePerWeek) + (days * pricePerDay);
+            // Optionally, find the minimum cost if it would be cheaper to use weekly or monthly rates
+            const totalWeeks = Math.ceil(n / daysInWeek);
+            const totalMonths = Math.ceil(n / daysInMonth);
+            const priceByWeeks = totalWeeks * pricePerWeek;
+            const priceByMonths = totalMonths * pricePerMonth;
+
+            const totalPrice = Math.min(totalPriceTemp, priceByWeeks, priceByMonths);
+
+            // console.log('Months:', months, 'Weeks:', weeks, 'Days:', days);
+            // console.log(totalPriceTemp, priceByWeeks, priceByMonths);
+            // console.log('Total Price:', totalPriceTemp);
+            // console.log('Minimum Price:', totalPrice);
+
             const itemTotalPrice = totalPrice * qty; // Multiply by quantity
 
             // Calculate the environmental fee
@@ -540,47 +562,48 @@
         }
     }
 
-    // function calculateRentalPrice(n) {
-    //     const dailyRate = 35;
-    //     const weeklyRate = 145;
-    //     const monthlyRate = 438;
-    //     const daysInMonth = 30;
-    //     const daysInWeek = 7;
+    function calculateRentalPrice(n) {
+        const dailyRate = 35;
+        const weeklyRate = 145;
+        const monthlyRate = 438;
+        const daysInMonth = 30;
+        const daysInWeek = 7;
 
-    //     // Calculate the number of months
-    //     const months = Math.floor(n / daysInMonth);
-    //     let remainingDays = n % daysInMonth;
+        // Calculate the number of months and remaining days
+        const months = Math.floor(n / daysInMonth);
+        let remainingDays = n % daysInMonth;
 
-    //     // Calculate the number of weeks from the remaining days
-    //     const weeks = Math.floor(remainingDays / daysInWeek);
-    //     remainingDays = remainingDays % daysInWeek;
+        // Calculate the number of weeks and remaining days
+        const weeks = Math.floor(remainingDays / daysInWeek);
+        remainingDays = remainingDays % daysInWeek;
 
-    //     // The remaining days
-    //     const days = remainingDays;
+        // Calculate the total price based on months, weeks, and days
+        const totalPrice = (months * monthlyRate) + (weeks * weeklyRate) + (remainingDays * dailyRate);
 
-    //     // Calculate the total price
-    //     const totalPrice = (months * monthlyRate) + (weeks * weeklyRate) + (days * dailyRate);
+        // Calculate alternative prices
+        const totalWeeks = Math.ceil(n / daysInWeek);
+        const priceByWeeks = totalWeeks * weeklyRate;
 
-    //     // Optionally, find the minimum cost if it would be cheaper to use weekly or monthly rates
-    //     const totalWeeks = Math.ceil(n / daysInWeek);
-    //     const totalMonths = Math.ceil(n / daysInMonth);
-    //     const priceByWeeks = totalWeeks * weeklyRate;
-    //     const priceByMonths = totalMonths * monthlyRate;
+        const totalMonths = Math.ceil(n / daysInMonth);
+        const priceByMonths = totalMonths * monthlyRate;
 
-    //     const minimumPrice = Math.min(totalPrice, priceByWeeks, priceByMonths);
+        // Find the minimum price among different options
+        let minimumPrice = Math.min(totalPrice, priceByWeeks, priceByMonths);
 
-    //     console.log('Months:', months, 'Weeks:', weeks, 'Days:', days);
-    //     console.log('Total Price:', totalPrice);
-    //     console.log('Minimum Price:', minimumPrice);
+        // if(n > 30){
+        //     minimumPrice += dailyRate;
+        //     if(minimumPrice < monthlyRate * 2){
+        //         minimumPrice = monthlyRate;
+        //     }
+        // }
 
-    //     return {
-    //         months,
-    //         weeks,
-    //         days,
-    //         totalPrice,
-    //         minimumPrice
-    //     };
-    // }
+        console.log('Months:', months, 'Weeks:', weeks, 'Days:', remainingDays);
+        console.log('Total Price:', totalPrice);
+        console.log('Price by Weeks:', priceByWeeks);
+        console.log('Price by Months:', priceByMonths);
+        console.log('Minimum Price:', minimumPrice);
+    }
+
 
 </script>
 <script>

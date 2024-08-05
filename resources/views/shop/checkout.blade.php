@@ -719,7 +719,16 @@
                                         $remainingDays = $remainingDays % $daysInWeek;
                                         $days = $remainingDays;
 
-                                        $totalPrice = ($months * $pricePerMonth) + ($weeks * $pricePerWeek) + ($days * $pricePerDay);
+                                        $totalPriceTemp = ($months * $pricePerMonth) + ($weeks * $pricePerWeek) + ($days * $pricePerDay);
+
+                                        $totalWeeks = ceil($day / $daysInWeek);
+                                        $totalMonths = ceil($day / $daysInMonth);
+
+                                        $priceByWeeks = $totalWeeks * $pricePerWeek;
+                                        $priceByMonths = $totalMonths * $pricePerMonth;
+
+                                        $totalPrice = min($totalPriceTemp, $priceByWeeks, $priceByMonths);
+
                                         $itemTotalPrice = $totalPrice * $qty;
 
                                         $envFeeFinal = ($envFee / 100) * $itemTotalPrice;
