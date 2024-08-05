@@ -504,7 +504,7 @@
                                             <input class="form-check-input" type="checkbox" name="terms_and_conditions"
                                                 id="termsAndConditions" required>
                                             <label class="form-check-label" for="termsAndConditions">
-                                                I agree to the <a href="#">Terms and Conditions</a>
+                                                I agree to the <a href="{{ route('terms') }}">Terms and Conditions</a>
                                             </label>
                                             <div class="invalid-feedback">
                                                 You must agree to the terms and conditions.
@@ -518,7 +518,7 @@
                                             <input class="form-check-input" type="checkbox" name="rental_agreement"
                                                 id="rentalAgreement" required>
                                             <label class="form-check-label" for="rentalAgreement">
-                                                I have read and accept the <a href="#">Rental Agreement</a>
+                                                I have read and accept the <a href="{{ route('rental-agreement') }}">Rental Agreement</a>
                                             </label>
                                             <div class="invalid-feedback">
                                                 You must accept the rental agreement.
@@ -764,6 +764,8 @@
                                         $tax_check += $tax_final;
                                     @endphp
                                         <h5>{{ $value['name'] }} <span> = ${{ $total_price }}</span>
+                                        </h5>
+                                        <h5>Qty <span> = {{ $qty }}</span>
                                         </h5>
                                         {{-- <h5>Environmental Fee <span> = {{ $env_fee_final }}</span>
                                         </h5>
