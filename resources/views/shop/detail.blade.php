@@ -108,7 +108,7 @@
 
                             </div>
 
-
+                            <p>{{ $product_detail->short_desc }}</p>
                             {!! $product_detail->description !!}
                         </form>
                     </div>
