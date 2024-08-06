@@ -78,7 +78,7 @@
                                         <a href="{{ route('shopDetail', ['id' => $items->id]) }}">
                                             <h3>{{ $items->product_title }}</h3>
                                         </a>
-                                        {!! \Illuminate\Support\Str::limit($items->description, 100, $end = '...') !!}
+                                        {!! \Illuminate\Support\Str::limit($items->short_desc, 100, $end = '...') !!}
 
                                     </div>
                                 </div>

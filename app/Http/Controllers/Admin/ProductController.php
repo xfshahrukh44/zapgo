@@ -128,6 +128,7 @@ class ProductController extends Controller
             $product->product_title = $request->input('product_title');
 			$product->price = $request->input('price');
             $product->description = $request->input('description');
+            $product->short_desc = $request->input('short_desc');
 			$product->category = $request->input('item_id');
             $product->location_id = $request->input('location_id');
             $product->delivery_charges = $request->input('delivery_charges') ?? 0;
@@ -266,6 +267,7 @@ class ProductController extends Controller
         // dd($request->all());
         $requestData['product_title'] = $request->input('product_title');
         $requestData['description'] = $request->input('description');
+        $requestData['short_desc'] = $request->input('short_desc');
 		$requestData['sku'] = $request->input('sku');
 		$requestData['price'] = $request->input('price');
 		$requestData['category'] = $request->input('item_id');
