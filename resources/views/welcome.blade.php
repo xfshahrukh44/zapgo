@@ -114,7 +114,7 @@
                             </div>
                             <div class="mid-slides">
                                 <h3>{{ $items->product_title }}</h3>
-                                <p>{!! \Illuminate\Support\Str::limit($items->description, 150, $end = '...') !!}</p>
+                                <p>{!! \Illuminate\Support\Str::limit($items->short_desc, 150, $end = '...') !!}</p>
                             </div>
 
                             <div class="add-btn">
