@@ -244,11 +244,12 @@ function removeActive() {
     $(document).ready(function() {
         var serviceDates = @json($service_dates_arr); // Convert PHP array to JavaScript array
         var currentDate = new Date().toISOString().split('T')[0];
-        console.log(serviceDates,currentDate);
 
         if (serviceDates.includes(currentDate)) {
             $("#addCart").prop("disabled", true);
             $(".addCart").prop("disabled", true);
+            $("#addQuote").prop("disabled", true);
+            $("#outofstock").addClass("disabled");
         }
     });
 </script>

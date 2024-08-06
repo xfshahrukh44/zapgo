@@ -295,32 +295,22 @@ class ProductController extends Controller
 			}
 
             $file = $request->file('image');
-            $fileNameExt = $request->file('image')->getClientOriginalName();
-            $fileNameForm = str_replace(' ', '_', $fileNameExt);
-            $fileName = pathinfo($fileNameForm, PATHINFO_FILENAME);
-            $fileExt = $request->file('image')->getClientOriginalExtension();
-            $fileNameToStore = $fileName.'_'.time().'.'.$fileExt;
-            $pathToStore = public_path('uploads/products/');
-            Image::make($file)->save($pathToStore . DIRECTORY_SEPARATOR. $fileNameToStore);
-
-			$requestData['image'] = 'uploads/products/'.$fileNameToStore;
+            $filePath = date("Ymdhis").".".$file->getClientOriginalExtension();
+            $file->move(public_path('uploads/products/'), $filePath);
+            $requestData['image'] = 'uploads/products/' . $filePath;
         }
 
             if(! is_null(request('images'))) {
 
                 $photos=request()->file('images');
                 foreach ($photos as $photo) {
-                    $destinationPath = 'uploads/products/';
-
-                    $filename = date("Ymdhis").uniqid().".".$photo->getClientOriginalExtension();
-                    //dd($photo,$filename);
-                    Image::make($photo)->save(public_path($destinationPath) . DIRECTORY_SEPARATOR. $filename);
-
-                    $product = product::where('id', $id)->first();
+                    $photoPath = date("Ymdhis").".".$photo->getClientOriginalExtension();
+                    $photo->move(public_path('uploads/products/'), $photoPath);
+                    $destination_path = 'uploads/products/' . $photoPath;
 
                     DB::table('product_imagess')->insert([
 
-                        ['image' => $destinationPath.$filename, 'product_id' => $product->id]
+                        ['image' => $destination_path, 'product_id' => $product->id]
 
                     ]);
 

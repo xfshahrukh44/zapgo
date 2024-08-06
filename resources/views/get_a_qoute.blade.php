@@ -144,7 +144,7 @@
 
                                 </div>
                                 <div class="btn-from-last">
-                                    <button type="submit" class="btn blue-custom black-btn">Submit</button>
+                                    <button type="submit" class="btn blue-custom black-btn" id="addQuote">Submit</button>
 
                                 </div>
                             </form>
@@ -245,13 +245,13 @@
                 let price_key;
                 let day_value;
                 let multiplier_value;
-                if (diffDays > 30) {
+                if (diffDays > 28) {
                     price_key = 'price_per_month';
-                    day_value = 30;
+                    day_value = 28;
                     multiplier_value = diffDays - day_value;
-                } else if (diffDays == 30) {
+                } else if (diffDays == 28) {
                     price_key = 'price_per_week';
-                    day_value = 30;
+                    day_value = 28;
                     multiplier_value = 1;
                 } else if (diffDays > 7) {
                     price_key = 'price_per_week';
@@ -326,11 +326,11 @@
                 var per_day_price = parseFloat(selectedOption.data("price-per-day"));
                 var price_value;
                 var price;
-                if (days == 30) {
+                if (days == 28) {
                     price_value = parseFloat(selectedOption.data("price-per-month"));
                     price = parseFloat(price_value);
-                } else if (days > 30) {
-                    var temp_days = days - 30;
+                } else if (days > 28) {
+                    var temp_days = days - 28;
                     price_value = parseFloat(selectedOption.data("price-per-month"));
                     price = parseFloat(price_value + per_day_price * temp_days);
                 } else if (days == 7) {
@@ -496,13 +496,13 @@
                 let price_key;
                 let day_value;
                 let multiplier_value;
-                if (diffDays > 30) {
+                if (diffDays > 28) {
                     price_key = 'price_per_month';
-                    day_value = 30;
+                    day_value = 28;
                     multiplier_value = diffDays - day_value;
-                } else if (diffDays == 30) {
+                } else if (diffDays == 28) {
                     price_key = 'price_per_week';
-                    day_value = 30;
+                    day_value = 28;
                     multiplier_value = 1;
                 } else if (diffDays > 7) {
                     price_key = 'price_per_week';
@@ -540,10 +540,10 @@
         //     var per_day_price = parseFloat(selectedOption.data("price-per-day"));
         //     var price_value;
         //     var price;
-        //     if (days == 30) {
+        //     if (days == 28) {
         //         price_value = parseFloat(selectedOption.data("price-per-month"));
         //         price = parseFloat(price_value);
-        //     } else if (days > 30) {
+        //     } else if (days > 28) {
         //         price_value = parseFloat(selectedOption.data("price-per-month"));
         //         price = parseFloat(price_value + per_day_price * amount_date);
         //     } else if (days == 7) {
@@ -578,10 +578,10 @@
         //     var per_day_price = parseFloat(selectedOption.data("price-per-day"));
         //     var price_value;
         //     var price;
-        //     if (days == 30) {
+        //     if (days == 28) {
         //         price_value = parseFloat(selectedOption.data("price-per-month"));
         //         price = parseFloat(price_value);
-        //     } else if (days > 30) {
+        //     } else if (days > 28) {
         //         price_value = parseFloat(selectedOption.data("price-per-month"));
         //         price = parseFloat(price_value + per_day_price * amount_date);
         //     } else if (days == 7) {

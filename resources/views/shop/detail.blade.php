@@ -101,7 +101,7 @@
                                     @if($product_detail->stock_inventory > 0)
                                         <button href="javascript:void(0)" class="btn blue-custom" id="addCart" {{ Auth::user()->role == 3 ? 'disabled' : '' }}>Add to cart </button>
                                     @else
-                                        <button href="javascript:void(0)" class="btn blue-custom disabled" id="outofstock">Out of Stock </button>
+                                        <a href="{{ route('get_a_qoute') }}" class="btn blue-custom addQuote" id="outofstock">Get A Quote </a>
                                     @endif
 
                                 </div>
@@ -462,6 +462,12 @@
             width: 100% !important;
             height: 100%;
             object-fit: contain;
+        }
+
+        a#outofstock {
+            width: 100%;
+            font-size: 20px;
+            margin: 0;
         }
 
     </style>
