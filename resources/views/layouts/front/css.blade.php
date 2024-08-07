@@ -33,6 +33,10 @@
         opacity: 0.5;
         cursor: not-allowed;
     }
+    .content-image {
+        text-align: center;
+        margin-bottom: 18px;
+    }
 </style>
 
 @if(Session::get('subs') == 'yes')

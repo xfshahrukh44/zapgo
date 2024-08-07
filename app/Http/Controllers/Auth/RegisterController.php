@@ -56,15 +56,15 @@ class RegisterController extends Controller
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6'
-            // 'zip'   => 'required|integer|max:11',
-            // 'terms' => 'required',
-            // 'company_name' => 'required|string|max:255',
-            // 'license_state' => 'required|string|max:255',
-            // 'license_no'    => 'required|string|max:255',
-            // 'city'  =>  'required',
-            // 'state' => 'required',
-            // 'age' => 'required|in:Yes,No'
+            'password' => 'required|string|min:6',
+            'zip'   => 'required|integer',
+            'terms' => 'required',
+            'company_name' => 'required|string|max:255',
+            'license_state' => 'required|string|max:255',
+            'license_no'    => 'required|string|max:255',
+            'city'  =>  'required',
+            'state' => 'required',
+            'age' => 'required|in:Yes,No'
         ]);
     }
 
@@ -79,7 +79,7 @@ class RegisterController extends Controller
         // dd($request->all());
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator, 'registerForm');
+            return back()->withErrors($validator->errors())->withInput();
         }
         $previousUrl = url()->previous();
         session()->put('previousUrl', $previousUrl);

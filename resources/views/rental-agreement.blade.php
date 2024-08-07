@@ -18,6 +18,9 @@
     <div class="container rental-content">
          <div class="row">
               <div class="col-lg-12">
+                <div class="content-image">
+                    <img src="{{ asset($logo->img_path) }}" class="img-fluid" alt="">
+                </div>
                   {!! $page->content !!}
               </div>
 
