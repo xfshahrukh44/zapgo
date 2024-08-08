@@ -37,6 +37,9 @@
         text-align: center;
         margin-bottom: 18px;
     }
+    .content-image img {
+        height: 135px;
+    }
 </style>
 
 @if(Session::get('subs') == 'yes')
