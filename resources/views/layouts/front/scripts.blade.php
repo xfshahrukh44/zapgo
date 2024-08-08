@@ -231,6 +231,12 @@ function removeActive() {
   ratings.forEach((rating) => rating.classList.remove("active"));
 }
 
+$(document).ready(function () {
+  setTimeout(function () {
+    $('.loadermain').fadeOut()
+  }, 3500)
+})
+
 </script>
 
 @php
