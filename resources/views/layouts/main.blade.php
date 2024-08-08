@@ -348,9 +348,6 @@ p.text {
         </style>
     </head>
     <body class="responsive">
-        <div class="loadermain">
-            <img src="{{ asset('assets/imgs/loader.gif') }}" class="img-fluid" alt="">
-        </div>
 
         @include('layouts/front.header')
 

@@ -1,6 +1,9 @@
 @extends('layouts.main')
 
 @section('content')
+<div class="loadermain">
+    <img src="{{ asset('assets/imgs/loader.gif') }}" class="img-fluid" alt="">
+</div>
     <section class="rent-sec">
         <div class="container">
             <div class="row">
