@@ -7,7 +7,7 @@
   align-items: center;
 }
 .equipment h1 span {
-    margin-top: 48px;
+    margin-top: 179px;
 }
 </style>
 <section class="rent-sec about-inner">

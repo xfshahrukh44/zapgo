@@ -23,7 +23,7 @@
 }
 
 .equipment h1 span {
-    margin-top: 48px;
+    margin-top: 179px;
 }
 
 .btn-yellow{
