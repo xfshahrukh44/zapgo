@@ -132,12 +132,12 @@ Route::group(['middleware' => ['auth', 'roles'],'roles' => 'admin','prefix'=>'ad
     Route::get('activity-log/data', 'LogViewerController@activityLogData')->name('activity-log.data');
 
     #User Management routes
-    Route::get('users','Admin\\UsersController@Index');
-    Route::get('users/create','Admin\\UsersController@create');
-    Route::post('users/store','Admin\\UsersController@store');
-    Route::get('users/edit/{id}','Admin\\UsersController@edit');
-    Route::post('users/update/{id}','Admin\\UsersController@update');
-    Route::get('users/delete/{id}','Admin\\UsersController@destroy');
+    Route::get('users','Admin\\UsersController@Index')->name('admin.users.index');
+    Route::get('users/create','Admin\\UsersController@create')->name('admin.users.create');
+    Route::post('users/store','Admin\\UsersController@store')->name('admin.users.store');
+    Route::get('users/edit/{id}','Admin\\UsersController@edit')->name('admin.users.edit');
+    Route::post('users/update/{id}','Admin\\UsersController@update')->name('admin.users.update');
+    Route::get('users/delete/{id}','Admin\\UsersController@destroy')->name('admin.users.destroy');
     Route::get('users/deleted/','Admin\\UsersController@getDeletedUsers');
     Route::get('users/restore/{id}','Admin\\UsersController@restoreUser');
     Route::post('users/verify','Admin\\UsersController@verifyUsers')->name('verify.otp');
