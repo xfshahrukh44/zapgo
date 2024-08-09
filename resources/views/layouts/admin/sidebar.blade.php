@@ -29,6 +29,11 @@
                             <span data-i18n="Sales">Banner Management</span>
                         </a>
                     </li>
+                    <li class="{{ (request()->routeIs('admin.users.index') || request()->routeIs('admin.users.create') || request()->routeIs('admin.users.edit')) ? 'active' : '' }}">
+                        <a class="menu-item" href="{{url('admin/users')}}"><i></i>
+                            <span data-i18n="Sales">Users Management</span>
+                        </a>
+                    </li>
                     <li class="{{ (request()->routeIs('admin.config.setting'))? 'active' : '' }}">
                         <a class="menu-item" href="{{url('admin/config/setting')}}"><i></i>
                             <span data-i18n="Sales">Config</span>

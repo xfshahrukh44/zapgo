@@ -7,6 +7,24 @@
 @endpush
 
 @section('content')
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+        <h3 class="content-header-title mb-0 d-inline-block">Users</h3>
+        <div class="row breadcrumbs-top d-inline-block">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">Home</li>
+                    <li class="breadcrumb-item active">Users</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div class="btn-group float-md-right">
+            <a class="btn btn-info mb-1" href="{{ url('admin/users/create') }}">Add Users</a>
+        </div>
+    </div>
+</div>
     <div class="container-fluid">
         <!-- .row -->
         <div class="row">
@@ -14,7 +32,7 @@
                 <div class="white-box card">
                     <div class="card-body">
                         <h3 class="box-title pull-left">Users List</h3>
-                        
+
                         <div class="clearfix"></div>
                         <hr>
                         <div class="row">
@@ -34,15 +52,48 @@
                                             <tr>
                                                 <td>{{$key+1}}</td>
                                                 <td>{{$user->name}}</td>
-                                                <td>{{$user->roles()->pluck('name')->implode(', ')}}</td>
+                                                @if ($user->role == 2)
+                                                    <td>User</td>
+                                                @else
+                                                    <td>Employee</td>
+                                                @endif
                                                 <th>
-                                                    <a class="btn btn-info" href="{{url('user/edit/'.$user->id)}}"><i
-                                                                class="fa fa-pencil"></i> Edit</a> &nbsp;&nbsp;
-                                                    <a class="delete btn btn-danger"
-                                                       href="{{url('user/delete/'.$user->id)}}"><i
-                                                                class="fa fa-trash"></i> Delete</a>
+                                                    @if ($user->role == 3 && $user->status == 0)
+                                                        <a class="btn btn-info" data-toggle="modal" data-target="#otpModal"><i
+                                                            class="fa fa-pencil"></i> Verify</a>
+                                                        <div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="otpModalLabel">Verify Your OTP</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form action="{{ route('verify.otp') }}" method="POST">
+                                                                            @csrf
+                                                                            <input type="hidden" name="user_id" value="{{ $user->id }}">
+                                                                            <div class="form-group">
+                                                                                <label for="otp">Enter OTP</label>
+                                                                                <input type="text" id="otp" name="otp" class="form-control" required>
+                                                                            </div>
+                                                                            <button type="submit" class="btn btn-primary">Verify OTP</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <a class="btn btn-info" href="{{url('admin/users/edit/'.$user->id)}}"><i
+                                                                    class="fa fa-pencil"></i> Edit</a> &nbsp;&nbsp;
+                                                        <a class="delete btn btn-danger"
+                                                        href="{{url('admin/users/delete/'.$user->id)}}"><i
+                                                                    class="fa fa-trash"></i> Delete</a>
+                                                    @endif
                                                 </th>
                                             </tr>
+
                                         @endforeach
                                         </tbody>
                                     </table>
@@ -54,6 +105,10 @@
                 </div>
             </div>
         </div>
+        <!-- Button to trigger the modal -->
+        {{-- <button type="button">Verify Account</button> --}}
+        <!-- OTP Verification Modal -->
+
         @include('layouts.admin.footer')
     </div>
 @endsection
