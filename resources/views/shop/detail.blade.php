@@ -93,7 +93,7 @@
 
                                 <div class="stock"><strong>Stock Available:</strong> {{ $product_detail->stock_inventory }}</div>
                                 <div class="cart-btn">
-                                    <div class="quantity qty">
+                                    <div class="quantity qty" data-stock="{{ $product_detail->stock_inventory }}">
                                         <span class="minus  minus-1">-</span>
                                         <input type="text" id="qty" class="count" name="qty" value="1">
                                         <span class="plus bg-dark plus-1">+</span>
