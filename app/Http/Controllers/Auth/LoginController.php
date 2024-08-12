@@ -69,6 +69,11 @@ class LoginController extends Controller
                 return redirect()->back()->with('error', 'Your account is not verified. Please verify your email address.');
             }
 
+            $redirect = $request->input('redirect');
+            if ($redirect == 'get_a_qoute') {
+                return redirect()->route('get_a_qoute');
+            }
+
             return redirect()->intended($this->redirectTo);
         } else {
             return redirect()->back()->with('error', 'Invalid email address or password.');

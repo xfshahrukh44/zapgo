@@ -109,6 +109,9 @@ else
         $req['end_date'] = $request->end_date;
         $req['user_id'] = Auth::user()->id;
         $req['bulk_amount'] = $request->bulk_amount;
+        $req['zip'] = $request->input('zip');
+        $req['delivery_time'] = $request->input('delivery_time');
+        $req['pickup_time'] = $request->input('pickup_time');
 
         $quote = GetQuote::create($req);
 
@@ -174,7 +177,7 @@ else
             // dd('Success ');
             return redirect()->back()->with('stripe_error', $e->getMessage());
         }
-        
+
         $chargeJson = $charge->jsonSerialize();
 			// Check whether the charge is successful
 			if ($chargeJson['amount_refunded'] == 0 && empty($chargeJson['failure_code']) && $chargeJson['paid'] == 1 && $chargeJson['captured'] == 1) {
@@ -221,9 +224,9 @@ else
         $page = Page::find(6);
         $category = Category::orderBy('name', 'asc')->get();
         $mainproduct = Product::orderBy('product_title', 'asc')->get();
-        
+
         // dd($mainproduct);
-        
+
         return view('categories',compact('page','category','mainproduct'));
     }
 
@@ -256,7 +259,7 @@ else
     {
         // $page = Page::find(4);
         if (!Auth::check()) {
-            return redirect()->route('signin');
+            return redirect()->route('signin', ['redirect' => 'get_a_qoute']);
         }
         return view('get_a_qoute');
     }
@@ -328,7 +331,7 @@ else
             }
         }
     }
-    
+
     public function stkPush(Request $request){
         Log::info('STK Push endpoint hit');
         Log::info($request->all());

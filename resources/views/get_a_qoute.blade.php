@@ -59,7 +59,29 @@
                                         <input type="text" name="address" class="form-control" placeholder="Delivery/Recovery Address*" required="">
                                     </div>
                                     <div class="form-group col-6">
+                                        <select class="form-select" name="delivery_time" id="delivery_time" required>
+                                            <option value="" selected disabled>Select Delivery Time</option>
+                                            <option value="Available All Time">Available All Time</option>
+                                            <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
+                                            <option value="09:00 AM - 11:00 PM">09:00 AM - 11:00 AM</option>
+                                            <option value="01:00 PM - 03:00 PM">01:00 PM - 03:00 PM</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <select class="form-select" name="pickup_time" id="pickup_time" required>
+                                            <option value="" selected disabled>Select Recovery Time</option>
+                                            <option value="Available All Time">Available All Time</option>
+                                            <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
+                                            <option value="09:00 AM - 11:00 PM">09:00 AM - 11:00 AM</option>
+                                            <option value="01:00 PM - 03:00 PM">01:00 PM - 03:00 PM</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-6">
                                         <input type="text" name="city" class="form-control" placeholder="City*" required="">
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <input type="text" name="zip" class="form-control" placeholder="Zip Code*" required
+                                               pattern="\d{5}(-\d{4})?" title="Enter a valid ZIP code (e.g., 12345 or 12345-6789)">
                                     </div>
                                     <div class="form-group col-6">
                                         @php

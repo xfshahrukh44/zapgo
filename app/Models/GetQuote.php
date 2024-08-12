@@ -25,7 +25,7 @@ class GetQuote extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id','first_name', 'last_name', 'email', 'phone', 'company', 'address', 'city', 'state', 'product', 'quantity', 'message', 'start_date', 'end_date', 'number_of_days', 'bulk_amount', 'bulk_status', 'total_amount'];
+    protected $fillable = ['user_id','first_name', 'last_name', 'email', 'phone', 'company', 'address', 'city', 'state', 'product', 'quantity', 'message', 'start_date', 'end_date', 'number_of_days', 'bulk_amount', 'bulk_status', 'total_amount', 'zip', 'delivery_time', 'pickup_time'];
 
     protected $appends = ['product_total_amount'];
 

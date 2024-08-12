@@ -15,9 +15,9 @@
                         <div class="card border-0">
 
                         <div class="navbar-header mt-5 ml-5">
-                            <a class="navbar-brand" href="{{url('/')}}"> 
-                                <img src="{{ asset($logo->img_path) }}" alt="homepage" class="dark-logo"> 
-                            </a> 
+                            <a class="navbar-brand" href="{{url('/')}}">
+                                <img src="{{ asset($logo->img_path) }}" alt="homepage" class="dark-logo">
+                            </a>
                         </div>
 
                             <div class="card-body p-0">
