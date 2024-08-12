@@ -62,15 +62,21 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <nav class="navbar navbar-expand-lg">
+                    <nav class="navbar navbar-expand-lg navbar-light">
                         <div class="container-fluid">
                             <a class="navbar-brand" id="logo-main" href="{{ route('home') }}"><img
                                     src="{{ asset($logo->img_path) }}" class="img-fluid" alt=""></a>
+
+                                    <div class="magnifying-main">
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
+                            <div class="magnifying">
+                                <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        </div>
+</div>
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                                     {{-- <li class="nav-item active">
@@ -130,9 +136,9 @@
                                     @else
                                         {{-- User is not signed in, show the Sign in and Sign up buttons --}}
 
-                                        <a class="btn blue-custom black-btn" href="{{ route('signin') }}">Sign
+                                        <a class="btn blue-custom black-btn btn-hover-1" href="{{ route('signin') }}">Sign
                                             in</a>
-                                        <a class="btn blue-custom" href="{{ route('signup') }}">Sign up</a>
+                                        <a class="btn blue-custom btn-hover-2" href="{{ route('signup') }}">Sign up</a>
                                         <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" class="cart_icons">
                                             <span class="cart_counts">{{ (Session::get('cart') != null) ? count(Session::get('cart')) : 0 }}</span>
                                             <img src="{{ asset('images/12.png') }}" class="img-fluid" alt="">
