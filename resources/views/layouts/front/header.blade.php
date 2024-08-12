@@ -94,9 +94,9 @@
                                         <!--    </div>-->
                                         <!--</form>-->
                                     </div>
-                                    <li class="nav-item ">
+                                    {{-- <li class="nav-item ">
                                         <a class="nav-link" href="{{ url('/') }}"> Home</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item ">
                                         <a class="nav-link" href="{{ route('category') }}"> All Products</a>
                                     </li>
@@ -147,7 +147,7 @@
                                 </form>
 
                                 <div class="">
-                                    <form action="{{ route('shop') }}" method="GET" onsubmit="return validateSearch()" class="magnifying">
+                                    {{-- <form action="{{ route('shop') }}" method="GET" onsubmit="return validateSearch()" class="magnifying">
                                         <div class="one-input-for-magnifying">
                                         <input type="text" name="search" class="form-control magnifying-input" placeholder="Search..">
                                         </div>
@@ -155,7 +155,7 @@
                                         <div class="one-input-for-magnifying">
                                         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                                         </div>
-                                    </form>
+                                    </form> --}}
                         </div>
 
 
