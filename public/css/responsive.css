@@ -1,10 +1,31 @@
+@media (max-width: 2000px) {
+
+  .magnifying{
+    display: none;
+  }
+
+  a.btn.blue-custom.black-btn.btn-hover-1:hover {
+    background-color: var(--white-color);
+    color: black !important;
+    border: 1px solid black !important;
+  }
+  
+.btn-hover-2:hover {
+    background: var(--white-color) !important;
+    color: black !important;
+    border: 1px solid black !important;
+  }
+
+}
+
+
 @media (max-width: 1440px) {
   .equipment h1 {
     font-size: 75px;
   }
-  .equipment h1 span {
+  /* .equipment h1 span {
     font-size: 95px;
-  }
+  } */
   .equipment p {
     width: 42%;
   }
@@ -102,4 +123,235 @@
     padding-left: 30px;
     padding-right: 100px;
   }
+}
+
+
+
+
+@media (max-width: 576px) {
+  .equipment h1 {
+    font-size: 45px;
+    line-height: 1;
+}
+
+.equipment h1 span{
+  font-size: 45px !important;
+}
+
+.rent-sec {
+  height: 650px !important;
+}
+
+.from-mid {
+  width: 97%;
+  padding: 15px 10px;
+}
+
+.from-mid .form-group .form-control {
+  padding: 0px 23px;
+  font-size: 11px;
+  height: 50px;
+}
+
+.from-mid .form-group img {
+  left: 0px;
+}
+
+.from-mid .blue-custom {
+  height: 50px;
+  font-size: 11px;
+  padding: 0px;
+  width: 70px;
+}
+
+.random-products .mid-slides {
+  height: 150px;
+}
+
+.random-products {
+  height: 450px !important;
+}
+
+.rating {
+  height: 40px !important;
+  width: 40px !important;
+  margin: 0 !important;
+  margin-bottom: 70px !important;
+}
+
+.ratings-container {
+  margin-bottom: 100px;
+}
+
+.side-form button {
+  padding: 10px;
+  font-size: 17px;
+  width: 90%;
+  margin: auto;
+}
+
+.on-para p {
+  width: 100%;
+}
+
+.on-para {
+  margin-top: 50px;
+}
+
+.john-doe h5 {
+  font-size: 18px;
+}
+
+.john-doe:before {
+  height: 40px;
+}
+
+.slides-main .owl-nav .owl-prev {margin: 0px -20px;}
+
+.owl-nav {
+  position: relative;
+  top: -100px;
+}
+
+.slides-main .owl-nav .owl-prev {
+  margin: 5px -20px;
+}
+
+button.owl-next, .owl-carousel .owl-nav {
+  margin: 30px 0px;
+}
+
+.eleven figure img {
+  height: 350px;
+  margin-top: 30px;
+}
+
+.eleven.aos-init {
+  margin: 30px 0px;
+}
+
+.equipment p {
+  width: 60%;
+}
+
+.blue-custom {
+  padding: 10px 20px;
+}
+
+.why-we-best h2 {
+  font-size: 40px;
+  margin-bottom: 0;
+}
+
+.main-pro-details {
+  margin-bottom: 20px;
+}
+
+.sec-text-form-free-acc h4 {
+  FONT-SIZE: 30PX;
+}
+
+.tabs-sign ul {
+  text-align: center;
+  padding: 0;
+}
+
+.radio-1.active {padding: 0px 10px;margin-bottom: 20px;}
+
+.form-control:disabled, .form-control[readonly] {
+  width: 130px;
+}
+
+.main-chck-two span {
+  width: 45px;
+}
+
+.main-chck-two {
+  padding: 20px;
+}
+
+.side-summary {
+  padding: 0;
+}
+
+.check-sec {
+  padding: 0;
+}
+
+.about-inner{
+  height: 500px !important;
+}
+
+.inner-to-slides {
+  margin: 20px 45px;
+}
+
+.week-and-day ul {
+  justify-content: start;
+  /* flex-wrap: nowrap; */
+}
+
+.side-details .week-and-day ul li {
+  width: 92px !important;
+}
+
+.week-and-day .input-attr {
+  width: 100% !important;
+}
+
+.side-details .week-and-day ul li h5 {
+  font-size: 17px;
+}
+
+.side-details .week-and-day ul li h5 span {
+  font-size: 10px;
+}
+
+.section-heading h2 {
+  padding: 20px 10px;
+}
+
+.home-ab {
+  overflow: hidden !important;
+}
+
+.loadermain img {
+    height: 140px;
+}
+
+.loadermain{
+  left:-70px !important;
+}
+
+.magnifying{
+  display: block;
+}
+
+.magnifying {
+  position: absolute;
+  right: 100px;
+  top: 16px;
+}
+
+.magnifying i {
+
+  color: black !important;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+a.btn.blue-custom.black-btn.btn-hover-1:hover {
+  background-color: var(--white-color);
+  color: black !important;
+  border: 1px solid black !important;
+}
+
+.btn-hover-2:hover {
+  background-color: var(--white-color);
+  color: black !important;
+  border: 1px solid black !important;
+}
+
 }

@@ -19,3 +19,4 @@ yarn-error.log
 *.mp4
 *.sql
 *.wpress
+composer.lock
