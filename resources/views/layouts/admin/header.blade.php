@@ -1,5 +1,5 @@
 <?php
-    
+
      $logo = DB::table('imagetable')
                 ->where('table_name', 'logo')
                 ->first();
@@ -12,7 +12,7 @@
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mobile-menu d-lg-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
                 <li class="nav-item mr-auto brand-logo-wrapper">
-                    <a class="navbar-brand" href="{{url('/')}}">
+                    <a class="navbar-brand" href="{{url('admin/dashboard')}}">
                         <img class="brand-logo" alt="modern admin logo" src="{{asset($logo->img_path)}}">
                     </a>
                 </li>

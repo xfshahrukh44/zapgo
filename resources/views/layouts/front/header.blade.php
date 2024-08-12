@@ -74,7 +74,7 @@
                                 aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                            
+
 <!-- </div> -->
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -147,10 +147,12 @@
                                 </form>
 
                                 <div class="magnifying">
-                                                <input type="text" class="form-control magnifying-input" placeholder="Search..">
-                                <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                                    <form action="{{ route('shop') }}" method="GET" onsubmit="return validateSearch()">
+                                        <input type="text" name="search" class="form-control magnifying-input" placeholder="Search..">
+                                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                    </form>
                         </div>
-                                 
+
 
                             </div>
                         </div>

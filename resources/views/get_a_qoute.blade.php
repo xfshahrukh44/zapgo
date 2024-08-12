@@ -15,11 +15,20 @@
 
     <section class="home-ab about-pg-sec">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-12">
                     <div class="modal-body">
                         <div class="main-form-news">
-                            <form action="{{ route('quoteStore') }} " method="POST">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form action="{{ route('quoteStore') }} " id="form_id" method="POST">
                                 @csrf
                                 <input type="hidden" id="date-range-days" value="0">
                                 <input type="hidden" id="amount-date" value="1">
@@ -59,7 +68,7 @@
                                         <input type="text" name="address" class="form-control" placeholder="Delivery/Recovery Address*" required="">
                                     </div>
                                     <div class="form-group col-6">
-                                        <select class="form-select" name="delivery_time" id="delivery_time" required>
+                                        <select class="form-select" name="delivery_time" id="delivery_time" >
                                             <option value="" selected disabled>Select Delivery Time</option>
                                             <option value="Available All Time">Available All Time</option>
                                             <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
@@ -68,7 +77,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
-                                        <select class="form-select" name="pickup_time" id="pickup_time" required>
+                                        <select class="form-select" name="pickup_time" id="pickup_time" >
                                             <option value="" selected disabled>Select Recovery Time</option>
                                             <option value="Available All Time">Available All Time</option>
                                             <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
@@ -77,10 +86,10 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="city" class="form-control" placeholder="City*" required="">
+                                        <input type="text" name="city" class="form-control" placeholder="City*">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" name="zip" class="form-control" placeholder="Zip Code*" required
+                                        <input type="text" name="zip" class="form-control" placeholder="Zip Code*"
                                                pattern="\d{5}(-\d{4})?" title="Enter a valid ZIP code (e.g., 12345 or 12345-6789)">
                                     </div>
                                     <div class="form-group col-6">
@@ -151,17 +160,17 @@
                                     </div>
 
                                     <div class="form-group col-6">
-                                        <input type="text" name="" id="total_amount" class="form-control" placeholder="Total Amount*" readonly>
+                                        <input type="text" name="total_amount" id="total_amount" class="form-control" placeholder="Total Amount*" readonly value="{{ old('total_amount') }}">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="number" step="any" name="bulk_amount" class="form-control" placeholder="Desired Amount*">
+                                        <input type="number" step="any" name="bulk_amount" class="form-control" placeholder="Desired Amount*" value="{{ old('bulk_amount') }}">
                                     </div>
 
                                     <div class="form-group col-12">
                                         <label>
                                             Additional Information
                                         </label>
-                                        <textarea class="form-control" name="message" id="textarea" placeholder="" row="5"></textarea>
+                                        <textarea class="form-control" name="message" id="textarea" placeholder="" rows="5">{{ old('message') }}</textarea>
                                     </div>
 
                                 </div>
@@ -203,6 +212,20 @@
         .Zebra_DatePicker_Icon_Wrapper .date-rent-end {
             max-width: 98.5% !important;
             width: inherit !important;
+        }
+
+        .alert-danger {
+            color: #842029;
+            background-color: #f8d7da;
+            border-color: #f5c2c7;
+        }
+
+        .alert {
+            position: relative;
+            padding: 1rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: .25rem;
         }
     </style>
 @endsection

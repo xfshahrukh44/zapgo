@@ -56,7 +56,23 @@ class RegisterController extends Controller
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => [
+                'required',
+                'string',
+                'min:8', // Minimum length of 8 characters
+                'regex:/[A-Z]/', // Must contain at least one uppercase letter
+                'regex:/[a-z]/', // Must contain at least one lowercase letter
+                'regex:/[0-9]/', // Must contain at least one number
+                function ($attribute, $value, $fail) use ($data) {
+                    $firstName = $data['f_name'];
+                    $lastName = $data['l_name'];
+                    $email = $data['email'];
+
+                    if (str_contains($value, $firstName) || str_contains($value, $lastName) || str_contains($value, $email)) {
+                        $fail('The password cannot contain your first name, last name, or email.');
+                    }
+                },
+            ],
             'zip'   => 'required|integer',
             'terms' => 'required',
             'company_name' => 'required|string|max:255',
@@ -81,6 +97,7 @@ class RegisterController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator->errors())->withInput();
         }
+        return $request;
         $previousUrl = url()->previous();
         session()->put('previousUrl', $previousUrl);
 

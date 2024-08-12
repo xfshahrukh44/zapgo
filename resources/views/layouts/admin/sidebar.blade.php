@@ -1,45 +1,80 @@
 <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="javascript:;"><i class="la la-home"></i><span class="menu-title" data-i18n="Dashboard">Home</span></a>
                 <ul class="menu-content">
-                    <li class="{{ (request()->routeIs('admin.dashboard'))? 'active' : '' }}">
+                    <li class="nav-item {{ (request()->routeIs('admin.dashboard'))? 'active' : '' }}">
                         <a class="menu-item" href="{{url('admin/dashboard')}}"><i></i>
                             <span data-i18n="eCommerce">Dashboard</span>
                     </a>
                     </li>
-                    <li class="{{ (request()->routeIs('home'))? 'active' : '' }}">
+                    <li class="nav-item {{ (request()->routeIs('home'))? 'active' : '' }}">
                         <a class="menu-item" href="{{ URL('') }}"><i></i>
                             <span data-i18n="Crypto">Visit Website</span>
                         </a>
                     </li>
-                    <li class="{{ (request()->routeIs('admin.favicon.edit'))? 'active' : '' }}">
+                    <li class="nav-item {{ (request()->routeIs('admin.favicon.edit'))? 'active' : '' }}">
                         <a class="menu-item" href="{{url('admin/favicon/edit')}}"><i></i>
                             <span data-i18n="Crypto">Favicon Management</span>
                         </a>
                     </li>
-                    <li class="{{ (request()->routeIs('admin.logo.edit'))? 'active' : '' }}">
+                    <li class="nav-item {{ (request()->routeIs('admin.logo.edit'))? 'active' : '' }}">
                         <a class="menu-item" href="{{url('admin/logo/edit')}}"><i></i>
                             <span data-i18n="Sales">Logo Management</span>
                         </a>
                     </li>
-                    <li class="{{ (request()->routeIs('admin.banner.index') || request()->routeIs('admin.banner.create') || request()->routeIs('admin.banner.edit')) ? 'active' : '' }}">
+                    <li class="nav-item {{ (request()->routeIs('admin.banner.index') || request()->routeIs('admin.banner.create') || request()->routeIs('admin.banner.edit')) ? 'active' : '' }}">
                         <a class="menu-item" href="{{url('admin/banner')}}"><i></i>
                             <span data-i18n="Sales">Banner Management</span>
                         </a>
                     </li>
-                    <li class="{{ (request()->routeIs('admin.users.index') || request()->routeIs('admin.users.create') || request()->routeIs('admin.users.edit')) ? 'active' : '' }}">
+                    <li class="nav-item {{ (request()->routeIs('admin.users.index') || request()->routeIs('admin.users.create') || request()->routeIs('admin.users.edit')) ? 'active' : '' }}">
                         <a class="menu-item" href="{{url('admin/users')}}"><i></i>
                             <span data-i18n="Sales">Users Management</span>
                         </a>
                     </li>
-                    <li class="{{ (request()->routeIs('admin.config.setting'))? 'active' : '' }}">
+                    <li class="nav-item {{ (request()->routeIs('admin.config.setting'))? 'active' : '' }}">
                         <a class="menu-item" href="{{url('admin/config/setting')}}"><i></i>
                             <span data-i18n="Sales">Config</span>
                         </a>
                     </li>
                 </ul>
+            </li> --}}
+            <li class="nav-item {{ (request()->routeIs('admin.dashboard'))? 'active' : '' }}">
+                <a class="menu-item" href="{{url('admin/dashboard')}}"><i class="la la-home"></i>
+                    <span data-i18n="eCommerce">Dashboard</span>
+            </a>
+            </li>
+            <li class="nav-item {{ (request()->routeIs('home'))? 'active' : '' }}">
+                <a class="menu-item" href="{{ URL('') }}"><i class="la la-globe"></i>
+                    <span data-i18n="Crypto">Visit Website</span>
+                </a>
+            </li>
+            <li class="nav-item {{ (request()->routeIs('admin.favicon.edit'))? 'active' : '' }}">
+                <a class="menu-item" href="{{url('admin/favicon/edit')}}"><i class="la la-globe"></i>
+                    <span data-i18n="Crypto">Favicon Management</span>
+                </a>
+            </li>
+            <li class="nav-item {{ (request()->routeIs('admin.logo.edit'))? 'active' : '' }}">
+                <a class="menu-item" href="{{url('admin/logo/edit')}}"><i class="la la-globe"></i>
+                    <span data-i18n="Sales">Logo Management</span>
+                </a>
+            </li>
+            <li class="nav-item {{ (request()->routeIs('admin.banner.index') || request()->routeIs('admin.banner.create') || request()->routeIs('admin.banner.edit')) ? 'active' : '' }}">
+                <a class="menu-item" href="{{url('admin/banner')}}"><i class="la la-image"></i>
+                    <span data-i18n="Sales">Banner Management</span>
+                </a>
+            </li>
+            <li class="nav-item {{ (request()->routeIs('admin.users.index') || request()->routeIs('admin.users.create') || request()->routeIs('admin.users.edit')) ? 'active' : '' }}">
+                <a class="menu-item" href="{{url('admin/users')}}"><i class="la la-users"></i>
+                    <span data-i18n="Sales">Users Management</span>
+                </a>
+            </li>
+            <li class="nav-item {{ (request()->routeIs('admin.config.setting'))? 'active' : '' }}">
+                <a class="menu-item" href="{{url('admin/config/setting')}}"><i class="la la-cog"></i>
+                    <span data-i18n="Sales">Config</span>
+                </a>
             </li>
             <li class="nav-item">
                 <a href="javascript:;"><i class="la la-share-alt"></i><span class="menu-title" data-i18n="Dashboard">Inquires</span></a>

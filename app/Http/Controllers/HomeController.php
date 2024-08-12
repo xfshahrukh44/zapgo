@@ -94,11 +94,26 @@ else
     public function quoteStore(Request $request)
     {
         $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-		]);
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:50',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'zip' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'company' => 'required',
+            'address' => 'required',
+            'product' => 'required|array',
+            'product.*' => 'required|exists:products,id', // Validate that each product ID exists
+            'price' => 'required|array',
+            'price.*' => 'required', // Ensure each price is a non-negative number
+            'quantity' => 'required|array',
+            'quantity.*' => 'required', // Ensure each quantity is a positive integer
+            'item_price' => 'required',
+            'item_price.*' => 'required', // Ensure each item price is a non-negative number
+        ]);
 
         $req = $request->all();
 

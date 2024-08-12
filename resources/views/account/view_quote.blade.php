@@ -83,6 +83,10 @@
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Order Date:</span> {{date('d F, Y h:i a',strtotime($bulkOrders->created_at))}}</div>
 
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Transaction:</span> {{$bulkOrders->transaction_id}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Delivery Time:</span> {{$quote->delivery_time}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Recovery Time:</span> {{$quote->pickup_time}}</div>
                             </div>
                         </div>
                         <!-- /.col -->
@@ -113,7 +117,7 @@
                                 <div class="d-none d-sm-block col-2 text-95">{{$val->quantity}}</div>
                                 <div class="col-2 text-secondary-d2">${{$val->price}}</div>
                             </div>
-                            @php 
+                            @php
                                 $subtotal+= $val->item_price * $val->quantity;
                                 $count++;
                             @endphp
@@ -144,7 +148,7 @@
                                 <div class="col-2 text-secondary-d2">${!! number_format($rentalProtection_final, 2) !!}</div>
                             </div>
                         </div>
-                        
+
 
                         <div class="row border-b-2 brc-default-l2"></div>
 
