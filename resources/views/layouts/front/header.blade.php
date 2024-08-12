@@ -68,16 +68,14 @@
                             <a class="navbar-brand" id="logo-main" href="{{ route('home') }}"><img
                                     src="{{ asset($logo->img_path) }}" class="img-fluid" alt=""></a>
 
-                                    <div class="magnifying-main">
+                                    <!-- <div class="magnifying-main"> -->
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                            <div class="magnifying">
-                                <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-                        </div>
-</div>
+                            
+<!-- </div> -->
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                                     {{-- <li class="nav-item active">
@@ -144,8 +142,15 @@
                                             <span class="cart_counts">{{ (Session::get('cart') != null) ? count(Session::get('cart')) : 0 }}</span>
                                             <img src="{{ asset('images/12.png') }}" class="img-fluid" alt="">
                                         </a>
+
                                     @endif
                                 </form>
+
+                                <div class="magnifying">
+                                                <input type="text" class="form-control magnifying-input" placeholder="Search..">
+                                <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        </div>
+                                 
 
                             </div>
                         </div>
