@@ -120,6 +120,10 @@
         </div> --}}
         <div class="form-container sign-in-container col-md-6">
             <div class="sec-text-form-free-acc">
+                @php
+                    // Retrieve the 'redirect' parameter from the request
+                    $redirect = request()->query('redirect');
+                @endphp
                 <h4>
                     Sign In to your ZapGO Rentals Account
                 </h4>
@@ -136,6 +140,7 @@
                 @endif
             <form method="POST" action="{{ route('login') }}">
                 @csrf
+                <input type="hidden" name="redirect" value="{{ $redirect ?? '' }}">
                 {{-- <h1>Login</h1> --}}
                 <div class="form-group custom">
                     <label>Email</label>

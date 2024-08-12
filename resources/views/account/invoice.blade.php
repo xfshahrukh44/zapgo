@@ -71,9 +71,9 @@
                         <div class="text-95 col-sm-4 offset-sm-4 align-self-start d-sm-flex justify-content-end">
                             <hr class="d-sm-none" />
                             <div class="text-grey-m2">
-                                <div class="mt-1 mb-2 text-secondary-m1 text-600 text-125">
+                                {{-- <div class="mt-1 mb-2 text-secondary-m1 text-600 text-125">
                                     Invoice
-                                </div>
+                                </div> --}}
 
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">ID:</span> #{{$order->invoice_number}}</div>
 
@@ -83,6 +83,8 @@
                                 @if($order->transaction_id != '')
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Transaction ID:</span> {{$order->transaction_id}}</div>
                                 @endif
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Delivery Time:</span> {{$order->delivery_time}}</div>
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Recovery Time:</span> {{$order->pickup_time}}</div>
                             </div>
                         </div>
                         <!-- /.col -->

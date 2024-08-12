@@ -122,6 +122,14 @@
                                         <td> {{ $getquote->address }} </td>
                                     </tr>
                                     <tr>
+                                        <th> Delivery Time </th>
+                                        <td> {{ $getquote->delivery_time }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Recovery Time </th>
+                                        <td> {{ $getquote->pickup_time }} </td>
+                                    </tr>
+                                    <tr>
                                         <th> City </th>
                                         <td> {{ $getquote->city }} </td>
                                     </tr>
@@ -130,9 +138,13 @@
                                         <td> {{ $getquote->state }} </td>
                                     </tr>
                                     <tr>
+                                        <th> Zip Code </th>
+                                        <td> {{ $getquote->zip }} </td>
+                                    </tr>
+                                    <tr>
                                         <th> Desired Price </th>
-                                        <td> {{ $getquote->bulk_amount }} 
-                                            {{-- <button id="approved" class="btn btn-success response" data-amount = "{{ $getquote->bulk_amount }}" style=" padding: 3px; margin-left: 17px; font-size: 12px; display: inline-block">Approve</button> 
+                                        <td> {{ $getquote->bulk_amount }}
+                                            {{-- <button id="approved" class="btn btn-success response" data-amount = "{{ $getquote->bulk_amount }}" style=" padding: 3px; margin-left: 17px; font-size: 12px; display: inline-block">Approve</button>
                                             <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}" style=" padding: 3px; margin-left: 17px; font-size: 12px; display: inline-block">Decline</button>  --}}
                                         </td>
                                     </tr>
@@ -175,12 +187,12 @@
                                         </div>
                                         <div class="price item">
                                             <h5>Total: </h5>
-                                                <h4>$<span id="total">{{ $val->price }}</span></h4>            
+                                                <h4>$<span id="total">{{ $val->price }}</span></h4>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                
+
                         </div>
                     </div>
                     @php
@@ -282,7 +294,7 @@
                                     </div>
                                 </div>
                             </div>
-                
+
                         </div>
                     </div>
                     @if($getquote->status != 1)
@@ -297,25 +309,25 @@
                                     @endif
                                     <div class="order-box">
                                         <form>
-                                    
+
                                             <input type="hidden" id="quote_id" value="{{ $getquote->id }}">
                                             <input type="hidden" id="subtotal" value="{{ $subtotal }}">
                                             <!--<input type="number" step="any" name="total_amount" id="total_amount">-->
                                             <!--<input type="button" class="btn btn-primary" id="submitButton" value="Add">-->
                                             @if($getquote->status == 2)
-                                                <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}">Not Approve</button> 
+                                                <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}">Not Approve</button>
                                             @elseif($getquote->status == 0)
                                                 <input type="number" step="any" name="total_amount" id="total_amount">
                                                 <input type="button" class="btn btn-primary" id="submitButton" value="Add">
                                                 <button id="approved" class="btn btn-success response" data-amount = "{{ $getquote->bulk_amount }}">Approve</button>
-                                                <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}">Not Approve</button> 
+                                                <button id="declined" class="btn btn-danger response" data-amount = "{{ $getquote->product_total_amount }}">Not Approve</button>
                                             @endif
-                                            
+
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                
+
                         </div>
                     </div>
                     @endif
@@ -430,18 +442,18 @@
         <script>
 
             $('.response').click(function(){
-                var response = $(this).attr('id'); 
-                var amount = $(this).attr('data-amount'); 
+                var response = $(this).attr('id');
+                var amount = $(this).attr('data-amount');
                 var quote_id = $('#quote_id').val();
 
                 $.ajax({
-                    url: "{{ url('admin/bulk-status') }}", 
-                    method: 'POST', 
-                    data: { response: response, quote_id: quote_id, "_token": "{{ csrf_token() }}", amount: amount }, 
-                    dataType: 'json', 
+                    url: "{{ url('admin/bulk-status') }}",
+                    method: 'POST',
+                    data: { response: response, quote_id: quote_id, "_token": "{{ csrf_token() }}", amount: amount },
+                    dataType: 'json',
                     // headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function(response) {
-                        
+
                         console.log('Data updated successfully');
 
                         if(response.success && response.status == "approved"){
@@ -455,12 +467,12 @@
                             $('#declined').prop('disabled', true);
                             $('#approved').hide();
                         }
-                        
+
                     },
                     error: function(xhr, status, error) {
-                        
+
                         console.error('Error updating data:', error);
-                        
+
                     }
                 });
             });
@@ -474,9 +486,9 @@
                     // Check if totalAmount is less than or equal to subtotal
                     if(totalAmount <= subtotal) {
                         $.ajax({
-                            url: "{{ url('admin/discount') }}", 
-                            method: 'POST', 
-                            data: { quote_id: quote_id, amount: totalAmount, subtotal: subtotal, "_token": "{{ csrf_token() }}" }, 
+                            url: "{{ url('admin/discount') }}",
+                            method: 'POST',
+                            data: { quote_id: quote_id, amount: totalAmount, subtotal: subtotal, "_token": "{{ csrf_token() }}" },
                             dataType: 'json',
                             success: function(response){
                                 alert(response.message)
@@ -587,7 +599,7 @@
                 return errorCount;
             }
 
-            
+
 
         </script>
         {{-- @include('layouts.admin.footer') --}}

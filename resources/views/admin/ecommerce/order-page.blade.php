@@ -126,7 +126,68 @@
                                     ?>
 
                                     @foreach ($order_products as $order_product)
-                                        <?php $product = App\Product::where('id', $order_product->order_products_product_id)->first(); // Helper::returnRow("products_header","id = ".$order_product->order_products_product_id); ?>
+                                    @php
+                                        $product = App\Product::where('id', $order_product->order_products_product_id)->first();
+                                        $order = App\orders::where('id', $order_product->orders_id)->first();
+                                        $envFee = (float)$product->env_fee;
+                                        $taxes = (float)$product->taxes;
+
+                                        $start = new DateTime($order->start_date);
+                                        $end = new DateTime($order->end_date);
+                                        $interval = $start->diff($end);
+                                        $day = $interval->days;
+
+                                        $pricePerDay = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 14])->first()->price) ?? 0.00;
+                                        $pricePerWeek = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 15])->first()->price) ?? 0.00;
+                                        $pricePerMonth = (\App\ProductAttribute::where(['product_id' => $order_product->order_products_product_id, 'attribute_id' => 16])->first()->price) ?? 0.00;
+                                        $priceFor35Days = (float)$pricePerMonth + (float)$pricePerWeek;
+                                        $priceFor42Days = (float)$pricePerMonth + (float)$pricePerWeek * 2;
+                                        $priceFor49Days = (float)$pricePerMonth + (float)$pricePerWeek * 3;
+                                        $daysInMonth = 28;
+                                        $daysInWeek = 7;
+                                        $months = floor($day / $daysInMonth);
+                                        $remainingDays = $day % $daysInMonth;
+                                        $weeks = floor($remainingDays / $daysInWeek);
+                                        $remainingDays = $remainingDays % $daysInWeek;
+                                        $days = $remainingDays;
+
+                                        $totalPriceTemp = ($months * $pricePerMonth) + ($weeks * $pricePerWeek) + ($days * $pricePerDay);
+
+                                        $totalWeeks = ceil($day / $daysInWeek);
+                                        $totalMonths = ceil($day / $daysInMonth);
+
+                                        $priceByWeeks = $totalWeeks * $pricePerWeek;
+                                        $priceByMonths = $totalMonths * $pricePerMonth;
+
+                                        $totalPrice = min($totalPriceTemp, $priceByWeeks, $priceByMonths);
+
+                                        if ($day > 30 && $day <= 35) {
+                                            $totalPrice = min($totalPrice, $priceFor35Days);
+                                            if ($totalPrice > $pricePerMonth * 2) {
+                                                $totalPrice = $pricePerMonth * 2;
+                                            }
+                                        } elseif ($day > 35 && $day <= 42) {
+                                            $totalPrice = min($totalPrice, $priceFor42Days);
+                                            if ($totalPrice > $pricePerMonth * 2) {
+                                                $totalPrice = $pricePerMonth * 2;
+                                            }
+                                        } elseif ($day > 42 && $day <= 49) {
+                                            $totalPrice = min($totalPrice, $priceFor49Days);
+                                            if ($totalPrice > $pricePerMonth * 2) {
+                                                $totalPrice = $pricePerMonth * 2;
+                                            }
+                                        }
+
+
+                                        $itemTotalPrice = $totalPrice * $order_product->order_products_qty;
+
+                                        $envFeeFinal = ($envFee / 100) * $itemTotalPrice;
+                                        $taxFinal = ($taxes / 100) * $itemTotalPrice;
+
+                                        $total_price = number_format($itemTotalPrice, 2, '.', '');
+                                        $env_fee_final = number_format($envFeeFinal, 2, '.', '');
+                                        $tax_final = number_format($taxFinal, 2, '.', '');
+                                    @endphp
                                         <tr>
 
                                             <td>{{ $order_product->order_products_id }}</td>
@@ -135,46 +196,28 @@
 
                                             <td class="text-dark weight-600">
                                                 {{ $order_product->order_products_name }}
-                                                @php
-                                                    $variants = json_decode($order_product->variants);
-                                                    //dump($order_product->order_products_qty);
-                                                @endphp
-                                                <?php $toppingtotal += $value->price; ?>
-                                                @foreach ($variants as $key => $value)
-                                                    <?php $toppingtotal += $value->price; ?>
-                                                    <p class="mb-0"> {{ $value->attribute }} -
-                                                        {{ $value->attribute_val }} - ${{ $value->attribute_price }}</p>
-                                                    @php
-                                                        $total_variation += $value->attribute_price;
-                                                    @endphp
-                                                @endforeach
-                                                @php
-                                                    $total_variation *= $order_product->order_products_qty;
-                                                @endphp
-
                                             </td>
                                             <td>${!! number_format($order_product->order_products_price, 2) !!}</td>
                                             <td>{{ $order_product->order_products_qty }}</td>
-                                            <td>${!! number_format($order_product->order_products_subtotal, 2) !!}</td>
+                                            <td>${{ number_format($itemTotalPrice, 2) }}</td>
 
                                         </tr>
 
-                                        <?php $subtotal += $order_product->order_products_qty * $order_product->order_products_price;
-                                        $count++;
-                                        ?>
+                                        @php
+                                            $subtotal += $total_price + $env_fee_final + $tax_final;
+                                            $env_check += $env_fee_final;
+                                            $tax_check += $tax_final;
+                                            $count++;
+                                        @endphp
                                     @endforeach
 
                                     @php
-                                      $tax = App\Http\Traits\HelperTrait::returnFlag(1973);
-                                      $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
-                                      $envFee = App\Http\Traits\HelperTrait::returnFlag(1976);
-                                      $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
-                                      $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
+                                        $otherFees = App\Http\Traits\HelperTrait::returnFlag(1977);
+                                        $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
+                                        $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
 
-                                      $tax_final = ($tax / 100) * $subtotal;
-                                      $otherFees_final = ($otherFees / 100) * $subtotal;
-                                      $envFee_final = ($envFee / 100) * $subtotal;
-                                      $rentalProtection_final = ($rentalProtection / 100) * $subtotal;
+                                        $otherFees_final = ($otherFees / 100) * $subtotal;
+                                        $rentalProtection_final = ($rentalProtection / 100) * $subtotal;
                                     @endphp
 
                                     <tr>
@@ -199,7 +242,7 @@
                                       <td>Environmental Service Fee</td>
                                       <td>---</td>
                                       <td>---</td>
-                                      <td>${!! number_format($envFee_final, 2) !!}</td>
+                                      <td>${!! number_format($env_check, 2) !!}</td>
                                     </tr>
                                     <tr>
                                       <td></td>
@@ -215,19 +258,12 @@
                                       <td>Taxes</td>
                                       <td>---</td>
                                       <td>---</td>
-                                      <td>${!! number_format($tax_final, 2) !!}</td>
+                                      <td>${!! number_format($tax_check, 2) !!}</td>
                                     </tr>
 
                                     @php
-                                        $estimatedSubtotal = ($subtotal+$rentalProtection_final+$envFee_final+$otherFees_final+$tax_final+$deliveryFee);
+                                        $estimatedSubtotal = ($subtotal + $rentalProtection_final + $otherFees_final + $deliveryFee);
                                     @endphp
-
-                                    <tr>
-                                        <td colspan="2" class="custom-product">&nbsp;</td>
-                                        <td colspan="3" class="text-muted custom-product">Subtotal Price:
-                                        </td>
-                                        <td class="custom-product">${!! number_format($estimatedSubtotal, 2) !!}</td>
-                                    </tr>
                                     @if($order->order_shipping)
                                     <tr>
                                         <td colspan="2" class="custom-product">&nbsp;</td>
@@ -344,6 +380,14 @@
                                   <tr>
                                       <td class="text-muted">Number of Days: </td>
                                       <td class="text-color">{{ $difference_in_days }}</td>
+                                  </tr>
+                                  <tr>
+                                      <td class="text-muted">Delivery Time: </td>
+                                      <td class="text-color">{{ $order->delivery_time }}</td>
+                                  </tr>
+                                  <tr>
+                                      <td class="text-muted">Recovery Time: </td>
+                                      <td class="text-color">{{ $order->pickup_time }}</td>
                                   </tr>
                                 </tbody>
                             </table>
