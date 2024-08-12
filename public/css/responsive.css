@@ -123,9 +123,38 @@
     padding-left: 30px;
     padding-right: 100px;
   }
+
+  
+input.form-control.magnifying-input {
+  width: 100%;
+  margin: 30px 0px 20px 0px;
+  border: 1px solid #bbbbbb;
+  border-radius: 30px;
+}s
 }
 
 
+@media (max-width: 992px) {
+
+  .magnifying{
+    display: block;
+  }
+  
+  .magnifying {
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .magnifying button{
+    border:none;
+    padding: 0;
+    color: black !important;
+    background-color: transparent;
+  }
+}
 
 
 @media (max-width: 576px) {
@@ -330,18 +359,18 @@ button.owl-next, .owl-carousel .owl-nav {
 }
 
 .magnifying {
-  /* position: absolute; */
-  right: 24px;
-  bottom: 19px;
   font-size: 25px;
   display: flex;
   align-items: center;
   gap: 10px;
+  justify-content: center;
 }
 
-.magnifying i {
-
+.magnifying button{
+  border:none;
+  padding: 0;
   color: black !important;
+  background-color: transparent;
 }
 
 html {
@@ -365,8 +394,8 @@ a.btn.blue-custom.black-btn.btn-hover-1:hover {
 }
 
 input.form-control.magnifying-input {
-  width: 400px;
-  margin: 30px 3px 20px 10px;
+  width: 100%;
+  margin: 30px 0px 20px 0px;
   border: 1px solid #bbbbbb;
   border-radius: 30px;
 }

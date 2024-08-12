@@ -146,10 +146,15 @@
                                     @endif
                                 </form>
 
-                                <div class="magnifying">
-                                    <form action="{{ route('shop') }}" method="GET" onsubmit="return validateSearch()">
+                                <div class="">
+                                    <form action="{{ route('shop') }}" method="GET" onsubmit="return validateSearch()" class="magnifying">
+                                        <div class="one-input-for-magnifying">
                                         <input type="text" name="search" class="form-control magnifying-input" placeholder="Search..">
+                                        </div>
+
+                                        <div class="one-input-for-magnifying">
                                         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                        </div>
                                     </form>
                         </div>
 
