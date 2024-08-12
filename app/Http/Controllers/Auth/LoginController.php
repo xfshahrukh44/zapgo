@@ -42,14 +42,37 @@ class LoginController extends Controller
                select('img_path')
                ->where('table_name','=','logo')
                ->first();
-       
+
           $favicon = imagetable::
                            select('img_path')
                            ->where('table_name','=','favicon')
-                           ->first();  
+                           ->first();
 
         View()->share('logo',$logo);
         View()->share('favicon',$favicon);
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (auth()->attempt($credentials)) {
+            $user = auth()->user();
+
+            if ($user->status == 0) {
+                auth()->logout();
+                return redirect()->back()->with('error', 'Your account is not verified. Please verify your email address.');
+            }
+
+            return redirect()->intended($this->redirectTo);
+        } else {
+            return redirect()->back()->with('error', 'Invalid email address or password.');
+        }
     }
 
     protected function authenticated(Request $request, $user)
@@ -58,10 +81,10 @@ class LoginController extends Controller
             ->performedOn($user)
             ->causedBy($user)
             ->log('LoggedIn');
-            
+
         $previousUrl = url()->previous();
         session()->put('previousUrl', $previousUrl);
-        
+
         // Check if the authenticated user is an admin
         if ($user->isAdmin()) {
             return redirect('admin/dashboard');
@@ -88,5 +111,5 @@ class LoginController extends Controller
 
         return redirect('/login');
     }
-    
+
 }

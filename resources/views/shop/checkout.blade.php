@@ -955,7 +955,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="inputAddress">Delivery/ Recovery Address</label>
+                                <label for="inputAddress">Address</label>
                                 <input type="text" class="form-control" name="address" id="inputAddress"
                                     fdprocessedid="p54q">
                             </div>
@@ -1024,7 +1024,7 @@
                             </div>
 
                             <div class="form-check">
-                                <label for="blankCheckbox">I agree to the Terms and Conditions</label>
+                                <label for="blankCheckbox">I agree to the <a href="{{ route('terms') }}">Terms and Conditions</a></label>
                                 <input class="form-check-input position-static" name="terms" type="checkbox"
                                     id="blankCheckbox" aria-label="...">
                             </div>

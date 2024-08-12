@@ -29,13 +29,13 @@ Route::get('/route-cache', function() {
 Route::get('/config-cache', function() {
  	Artisan::call('config:cache');
  	return 'Config cache has been cleared';
-}); 
+});
 
 // Clear view cache:
 Route::get('/view-clear', function() {
     Artisan::call('view:clear');
     return 'View cache has been cleared';
-});    
+});
 
 
 
@@ -132,14 +132,15 @@ Route::group(['middleware' => ['auth', 'roles'],'roles' => 'admin','prefix'=>'ad
     Route::get('activity-log/data', 'LogViewerController@activityLogData')->name('activity-log.data');
 
     #User Management routes
-    Route::get('users','Admin\\UsersController@Index');
-    Route::get('user/create','Admin\\UsersController@create');
-    Route::post('user/create','Admin\\UsersController@save');
-    Route::get('user/edit/{id}','Admin\\UsersController@edit');
-    Route::post('user/edit/{id}','Admin\\UsersController@update');
-    Route::get('user/delete/{id}','Admin\\UsersController@destroy');
-    Route::get('user/deleted/','Admin\\UsersController@getDeletedUsers');
-    Route::get('user/restore/{id}','Admin\\UsersController@restoreUser');
+    Route::get('users','Admin\\UsersController@Index')->name('admin.users.index');
+    Route::get('users/create','Admin\\UsersController@create')->name('admin.users.create');
+    Route::post('users/store','Admin\\UsersController@store')->name('admin.users.store');
+    Route::get('users/edit/{id}','Admin\\UsersController@edit')->name('admin.users.edit');
+    Route::post('users/update/{id}','Admin\\UsersController@update')->name('admin.users.update');
+    Route::get('users/delete/{id}','Admin\\UsersController@destroy')->name('admin.users.destroy');
+    Route::get('users/deleted/','Admin\\UsersController@getDeletedUsers');
+    Route::get('users/restore/{id}','Admin\\UsersController@restoreUser');
+    Route::post('users/verify','Admin\\UsersController@verifyUsers')->name('verify.otp');
 
 
     Route::resource('product', 'Admin\\ProductController');

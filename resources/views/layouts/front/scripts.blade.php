@@ -160,18 +160,26 @@ $('#contactform').on('submit',function(e){
 {{-- @endif --}}
 <script>
       $(document).ready(function() {
-    $(document).on('click', '.plus', function() {
-        // Increase the quantity by 1
-        var currentQuantity = parseInt($('.count').val()) || 0;
-        $('.count').val(currentQuantity + 1);
+        // Update the quantity increase logic
+        $(document).on('click', '.plus', function() {
+            var $qtyInput = $('.count');
+            var currentQuantity = parseInt($qtyInput.val()) || 0;
+            var stock = parseInt($('.quantity').data('stock')) || 0;
+
+            if (currentQuantity < stock) {
+                $qtyInput.val(currentQuantity + 1);
+            }
+        });
+
+        // Update the quantity decrease logic
+        $(document).on('click', '.minus', function() {
+            var $qtyInput = $('.count');
+            var currentQuantity = parseInt($qtyInput.val()) || 0;
+
+            $qtyInput.val(currentQuantity > 1 ? currentQuantity - 1 : 1);
+        });
     });
 
-    $(document).on('click', '.minus', function() {
-        // Decrease the quantity by 1, ensuring it doesn't go below 1
-        var currentQuantity = parseInt($('.count').val()) || 0;
-        $('.count').val(currentQuantity > 1 ? currentQuantity - 1 : 1);
-    });
-});
 </script>
 
 

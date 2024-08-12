@@ -14,6 +14,7 @@
             'id' => $product_id,
             'name' => $product->product_title,
             'qty' => $item['qty'],
+            'stock_inventory' => $product->stock_inventory,
             'delivery_charges' => $delivery_fee_config,
             'price_per_day' => $price_per_day,
             'price_per_week' => $price_per_week,
@@ -221,6 +222,7 @@
                                         $pricePerMonth = $value['price_per_month'];
                                         $envFee = $value['env_fee'];
                                         $taxes = $value['taxes'];
+                                        $stock_inventory = $value['stock_inventory'];
 
                                         $daysInMonth = 30;
                                         $daysInWeek = 7;
@@ -271,7 +273,7 @@
                                             {{-- <p>Environmental Fee:</p><p>$<span id="envsub{{ $value['id'] }}">{{ $env_fee_final }}</span></p>
                                             <p>Taxes:</p><p>$<span id="taxessub{{ $value['id'] }}">{{ $tax_final }}</span></p> --}}
                                             <p class="days">
-                                                Quantity: <input type="number" min="1" value="{{ $value['qty'] }}" name="qty[{{ $value['id'] }}]" class="input_qty form-control" id="qty{{ $value['id'] }}" style="width: 41% !important; margin-top: 10px;" data-product-id="{{ $value['id'] }}" disabled>
+                                                Quantity: <input type="number" min="1" max="{{ $stock_inventory ?? '' }}" oninput="validateQuantity(this)" value="{{ $value['qty'] }}" name="qty[{{ $value['id'] }}]" class="input_qty form-control" id="qty{{ $value['id'] }}" style="width: 41% !important; margin-top: 10px;" data-product-id="{{ $value['id'] }}" disabled>
                                             </p>
                                         </div>
                                     </div>
@@ -642,6 +644,14 @@
         // console.log('Price by Weeks:', priceByWeeks);
         // console.log('Price by Months:', priceByMonths);
         // console.log('Minimum Price:', minimumPrice);
+    }
+
+
+    function validateQuantity(input) {
+        const max = parseInt(input.getAttribute('max'), 10);
+        if (input.value > max) {
+            input.value = max;
+        }
     }
 
 
