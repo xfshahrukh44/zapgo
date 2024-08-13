@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="equipment">
-                        <h1><span class="d-block">{{ $page->page_name ?? 'Get A Qoute' }} </span></h1>
+                        <h1><span class="d-block">{{ $page->page_name ?? 'Qoute' }} </span></h1>
                     </div>
                 </div>
 
@@ -17,6 +17,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-12">
+                    <h3>View quote status in customer dashboard</h3>
                     <div class="modal-body">
                         <div class="main-form-news">
                             @if ($errors->any())
@@ -72,7 +73,7 @@
                                             <option value="" selected disabled>Select Delivery Time</option>
                                             <option value="Available All Time">Available All Time</option>
                                             <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
-                                            <option value="09:00 AM - 11:00 PM">09:00 AM - 11:00 AM</option>
+                                            <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
                                             <option value="01:00 PM - 03:00 PM">01:00 PM - 03:00 PM</option>
                                         </select>
                                     </div>
@@ -81,7 +82,7 @@
                                             <option value="" selected disabled>Select Recovery Time</option>
                                             <option value="Available All Time">Available All Time</option>
                                             <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
-                                            <option value="09:00 AM - 11:00 PM">09:00 AM - 11:00 AM</option>
+                                            <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
                                             <option value="01:00 PM - 03:00 PM">01:00 PM - 03:00 PM</option>
                                         </select>
                                     </div>

@@ -97,7 +97,6 @@ class RegisterController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator->errors())->withInput();
         }
-        return $request;
         $previousUrl = url()->previous();
         session()->put('previousUrl', $previousUrl);
 
@@ -134,7 +133,7 @@ class RegisterController extends Controller
             'city' => $data['city'],
             'state' => $data['state'],
             'zip'   => $data['zip'],
-            'role'   => $data['role']
+            'role'   => $data['role'] ?? 2
 
         ]);
     }

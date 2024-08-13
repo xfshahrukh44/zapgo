@@ -72,6 +72,8 @@ class LoginController extends Controller
             $redirect = $request->input('redirect');
             if ($redirect == 'get_a_qoute') {
                 return redirect()->route('get_a_qoute');
+            }else if ($redirect == 'checkout'){
+                return redirect()->route('checkout');
             }
 
             return redirect()->intended($this->redirectTo);

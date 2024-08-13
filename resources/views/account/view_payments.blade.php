@@ -31,7 +31,8 @@
                                     <small class="page-info">
                                         <i class="fa fa-angle-double-right text-80"></i>
                                         ID: #{{$quote->id}}
-                                    </small></h3>
+                                    </small>
+                                    </h3>
                                 </div>
                             </div>
                         </div>
@@ -83,6 +84,14 @@
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Date range:</span> {{ $quote->start_date.' to '.$quote->end_date }}</div>
 
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Number of days:</span> {{$quote->number_of_days}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Rental Start:</span> {{$quote->start_date}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Rental End:</span> {{$quote->end_date}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Delivery Time:</span> {{$quote->delivery_time}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Recovery Time:</span> {{$quote->pickup_time}}</div>
                             </div>
                         </div>
                         <!-- /.col -->
@@ -105,7 +114,7 @@
                             @endphp
                             @foreach ($quote->quote_products as $val)
                             @php
-                               $quote_product_arr[] = $val->id; 
+                               $quote_product_arr[] = $val->id;
                             @endphp
                             <div class="row mb-2 mb-sm-0 py-25">
                                 <div class="d-none d-sm-block col-1">{{ $count }}</div>
@@ -114,7 +123,7 @@
                                 <div class="d-none d-sm-block col-2 text-95">{{$val->quantity}}</div>
                                 <div class="col-2 text-secondary-d2">${{$val->price}}</div>
                             </div>
-                            @php 
+                            @php
                                 $subtotal+= $val->item_price * $val->quantity;
                                 $count++;
                             @endphp
@@ -144,8 +153,17 @@
                                 <div class="d-none d-sm-block col-2 text-95">---</div>
                                 <div class="col-2 text-secondary-d2">${!! number_format($rentalProtection_final, 2) !!}</div>
                             </div>
+                            @if($quote->discount != null)
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 1 }}</div>
+                                <div class="col-9 col-sm-5">Admin Price</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($quote->discount, 2) !!}</div>
+                            </div>
+                            @endif
                         </div>
-                        
+
 
                         <div class="row border-b-2 brc-default-l2"></div>
 
@@ -154,15 +172,15 @@
                                 {{-- {{$quote->order_notes}} --}}
                             </div>
                             <div class="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
-                                <div class="row my-2">
+                                {{-- <div class="row my-2">
                                     <div class="col-7 text-right">
                                         SubTotal
                                     </div>
                                     <div class="col-5">
                                         <span class="text-120 text-secondary-d1">${!! number_format($subtotal, 2) !!}</span>
                                     </div>
-                                </div>
-                                @if($quote->discount != null)
+                                </div> --}}
+                                {{-- @if($quote->discount != null)
                                 <div class="row my-2">
                                     <div class="col-7 text-right">
                                         Admin Price
@@ -171,7 +189,7 @@
                                         <span class="text-110 text-secondary-d1">${!! number_format($quote->discount, 2) !!}</span>
                                     </div>
                                 </div>
-                                @endif
+                                @endif --}}
                                 {{-- @if($quote->bulk_status == 1)
                                 <div class="row my-2">
                                     <div class="col-7 text-right">
@@ -212,7 +230,7 @@
 
                         <hr />
                         @if ($quote->status == 2)
-                        
+
                         <h2 class="accordion-header" id="flush-headingTwo">
 
                             Pay with Credit Card
@@ -222,8 +240,8 @@
                         <form action="{{ route('getQuoteOrder') }}" method="POST" id="order-place">
                             @csrf
 
-                            @php 
-                                $user_name = $quote->first_name . ' ' . $quote->last_name; 
+                            @php
+                                $user_name = $quote->first_name . ' ' . $quote->last_name;
                                 $quote_prod_ids = implode(',', $quote_product_arr);
                             @endphp
                             <input type="hidden" name="payment_id" value="" />

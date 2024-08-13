@@ -253,6 +253,9 @@
         a.cart_icons {
             pointer-events: none;
         }
+        a.cart_icons1 {
+            pointer-events: none;
+        }
     </style>
 @endsection
 @section('content')
@@ -549,7 +552,7 @@
                                                 name="delivery_time" required>
                                                 <option value="Available All Time" selected>Available All Time</option>
                                                 <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
-                                                <option value="09:00 AM - 11:00 PM">09:00 AM - 11:00 AM</option>
+                                                <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
                                                 <option value="01:00 PM - 03:00 PM">01:00 PM - 03:00 PM</option>
                                             </select>
                                             {{-- <span class="invalid-feedback">
@@ -563,7 +566,7 @@
                                                 name="pickup_time" required>
                                                 <option value="Available All Time" selected>Available All Time</option>
                                                 <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
-                                                <option value="09:00 AM - 11:00 PM">09:00 AM - 11:00 AM</option>
+                                                <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
                                                 <option value="01:00 PM - 03:00 PM">01:00 PM - 03:00 PM</option>
                                             </select>
                                             {{-- <span class="invalid-feedback">
@@ -892,7 +895,7 @@
                     <div class="pickup-main">
                         <form class="loginForm" method="POST" action="{{ route('register') }}">
                             @csrf
-
+                            <input type="hidden" name="redirect" value="checkout">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="inputEmail4">First Name</label>

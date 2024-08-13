@@ -22,7 +22,7 @@
     </div>
 </section>
 
-    <div class="top-prog-sec top-prog-sec2 contact-sec">
+    <div class="top-prog-sec top-prog-sec2 contact-sec" style=" margin-top: 30px; ">
    <section class="inpage featurePro">
   <div class="container">
     <div class="row">
@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="company_name" class="form-label">Company Name* why do we need your company name? ZapGO Rentals only provides. equipment rental to other Business.</label>
+                    <label for="company_name" class="form-label">Company Name* why do we need your company name? ZapGO Rentals only. equipment rental to other Business.</label>
                     <input type="text" class="form-control" id="company_name" name="company_name" value="{{ old('company_name') }}" required>
                 </div>
 
@@ -152,7 +152,7 @@
 
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" id="terms_conditions" name="terms" {{ old('terms') ? 'checked' : '' }} required>
-                    <label class="form-check-label" for="terms_conditions">I agree to the Terms and Conditions</label>
+                    <label class="form-check-label" for="terms_conditions">I agree to the <a href="{{ route('terms') }}">Terms and Conditions</a></label>
                 </div>
 
                 <div class="mb-3 text-center">

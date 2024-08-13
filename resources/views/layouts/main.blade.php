@@ -301,6 +301,9 @@ p.text {
             a.cart_icons {
                 position: relative;
             }
+            a.cart_icons1 {
+                position: relative;
+            }
 
             span.cart_counts {
                 position: absolute;

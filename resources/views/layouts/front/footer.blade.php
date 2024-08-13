@@ -256,6 +256,7 @@
                     <div class="pickup-main">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
+                            <input type="hidden" name="redirect" value="checkout">
                             <div class="form-group">
                                 <label for="inputAddress">Email</label>
                                 <input type="email"

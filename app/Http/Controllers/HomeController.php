@@ -213,8 +213,10 @@ else
                 $bulkOrders->quantity = $request->quantity;
                 $bulkOrders->amount = $total;
                 $bulkOrders->transaction_id = $transactionID;
+                $bulkOrders->quote_id = $getOrderQuote->id;
                 $bulkOrders->quote_prod_ids = $request->quote_prod_ids;
                 $bulkOrders->status = $payment_status;
+                $bulkOrders->invoice_url = $chargeJson['receipt_url'];
                 $bulkOrders->save();
 
                 return redirect()->back()->with('message', 'Order Completed');

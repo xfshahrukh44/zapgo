@@ -31,7 +31,9 @@
                                     <small class="page-info">
                                         <i class="fa fa-angle-double-right text-80"></i>
                                         ID: #{{$bulkOrders->id}}
-                                    </small></h3>
+                                    </small>
+                                </h3>
+                                <span ><a href="{{ $bulkOrders->invoice_url }}" class="btn btn-primary" target="_blank">View Slip</a></span>
                                 </div>
                             </div>
                         </div>
@@ -83,6 +85,10 @@
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Order Date:</span> {{date('d F, Y h:i a',strtotime($bulkOrders->created_at))}}</div>
 
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Transaction:</span> {{$bulkOrders->transaction_id}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Rental Start:</span> {{$quote->start_date}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Rental End:</span> {{$quote->end_date}}</div>
 
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Delivery Time:</span> {{$quote->delivery_time}}</div>
 
@@ -147,6 +153,15 @@
                                 <div class="d-none d-sm-block col-2 text-95">---</div>
                                 <div class="col-2 text-secondary-d2">${!! number_format($rentalProtection_final, 2) !!}</div>
                             </div>
+                            @if($quote->discount != null)
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{ $count + 1 }}</div>
+                                <div class="col-9 col-sm-5">Admin Price</div>
+                                <div class="d-none d-sm-block col-2">---</div>
+                                <div class="d-none d-sm-block col-2 text-95">---</div>
+                                <div class="col-2 text-secondary-d2">${!! number_format($quote->discount, 2) !!}</div>
+                            </div>
+                            @endif
                         </div>
 
 
@@ -157,15 +172,15 @@
                                 {{-- {{$quote->order_notes}} --}}
                             </div>
                             <div class="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
-                                <div class="row my-2">
+                                {{-- <div class="row my-2">
                                     <div class="col-7 text-right">
                                         SubTotal
                                     </div>
                                     <div class="col-5">
                                         <span class="text-120 text-secondary-d1">${!! number_format($subtotal, 2) !!}</span>
                                     </div>
-                                </div>
-                                @if($quote->discount != null)
+                                </div> --}}
+                                {{-- @if($quote->discount != null)
                                 <div class="row my-2">
                                     <div class="col-7 text-right">
                                         Admin Price
@@ -174,7 +189,7 @@
                                         <span class="text-110 text-secondary-d1">${!! number_format($quote->discount, 2) !!}</span>
                                     </div>
                                 </div>
-                                @endif
+                                @endif --}}
                                 {{-- @if($quote->bulk_status == 1)
                                 <div class="row my-2">
                                     <div class="col-7 text-right">
@@ -340,6 +355,14 @@ hr {
 }
 .align-bottom {
     vertical-align: bottom!important;
+}
+
+.section-heading.dark-color {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+    margin-left: auto;
 }
 
 

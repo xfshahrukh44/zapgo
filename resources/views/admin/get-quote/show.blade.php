@@ -290,7 +290,25 @@
                                 <div class="order-detail">
                                     <h3>Total Product Amount</h3>
                                     <div class="order-box">
-                                        {{ number_format($subtotal, 2) }}
+                                        @php
+                                        $deliveryFee = App\Http\Traits\HelperTrait::returnFlag(1974);
+                                        $rentalProtection = App\Http\Traits\HelperTrait::returnFlag(1975);
+                                        $rentalProtection_final = ($rentalProtection / 100) * $subtotal;
+                                        $total = $subtotal + $deliveryFee + $rentalProtection_final;
+                                        @endphp
+                                        <div class="pname item">
+                                            <h4>Delivery Fee: </h4>
+                                            <h4>${{ $deliveryFee }}</h4>
+                                        </div>
+                                        <div class="pname item">
+                                            <h4>Rental Protection Fee: </h4>
+                                            <h4>${{ $rentalProtection_final }}</h4>
+                                        </div>
+                                        <div class="price item">
+                                            <h5>Total: </h5>
+                                                <h4>$<span id="total">{{ number_format($total, 2) }}</span></h4>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -311,7 +329,7 @@
                                         <form>
 
                                             <input type="hidden" id="quote_id" value="{{ $getquote->id }}">
-                                            <input type="hidden" id="subtotal" value="{{ $subtotal }}">
+                                            <input type="hidden" id="subtotal" value="{{ $total }}">
                                             <!--<input type="number" step="any" name="total_amount" id="total_amount">-->
                                             <!--<input type="button" class="btn btn-primary" id="submitButton" value="Add">-->
                                             @if($getquote->status == 2)

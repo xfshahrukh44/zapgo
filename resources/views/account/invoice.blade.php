@@ -83,6 +83,8 @@
                                 @if($order->transaction_id != '')
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Transaction ID:</span> {{$order->transaction_id}}</div>
                                 @endif
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Rental Start:</span> {{ date('m-d-Y', strtotime($order->start_date)) }}</div>
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Rental End:</span> {{ date('m-d-Y', strtotime($order->end_date)) }}</div>
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Delivery Time:</span> {{$order->delivery_time}}</div>
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Recovery Time:</span> {{$order->pickup_time}}</div>
                             </div>

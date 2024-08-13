@@ -102,7 +102,7 @@ class LoggedInController extends Controller
 	public function view_quotes($id)
     {
 		$quote = GetQuote::with('quote_products')->find($id);
-		$bulkOrders = Bulkorder::where('qoute_id', $id)->first();
+		$bulkOrders = Bulkorder::where('quote_id', $id)->first();
 		return view('account.view_quote',['quote'=>$quote, 'bulkOrders' => $bulkOrders]);
 
 	}
