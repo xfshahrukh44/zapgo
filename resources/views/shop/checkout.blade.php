@@ -859,7 +859,7 @@
                                                     <div class="form-group">
                                                         <button class="btn btn-red btn-block blue-custom" type="button"
                                                             id="stripe-submit">Pay Now
-                                                            ${{ number_format($estimatedSubtotal) }}</button>
+                                                            ${{ number_format($estimatedSubtotal, 2) }}</button>
                                                     </div>
                                                 </div>
                                             </div>
