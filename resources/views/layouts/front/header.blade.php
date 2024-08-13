@@ -93,7 +93,7 @@
 
 <!-- </div> -->
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                <ul class="navbar-nav m-auto mb-2 mb-lg-0">
                                     {{-- <li class="nav-item active">
                                         <a class="nav-link active" aria-current="page"
                                             href="{{ route('home') }}">Home</a>
@@ -151,9 +151,9 @@
                                     @else
                                         {{-- User is not signed in, show the Sign in and Sign up buttons --}}
 
-                                        <a class="btn blue-custom black-btn btn-hover-1" href="{{ route('signin') }}">Sign
-                                            in</a>
-                                        <a class="btn blue-custom btn-hover-2" href="{{ route('signup') }}">Sign up</a>
+                                        <a class="signup_img" href="{{ route('signin') }}"><img src="{{url('assets/imgs/login.png')}}" alt="" title="Signin">
+                                        </a>
+                                        <a class="signup_img" href="{{ route('signup') }}"><img src="{{url('assets/imgs/signup.png')}}" alt="" title="Signup"></a>
                                         <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" class="cart_icons">
                                             <span class="cart_counts">{{ (Session::get('cart') != null) ? count(Session::get('cart')) : 0 }}</span>
                                             <img src="{{ asset('images/12.png') }}" class="img-fluid" alt="">
