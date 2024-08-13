@@ -1,3 +1,9 @@
+@media (min-width: 1440px) {
+    .cart-mobile {
+        display: none;
+    }
+}
+
 @media (max-width: 2000px) {
 
   .magnifying{
@@ -15,6 +21,10 @@
     color: black !important;
     border: 1px solid black !important;
   }
+
+  .cart-mobile {
+        display: none;
+    }
 
 }
 
