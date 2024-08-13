@@ -153,7 +153,7 @@
 
                                         <a class="signup_img" href="{{ route('signin') }}"><img src="{{url('assets/imgs/login.png')}}" alt="" title="Signin">
                                         </a>
-                                        <a class="signup_img" href="{{ route('signup') }}"><img src="{{url('assets/imgs/signup.png')}}" alt="" title="Signup"></a>
+                                        {{-- <a class="signup_img" href="{{ route('signup') }}"><img src="{{url('assets/imgs/signup.png')}}" alt="" title="Signup"></a> --}}
                                         <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" class="cart_icons">
                                             <span class="cart_counts">{{ (Session::get('cart') != null) ? count(Session::get('cart')) : 0 }}</span>
                                             <img src="{{ asset('images/12.png') }}" class="img-fluid" alt="">
