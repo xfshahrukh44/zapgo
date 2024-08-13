@@ -17,7 +17,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-12">
-                    <h3>View quote status in customer dashboard</h3>
+                    <h3 class="custom-head">View quote status in customer dashboard</h3>
                     <div class="modal-body">
                         <div class="main-form-news">
                             @if ($errors->any())
@@ -227,6 +227,13 @@
             margin-bottom: 1rem;
             border: 1px solid transparent;
             border-radius: .25rem;
+        }
+
+        .custom-head {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
         }
     </style>
 @endsection
