@@ -68,6 +68,22 @@
                             <a class="navbar-brand" id="logo-main" href="{{ route('home') }}"><img
                                     src="{{ asset($logo->img_path) }}" class="img-fluid" alt=""></a>
 
+                                @if (Auth::check())
+                                    @if (Auth::user()->role == '1')
+                                    @elseif (Auth::user()->role == '2' || Auth::user()->role == '3')
+                                        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" class="cart_icons cart-mobile">
+                                            <span class="cart_counts">{{ (Session::get('cart') != null) ? count(Session::get('cart')) : 0 }}</span>
+                                            <img src="{{ asset('images/12.png') }}" class="img-fluid" alt="">
+                                        </a>
+                                    @endif
+                                @else
+                                    <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" class="cart_icons cart-mobile">
+                                        <span class="cart_counts">{{ (Session::get('cart') != null) ? count(Session::get('cart')) : 0 }}</span>
+                                        <img src="{{ asset('images/12.png') }}" class="img-fluid" alt="">
+                                    </a>
+
+                                @endif
+
                                     <!-- <div class="magnifying-main"> -->
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
