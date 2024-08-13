@@ -3,7 +3,7 @@
     width: 80px;
     margin-top: -2px;
     object-fit: contain;
-    filter: brightness(0) invert(1);
+    /* filter: brightness(0) invert(1); */
 }
 li.nav-item.mr-auto.brand-logo-wrapper {
     width: 100%;

@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="equipment">
-                        <h1><span class="d-block">{{ $page->page_name ?? 'Qoute' }} </span></h1>
+                        <h1><span class="d-block">{{ $page->page_name ?? 'Quote' }} </span></h1>
                     </div>
                 </div>
 
