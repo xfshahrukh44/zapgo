@@ -77,6 +77,7 @@
     .media {
         display: flex;
         gap: 10px;
+        justify-content: center;
     }
 
     .media a {
@@ -306,19 +307,24 @@
 <div class="bottom-div">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <ul class="footer-menu">
                     <li><a href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
                     <li><a href="{{ route('terms') }}">Terms & Conditions</a></li>
                     <li><a href="{{ route('rental-agreement') }}">Rental Agreement</a></li>
                 </ul>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="right-reserved">
                     <p>{!! App\Http\Traits\HelperTrait::returnFlag(499) !!}</p>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
+                <div class="text-center">
+                    <img src="{{ asset('assets/imgs/dmca_protected_sml_120m.png') }}" alt="">
+                </div>
+            </div>
+            <div class="col-lg-3">
                <div class="media">
                    @php
                        $facebookUrl = App\Http\Traits\HelperTrait::returnFlag(682);
@@ -327,23 +333,24 @@
                        $youtubeUrl = App\Http\Traits\HelperTrait::returnFlag(1964);
                    @endphp
 
-                   @if($facebookUrl)
+                   {{-- @if($facebookUrl) --}}
                        <a href="{{ $facebookUrl }}"><i class="fa-brands fa-facebook-f"></i></a>
-                   @endif
+                   {{-- @endif --}}
 
-                   @if($twitterUrl)
+                   {{-- @if($twitterUrl) --}}
                        <a href="{{ $twitterUrl }}"><i class="fa-brands fa-twitter"></i></a>
-                   @endif
+                   {{-- @endif --}}
 
-                   @if($instagramUrl)
+                   {{-- @if($instagramUrl) --}}
                        <a href="{{ $instagramUrl }}"><i class="fa-brands fa-instagram"></i></a>
-                   @endif
+                   {{-- @endif --}}
 
-                   @if($youtubeUrl)
+                   {{-- @if($youtubeUrl) --}}
                        <a href="{{ $youtubeUrl }}"><i class="fa-brands fa-youtube"></i></a>
-                   @endif
+                   {{-- @endif --}}
                </div>
-           </div>
+            </div>
+
 
 
         </div>
