@@ -100,6 +100,17 @@
     .media a i.fa-brands.fa-facebook-f {
         padding: 11px 14px;
     }
+
+    .ada-comp {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 9999;
+    }
+
+    .ada-comp img {
+        max-width: 99px;
+    }
 </style>
 <footer>
     <div class="container" id="footer-form">
@@ -322,6 +333,7 @@
             <div class="col-lg-3">
                 <div class="text-center">
                     <img src="{{ asset('assets/imgs/dmca_protected_sml_120m.png') }}" alt="">
+                    <img src="{{ asset('assets/imgs/ada-images.png') }}" alt="" style=" height: 55px; margin-left: 11px; ">
                 </div>
             </div>
             <div class="col-lg-3">
@@ -333,21 +345,13 @@
                        $youtubeUrl = App\Http\Traits\HelperTrait::returnFlag(1964);
                    @endphp
 
-                   {{-- @if($facebookUrl) --}}
-                       <a href="{{ $facebookUrl }}"><i class="fa-brands fa-facebook-f"></i></a>
-                   {{-- @endif --}}
+                    <a href="{{ $facebookUrl }}"><i class="fa-brands fa-facebook-f"></i></a>
 
-                   {{-- @if($twitterUrl) --}}
-                       <a href="{{ $twitterUrl }}"><i class="fa-brands fa-twitter"></i></a>
-                   {{-- @endif --}}
+                    <a href="{{ $twitterUrl }}"><i class="fa-brands fa-twitter"></i></a>
 
-                   {{-- @if($instagramUrl) --}}
-                       <a href="{{ $instagramUrl }}"><i class="fa-brands fa-instagram"></i></a>
-                   {{-- @endif --}}
+                    <a href="{{ $instagramUrl }}"><i class="fa-brands fa-instagram"></i></a>
 
-                   {{-- @if($youtubeUrl) --}}
-                       <a href="{{ $youtubeUrl }}"><i class="fa-brands fa-youtube"></i></a>
-                   {{-- @endif --}}
+                    <a href="{{ $youtubeUrl }}"><i class="fa-brands fa-youtube"></i></a>
                </div>
             </div>
 
@@ -428,7 +432,9 @@
 @endforeach
 
 
-
+<div class="ada-comp">
+    <img src="{{ asset('assets/imgs/ADA-accesibility-logo-icon.png') }}" alt="">
+</div>
 
 </body>
 
