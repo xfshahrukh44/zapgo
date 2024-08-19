@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('{any}', function () {
+//     abort(404, 'Not Found');
+// })->where('any', '.*');
+
 // Clear application cache:
 Route::get('/clear-cache', function() {
     Artisan::call('cache:clear');

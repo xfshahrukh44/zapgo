@@ -432,9 +432,9 @@
 @endforeach
 
 
-<div class="ada-comp">
-    <img src="{{ asset('assets/imgs/ADA-accesibility-logo-icon.png') }}" alt="">
-</div>
+<!--<div class="ada-comp">-->
+<!--    <img src="{{ asset('assets/imgs/ADA-accesibility-logo-icon.png') }}" alt="">-->
+<!--</div>-->
 
 </body>
 
