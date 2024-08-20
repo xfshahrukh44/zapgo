@@ -552,6 +552,9 @@
                                                 name="delivery_time" required>
                                                 <option value="Available All Time" selected>Available All Time</option>
                                                 <option value="05:00 AM - 07:00 AM">05:00 AM - 07:00 AM</option>
+                                                <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
+                                                <option value="09:00 AM- 11:00 AM">09:00 AM- 11:00 AM</option>
+                                                <option value="01:00 PM- 03:00 PM">01:00 PM- 03:00 PM</option>
                                                 <option value="03:00 PM - 06:00 PM">03:00 PM - 06:00 PM</option>
                                                 <option value="06:00 PM - 09:00 PM">06:00 PM - 09:00 PM</option>
                                             </select>
@@ -566,6 +569,9 @@
                                                 name="pickup_time" required>
                                                 <option value="Available All Time" selected>Available All Time</option>
                                                 <option value="05:00 AM - 07:00 AM">05:00 AM - 07:00 AM</option>
+                                                <option value="07:00 AM - 09:00 AM">07:00 AM - 09:00 AM</option>
+                                                <option value="09:00 AM- 11:00 AM">09:00 AM- 11:00 AM</option>
+                                                <option value="01:00 PM- 03:00 PM">01:00 PM- 03:00 PM</option>
                                                 <option value="03:00 PM - 06:00 PM">03:00 PM - 06:00 PM</option>
                                                 <option value="06:00 PM - 09:00 PM">06:00 PM - 09:00 PM</option>
                                             </select>
