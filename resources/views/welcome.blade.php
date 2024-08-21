@@ -110,7 +110,7 @@
                     $isRoleThree = Auth::user()->role == 3;
                 @endphp
                 @foreach ($randomproducts as $key => $items)
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-md-3 col-12">
                         <div class="main-center random-products">
                             <div class="purification">
                                 <img src="{{ asset($items->image) }}" class="img-fluid" alt="">
@@ -236,7 +236,7 @@
     <section class="helping-sec">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-md-6 col-12">
                     <div class="commited">
                         {!! $section[6]->value !!}
                         <div class="mt-5">
@@ -244,7 +244,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-md-6 col-12">
                     <div class="eleven" data-aos="fade-down" data-aos-duration="2000">
                         <figure>
                             <img src="{{ asset('images/11.png') }}" class="img-fluid" alt="">

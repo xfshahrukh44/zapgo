@@ -115,7 +115,7 @@
 <footer>
     <div class="container" id="footer-form">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6 col-12">
                 <div class="form-h">
                     <h6>contact us</h6>
                     <h2>Get in touch with us</h2>
@@ -149,12 +149,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-6 col-12">
                 <div class="side-form">
                     <form id="contactform">
                         @csrf
                         <input type="hidden" name="form_name" value="contact">
                         <div class="row">
+                            <div class="col-12">
                             <div class="form-group">
                                 <label>Your Name (*)</label>
                                 <input type="text" name="name" class="form-control" id="" required="">
@@ -187,6 +188,7 @@
                             </div>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,7 +197,7 @@
     {{-- @if (Auth::check() && Auth::user()->role == 2) --}}
         <div class="container" id="feedback-form" style="margin-top: 61px;">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-md-6 col-12">
                     <div class="form-h">
                         <h6>Feedback form</h6>
                         <h2>Give us feedback</h2>
@@ -318,25 +320,25 @@
 <div class="bottom-div">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-3 col-12">
                 <ul class="footer-menu">
                     <li><a href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
                     <li><a href="{{ route('terms') }}">Terms & Conditions</a></li>
                     <li><a href="{{ route('rental-agreement') }}">Rental Agreement</a></li>
                 </ul>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-3 col-12">
                 <div class="right-reserved">
                     <p>{!! App\Http\Traits\HelperTrait::returnFlag(499) !!}</p>
                 </div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-3 col-12">
                 <div class="text-center">
                     <img src="{{ asset('assets/imgs/dmca_protected_sml_120m.png') }}" alt="">
                     <img src="{{ asset('assets/imgs/ada-images.png') }}" alt="" style=" height: 55px; margin-left: 11px; ">
                 </div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-3 col-12">
                <div class="media">
                    @php
                        $facebookUrl = App\Http\Traits\HelperTrait::returnFlag(682);

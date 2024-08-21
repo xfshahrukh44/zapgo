@@ -1,8 +1,4 @@
-@media (min-width: 1440px) {
-    .cart-mobile {
-        display: none;
-    }
-}
+
 
 @media (max-width: 2000px) {
 
@@ -30,6 +26,10 @@
 
 
 @media (max-width: 1440px) {
+    
+     .cart-mobile {
+        display: none;
+    }
   .equipment h1 {
     font-size: 75px;
   }
@@ -182,21 +182,21 @@ input.form-control.magnifying-input {
 
 @media (max-width: 576px) {
   .equipment h1 {
-    font-size: 45px;
+    font-size: 35px;
     line-height: 1;
 }
 
 .equipment h1 span{
-  font-size: 45px !important;
+  font-size: 35px !important;
 }
 
 .rent-sec {
-  height: 650px !important;
+  height: 500px !important;
 }
 
 .from-mid {
-  width: 97%;
-  padding: 15px 10px;
+        width: 100%;
+        padding: 10px 5px;
 }
 
 .from-mid .form-group .form-control {
@@ -247,7 +247,7 @@ input.form-control.magnifying-input {
 }
 
 .on-para {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .john-doe h5 {
@@ -283,7 +283,7 @@ button.owl-next, .owl-carousel .owl-nav {
 }
 
 .equipment p {
-  width: 60%;
+  width: 100%;
 }
 
 .blue-custom {
@@ -431,4 +431,161 @@ input.form-control.magnifying-input {
     display: none;
 }
 
+#logo-main img {
+    width: 100px;
+}
+
+.cart-mobile img {
+    width: 25px;
+}
+
+span.cart_counts {
+    padding: 1px 5px;
+    font-size: 10px;
+}
+
+
+.range-slides p {
+    width: 100%;
+}
+
+h2.animate-charcter {
+    font-size: 22px !important;
+    margin-top: 20px;
+}
+
+
+.purification {
+    justify-content: center;
+}
+
+.mid-slides {
+    color: white;
+}
+
+.range-slides:before {
+    bottom: -20px;
+}
+
+.range-slides {
+    padding-bottom: 0;
+}
+
+.recently_viewed {
+    padding: 50px 0;
+}
+
+.recently_viewed .main-center {
+    margin-bottom: 50px;
+}
+.random-products .mid-slides {
+    height: 150px !important;
+}
+
+.f-tour {
+    margin-bottom: 30px;
+}
+
+.local-town {
+    padding: 50px 0;
+}
+
+.bulb-div figure {
+    height: 45px;
+}
+
+.bulb-div {
+    border-radius: 10px;
+    padding: 10px 10px;
+}
+
+.blub-h p {
+    width: 100%;
+}
+
+.home-ab {
+    padding-bottom: 0;
+}
+
+.helping-sec {
+    padding-top: 10px;
+}
+.commited p {
+    width: 100%;
+}
+.customer-say {
+    padding: 10px;
+    padding-bottom: 70px;
+}
+
+  
+.on-para p {
+    font-size: 15px;
+}
+.john-doe {
+    margin-top: 80px;
+}
+
+.client-r h3 {
+    font-size: 25px;
+    margin-top: 30px;
+}
+
+.form-h h2 {
+    font-size: 30px;
+}
+
+.office-call a {
+    font-size: 15px;
+}
+
+.office-call span {
+    font-size: 15px;
+}
+
+.office-call {
+    display: block;
+}
+
+.calls {
+    padding: 0;
+}
+
+.office-call p {
+    width: 100%;
+    font-size: 15px;
+}
+
+.calls h5 {
+    font-size: 16px;
+}
+.bottom-div {
+    padding: 10px;
+}
+
+ul.footer-menu {
+    margin-bottom: 14px;
+    justify-content: center;
+}
+
+.right-reserved p {
+    margin-bottom: 10px;
+}
+
+.media {
+    margin-top: 20px;
+}
+form#contactform {
+    margin-top: 40px;
+}
+.rent-sec.about-inner {
+    height: 250px !important;
+}
+
+.equipment {
+    margin-top: 90px;
+}
+.equipment h1 span {
+    margin: unset !important;
+}
 }
