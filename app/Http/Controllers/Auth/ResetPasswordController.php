@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use App\imagetable;
 
 
 
@@ -37,20 +38,20 @@ class ResetPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        
+
         $logo = imagetable::
                      select('img_path')
                      ->where('table_name','=','logo')
                      ->first();
-             
+
         $favicon = imagetable::
                      select('img_path')
                      ->where('table_name','=','favicon')
-                     ->first();  
+                     ->first();
 
         View()->share('logo',$logo);
         View()->share('favicon',$favicon);
-        
+
     }
 
 }

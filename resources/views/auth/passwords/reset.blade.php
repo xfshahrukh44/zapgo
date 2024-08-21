@@ -2,82 +2,123 @@
 
 @section('content')
 
-    <div class="slide-main">
-      <div class="container">
-        <div class="slide-cap inn-slide-cap text-right" data-aos="fade-up"
-          data-aos-duration="3000">
-          <div class="detail-text">
-            <h1>Reset Password</h1>
-          </div>
-        </div>
-      </div>
-    </div>
+@section('css')
+<style>
+.form-container.sign-in-container.col-md-6 {
+    margin: 0 auto;
+}
+.rent-sec {
+  background-image: url({{ asset('images/2.png') }}) !important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 800px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 0;
+}
 
-    <div class="container">
-        <div class="page-wrapper m-0 pt-5">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-4 col-12">
-                        <div class="card border-0">
-                            
-                                <form method="POST" class="form bordered-input" action="{{ route('password.update') }}">
-                                    @csrf
-                                    <input type="hidden" name="token" value="{{ $token }}">
+.about-inner {
+  height: 365px !important;
+  align-items: center;
+}
+
+.equipment h1 span {
+    margin-top: 179px;
+}
+
+.btn-yellow{
+    background: var(--blue-color);
+    padding: 15px 32px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--white-color) !important;
+    font-family: Proxima-Nova-Font;
+    /* margin-left: 300px; */
+    margin-top: 15px;
+}
 
 
-                                    <div class="p-30 pb-0">
-                                        <h4>Reset Password</h4>
+.custom input{
+    height: 55px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
 
-                                        <div class="form-group m-t-20 row">
-                                            <div class="col-12">
-                                                <label class="col-form-label font-12 text-primary p-0">Email Address</label>
-                                                <input class="form-control pl-0 font-12 {{ $errors->has('email') ? ' is-invalid' : '' }}" type="email" placeholder="Email" name="email" >
-                                                @if ($errors->has('email'))
-                                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="form-group row m-b-30">
-                                            <div class="col-12">
-                                                <label class="col-form-label font-12 text-primary p-0">Password</label>
-                                                <input class="form-control  pl-0 font-12 {{ $errors->has('password') ? ' is-invalid' : '' }}"  type="password" name="password" placeholder="password" >
-                                                @if ($errors->has('password'))
-                                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="form-group row m-b-20">
-                                            <div class="col-12">
-                                                <input id="password-confirm" type="password" class="form-control  pl-0 font-12" name="password_confirmation"  placeholder="Confirm password" >
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
+#footer-form,#feedback-form {
+    display: none;
+}
 
-                                        <div class="form-group row m-b-10">
-                                            <div class="col-12">
-                                                <p><button type="submit" class="btn btn-rounded btn-primary m-b-20 btn-block waves-effect waves-light d-block">Reset Password</button></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </form>
-                            
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="text-center mt-5">
-                            <ul class="social-network social-circle">
-                                <li><a href="#" class="icoFacebook" title="Facebook"><i class="mdi mdi-facebook"></i></a></li>
-                                <li><a href="#" class="icoTwitter" title="Twitter"><i class="mdi mdi-twitter"></i> </a></li>
-                                <li><a href="#" class="icoGoogle" title="Google +"><i class="mdi mdi-google-plus"></i></a></li>
-                            </ul>
-                        </div>
+
+
+
+</style>
+@endsection
+
+    <section class="rent-sec about-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="equipment">
+                        <h1><span class="d-block">Reset Password</span></h1>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="account">
+    <div class="container" id="from-wrapper">
+        <div class="form-container sign-in-container col-md-6">
+            <div class="sec-text-form-free-acc">
+                <h4>Reset Password To Your Account</h4>
+
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('password.update') }}">
+                    @csrf
+                    <input type="hidden" name="token" value="{{ $token }}">
+
+                    <div class="form-group custom">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" placeholder="Email" required>
+                        @if ($errors->has('email'))
+                            <small class="alert alert-danger w-100 d-block p-2 mt-2">{{ $errors->first('email') }}</small>
+                        @endif
+                    </div>
+
+                    <div class="form-group custom">
+                        <label>Password</label>
+                        <input type="password" class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="Password" required>
+                        @if ($errors->has('password'))
+                            <small class="alert alert-danger w-100 d-block p-2 mt-2">{{ $errors->first('password') }}</small>
+                        @endif
+                    </div>
+
+                    <div class="form-group custom">
+                        <label>Confirm Password</label>
+                        <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password" required>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 25px;">
+                        <button class="btn btn-yellow" type="submit">Reset Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+    </section>
+
 @endsection
