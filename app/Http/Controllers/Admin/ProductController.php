@@ -289,38 +289,49 @@ class ProductController extends Controller
         // 'images'=>  implode("|",$images),
     // ]);
 
-        if ($request->hasFile('image')) {
+    if ($request->hasFile('image')) {
 
-			$image_path = public_path($product->image);
+        $product = product::where('id', $id)->first();
+        $image_path = public_path($product->image);
 
-			if(File::exists($image_path)) {
+        if(File::exists($image_path)) {
 
-				File::delete($image_path);
-			}
-
-            $file = $request->file('image');
-            $filePath = date("Ymdhis").".".$file->getClientOriginalExtension();
-            $file->move(public_path('uploads/products/'), $filePath);
-            $requestData['image'] = 'uploads/products/' . $filePath;
+            File::delete($image_path);
         }
 
-            if(! is_null(request('images'))) {
+        $file = $request->file('image');
+        $fileNameExt = $request->file('image')->getClientOriginalName();
+        $fileNameForm = str_replace(' ', '_', $fileNameExt);
+        $fileName = pathinfo($fileNameForm, PATHINFO_FILENAME);
+        $fileExt = $request->file('image')->getClientOriginalExtension();
+        $fileNameToStore = $fileName.'_'.time().'.'.$fileExt;
+        $pathToStore = public_path('uploads/products/');
+        Image::make($file)->save($pathToStore . DIRECTORY_SEPARATOR. $fileNameToStore);
 
-                $photos=request()->file('images');
-                foreach ($photos as $photo) {
-                    $photoPath = date("Ymdhis").".".$photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads/products/'), $photoPath);
-                    $destination_path = 'uploads/products/' . $photoPath;
+        $requestData['image'] = 'uploads/products/'.$fileNameToStore;
+    }
 
-                    DB::table('product_imagess')->insert([
+        if(! is_null(request('images'))) {
 
-                        ['image' => $destination_path, 'product_id' => $product->id]
+            $photos=request()->file('images');
+            foreach ($photos as $photo) {
+                $destinationPath = 'uploads/products/';
 
-                    ]);
+                $filename = date("Ymdhis").uniqid().".".$photo->getClientOriginalExtension();
+                //dd($photo,$filename);
+                Image::make($photo)->save(public_path($destinationPath) . DIRECTORY_SEPARATOR. $filename);
 
-                }
+                $product = product::where('id', $id)->first();
+
+                DB::table('product_imagess')->insert([
+
+                    ['image' => $destinationPath.$filename, 'product_id' => $product->id]
+
+                ]);
 
             }
+
+        }
 
         product::where('id', $id)
                 ->update($requestData);
