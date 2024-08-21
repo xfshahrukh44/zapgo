@@ -78,12 +78,16 @@
             <div class="form-group">
                 {!! Form::label('additional_image', 'Gallary Image') !!}
                 <div class="gallery Images">
+                <!--<div class="row">-->
                 @foreach($product_images as $product_image)
-                <div class="image-single">
-                <img src="{{ asset( $product_image->image)}}" alt="" id="image_id">
-                <button type="button" class="btn btn-danger" data-repeater-delete="" onclick="getInputValue({{$product_image->id}}, this);"> <i class="ft-x"></i>Delete</button>
-                </div>
+                    <!--<div class="col-md-2">-->
+                        <div class="image-single" style="padding: 15px;">
+                        <img src="{{ asset( $product_image->image)}}" alt="" id="image_id" style="height: 100px; width: 100px; border: 1px solid; border-radius: 15px;" >
+                        <button type="button" class="btn btn-danger" data-repeater-delete="" onclick="getInputValue({{$product_image->id}}, this);"> <i class="ft-x"></i>Delete</button>
+                        </div>
+                    <!--</div>-->
                 @endforeach
+                <!--</div>-->
                 </div>
                 <input class="form-control dropify" name="images[]" type="file" id="images" {{ ($product->additional_image != '') ? "data-default-file = /$product->additional_image" : ''}} value="{{$product->additional_image}}" multiple>
             </div>
