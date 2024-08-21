@@ -265,6 +265,7 @@ class ProductController extends Controller
 			'item_id' => 'required'
 		]);
         // dd($request->all());
+        $product = product::where('id', $id)->first();
         $requestData['product_title'] = $request->input('product_title');
         $requestData['description'] = $request->input('description');
         $requestData['short_desc'] = $request->input('short_desc');
@@ -286,7 +287,6 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
 
-			$product = product::where('id', $id)->first();
 			$image_path = public_path($product->image);
 
 			if(File::exists($image_path)) {
