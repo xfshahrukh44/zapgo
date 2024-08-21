@@ -342,16 +342,16 @@
                        $facebookUrl = App\Http\Traits\HelperTrait::returnFlag(682);
                        $twitterUrl = App\Http\Traits\HelperTrait::returnFlag(1960);
                        $instagramUrl = App\Http\Traits\HelperTrait::returnFlag(1962);
-                       $youtubeUrl = App\Http\Traits\HelperTrait::returnFlag(1964);
+                       $tiktokUrl = App\Http\Traits\HelperTrait::returnFlag(1964);
                    @endphp
 
                     <a href="{{ $facebookUrl }}"><i class="fa-brands fa-facebook-f"></i></a>
 
-                    <a href="{{ $twitterUrl }}"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="{{ $twitterUrl }}"><i class="fa-brands fa-x-twitter"></i></a>
 
                     <a href="{{ $instagramUrl }}"><i class="fa-brands fa-instagram"></i></a>
 
-                    <a href="{{ $youtubeUrl }}"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="{{ $tiktokUrl }}"><i class="fa-brands fa-tiktok"></i></a>
                </div>
             </div>
 
